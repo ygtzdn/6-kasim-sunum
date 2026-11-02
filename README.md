@@ -6,7 +6,7 @@ Operating System Concepts, **10. baskı, Bölüm 11** için yalnızca istemci ta
 
 ## Çalıştırma
 
-Node.js 22.12+ ve pnpm:
+Node.js 24 ve pnpm 11.25.0:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -22,6 +22,12 @@ pnpm check:content  # 36 sahne, sunucu dağılımı ve ayrıntılı not sözleş
 ```
 
 `dist/` statik olarak sunulur; backend, veritabanı veya çalışma sırasında dış API gerekmez.
+
+## Vercel
+
+`vercel.json`, Vite derlemesini ve `dist/` çıktı klasörünü tanımlar. Kurulum ve derleme pnpm 11.25.0 sürümünü kullanır; Node.js sürümü `package.json` içinde 24.x olarak sabittir. Ortam değişkeni gerekmez.
+
+Proje kökü depo köküdür. Sunum adresleri `/#/sunum/s01` biçiminde hash yönlendirmesi kullandığı için ek sunucu yönlendirme kuralına gerek yoktur. `.vercel/` içindeki yerel hesap/proje bağlantıları Git'e eklenmez.
 
 ## Sunucu dağılımı
 

@@ -1,0 +1,476 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", sans-serif;
+  --font-display: "Space Grotesk", "Manrope", sans-serif;
+  --color-paper: #f8f9fc;
+  --color-ink: #111827;
+  --color-blue: #2247eb;
+  --color-orange: #f05b28;
+}
+@layer base {
+  html,
+  body,
+  #root {
+    @apply m-0 h-full w-full overflow-hidden bg-paper text-ink;
+  }
+  body {
+    @apply font-sans antialiased;
+    color-scheme: light;
+  }
+  button {
+    @apply cursor-pointer touch-manipulation;
+  }
+  button:disabled {
+    @apply cursor-default opacity-35;
+  }
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 3px solid #2247eb;
+    outline-offset: 4px;
+  }
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1:focus {
+    outline: none;
+  }
+  ::selection {
+    @apply bg-blue text-white;
+  }
+}
+@layer components {
+  .app {
+    @apply relative h-dvh w-full overflow-hidden;
+  }
+  .app.is-home {
+    @apply overflow-y-auto;
+  }
+  .presentation-canvas,
+  .scene-frame {
+    @apply h-full min-h-0 w-full;
+  }
+  .scene-frame {
+    @apply outline-none;
+  }
+  .stage {
+    @apply mx-auto grid h-full min-h-0 w-full max-w-[1600px] grid-rows-[auto_minmax(0,1fr)_auto] gap-3 overflow-hidden px-5 pt-7 pb-20 md:gap-5 md:px-16 md:pt-10 md:pb-22;
+  }
+  .stage-title {
+    @apply font-display text-center font-semibold tracking-tight;
+    font-size: clamp(24px, 4.2vw, 64px);
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  .stage-visual {
+    @apply flex min-h-0 w-full items-center justify-center overflow-hidden;
+  }
+  .stage-controls {
+    @apply flex min-h-0 items-center justify-center;
+  }
+  .eyebrow {
+    @apply text-[10px] leading-relaxed font-semibold tracking-[.14em] text-slate-600 uppercase;
+  }
+  .primary-button {
+    @apply inline-flex min-h-11 items-center justify-center gap-6 rounded-xl bg-blue px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-800;
+  }
+  .choice {
+    @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-blue hover:text-blue;
+  }
+  .choice-active {
+    @apply border-blue bg-blue text-white hover:bg-blue-800 hover:text-white;
+  }
+  .icon-button {
+    @apply inline-flex size-10 shrink-0 items-center justify-center rounded-xl transition-colors hover:bg-slate-100;
+  }
+  .floating-nav {
+    @apply fixed right-4 bottom-4 z-40 flex h-11 items-center rounded-2xl border border-slate-300 bg-white p-1 shadow-sm md:right-6 md:bottom-5;
+  }
+  .nav-button {
+    @apply flex h-9 w-9 items-center justify-center rounded-xl hover:bg-slate-100;
+  }
+  .menu-tab {
+    @apply inline-flex h-9 items-center justify-center gap-2 rounded-xl px-2 text-xs font-semibold hover:bg-slate-100;
+  }
+  .side-menu {
+    @apply fixed top-4 right-4 bottom-19 z-50 flex w-[min(330px,calc(100vw-32px))] flex-col gap-4 rounded-2xl border border-slate-300 bg-white p-5 shadow-2xl outline-none md:top-6 md:right-6 md:bottom-auto md:max-h-[calc(100dvh-100px)];
+  }
+  .menu-tabs {
+    @apply grid shrink-0 grid-cols-3 gap-1 rounded-xl bg-slate-100 p-1;
+  }
+  .menu-tabs button {
+    @apply rounded-lg px-2 py-2 text-xs font-semibold text-slate-600;
+  }
+  .menu-tabs button[aria-pressed="true"] {
+    @apply bg-white text-blue shadow-sm;
+  }
+  .menu-body {
+    @apply min-h-0 flex-1 overflow-y-auto overscroll-contain;
+  }
+  .scene-list {
+    @apply flex flex-col gap-1;
+  }
+  .scene-list button {
+    @apply flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-xs font-semibold hover:bg-slate-100;
+  }
+  .scene-list button > span {
+    @apply font-display text-xs text-slate-500;
+  }
+  .scene-list button.selected {
+    @apply bg-blue/8 text-blue;
+  }
+  .scene-list button svg {
+    @apply ml-auto;
+  }
+  .upcoming {
+    @apply mt-5 border-t border-slate-200 pt-4;
+  }
+  .upcoming > div {
+    @apply mt-3 flex items-center justify-between gap-2 text-[10px] text-slate-600;
+  }
+  .upcoming small {
+    @apply text-[9px] text-slate-500;
+  }
+  .menu-tools {
+    @apply flex shrink-0 items-center gap-1 border-t border-slate-200 pt-3;
+  }
+  .shortcut-toggle {
+    @apply ml-auto rounded-lg px-2 py-2 text-[10px] text-slate-600 hover:bg-slate-100;
+  }
+  .menu-notes {
+    @apply space-y-4 py-2;
+  }
+  .menu-notes h2 {
+    @apply font-display text-xl font-semibold;
+  }
+  .menu-notes h3 {
+    @apply mb-2 text-xs font-bold text-ink;
+  }
+  .menu-notes section {
+    @apply border-t border-slate-200 pt-4;
+  }
+  .menu-notes ol {
+    @apply list-decimal space-y-3 pl-4 text-xs leading-6 text-slate-700;
+  }
+  .menu-notes ul {
+    @apply list-disc space-y-3 pl-4 text-xs leading-6 text-slate-700;
+  }
+  .menu-notes .note-question {
+    @apply rounded-xl border border-blue/20 bg-blue/5 p-3;
+  }
+  .menu-notes p {
+    @apply text-sm leading-7 text-slate-700;
+  }
+  .menu-notes small {
+    @apply block rounded-lg bg-orange/10 p-3 text-xs text-ink;
+  }
+  .menu-sources > a {
+    @apply flex items-start justify-between gap-3 border-b border-slate-200 py-4;
+  }
+  .menu-sources strong {
+    @apply mt-1 block text-xs leading-5 font-semibold;
+  }
+  .menu-sources p {
+    @apply mt-2 text-[11px] leading-5 text-slate-600;
+  }
+  .menu-sources svg {
+    @apply mt-1 shrink-0;
+  }
+  .reference-animation {
+    @apply flex flex-col items-center gap-3 py-4;
+  }
+  .reference-animation img {
+    @apply w-full rounded-lg;
+  }
+  .toast {
+    @apply fixed top-5 left-1/2 z-60 -translate-x-1/2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-xs shadow-lg;
+  }
+  .home-grid {
+    @apply mx-auto grid min-h-full w-full max-w-[1600px] items-center gap-7 px-6 py-14 pb-24 md:grid-cols-[1fr_1.2fr] md:gap-8 md:px-18 md:py-16;
+  }
+  .home-title {
+    @apply font-display font-semibold tracking-[-.07em];
+    font-size: clamp(68px, 9.5vw, 152px);
+    line-height: 0.98;
+  }
+  .home-object {
+    @apply flex min-h-0 w-full flex-col items-center justify-center;
+  }
+  .home-object .disk-diagram {
+    @apply w-full;
+    max-height: 65dvh;
+  }
+  .disk-diagram {
+    @apply block h-full max-h-full w-full;
+  }
+  .svg-interactive {
+    @apply cursor-pointer outline-none;
+  }
+  .svg-interactive:focus-visible rect,
+  .svg-interactive:focus-visible circle {
+    stroke: #2247eb;
+    stroke-width: 5;
+  }
+  .focus-svg {
+    @apply block max-h-full w-full;
+  }
+  .svg-label {
+    @apply font-sans text-[12px] font-semibold tracking-[.14em] fill-slate-600;
+  }
+  .roadmap-grid {
+    @apply grid w-full grid-cols-2 justify-items-center gap-4 md:grid-cols-4 md:gap-8;
+  }
+  .roadmap-node {
+    @apply flex min-w-0 flex-col items-center gap-3 text-center;
+  }
+  .roadmap-orb {
+    @apply flex size-[clamp(55px,13vw,180px)] items-center justify-center rounded-full border-2 border-ink;
+  }
+  .orb-0 {
+    @apply bg-blue text-white;
+  }
+  .orb-1 {
+    @apply bg-[#fed84b] text-ink;
+  }
+  .orb-2 {
+    @apply bg-orange text-ink;
+  }
+  .orb-3 {
+    @apply bg-[#c4b2fa] text-ink;
+  }
+  .storage-visual {
+    @apply flex h-full min-h-0 w-full flex-col items-center justify-center gap-2;
+  }
+  .storage-visual > .disk-diagram,
+  .storage-visual > .focus-svg {
+    @apply min-h-0 flex-1;
+    max-width: 850px;
+  }
+  .visual-caption {
+    @apply shrink-0 text-sm font-semibold text-slate-700 md:text-xl;
+  }
+  .chip {
+    @apply relative flex aspect-[1.25] max-h-[80%] w-[min(440px,82vw)] min-w-0 flex-col items-center justify-center gap-3 rounded-3xl border-2 border-ink bg-white p-6 md:p-9;
+  }
+  .chip-cells {
+    @apply grid w-full grid-cols-6 gap-2;
+  }
+  .chip-cells > div {
+    @apply flex aspect-square items-center justify-center rounded-md text-xs font-semibold text-ink;
+  }
+  .power-button {
+    @apply absolute -right-3 -bottom-3 flex size-12 items-center justify-center rounded-full border-2 border-ink bg-blue text-white;
+  }
+  .power-button.is-off {
+    @apply bg-ink;
+  }
+  .anatomy-focus {
+    @apply flex h-full min-h-0 w-full max-w-[1000px] items-center justify-center;
+  }
+  .mapping-result {
+    @apply flex items-center justify-center gap-4 font-display text-xl font-medium md:text-3xl;
+  }
+  .block-layout {
+    @apply grid h-full min-h-0 w-full max-w-[1000px] grid-rows-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-3 md:grid-cols-[1fr_140px_1fr] md:grid-rows-1 md:gap-8;
+  }
+  .block-group {
+    @apply flex min-h-0 flex-col gap-2;
+  }
+  .address-grid {
+    @apply grid min-h-0 flex-1 grid-cols-4 grid-rows-4 gap-1.5 md:gap-3;
+  }
+  .address-grid > button,
+  .address-grid > div {
+    @apply flex min-h-0 items-center justify-center rounded-lg border border-ink bg-white font-display text-sm font-medium md:text-2xl;
+  }
+  .address-grid > button.selected {
+    @apply border-blue bg-blue text-white;
+  }
+  .address-grid > button:hover {
+    @apply border-blue;
+  }
+  .address-grid.physical-grid > .selected {
+    @apply border-ink bg-orange text-ink;
+  }
+  .mapping-controller {
+    @apply flex items-center justify-center gap-3 text-xs font-semibold md:flex-col md:gap-5 md:text-base;
+  }
+  .mapping-controller > div {
+    @apply rotate-90 md:rotate-0;
+  }
+  .mapping-result > span:first-child {
+    @apply text-blue;
+  }
+  .mapping-result > span:last-child {
+    @apply text-ink;
+  }
+  .flash-focus {
+    @apply flex max-h-full w-full max-w-[1100px] flex-col justify-center gap-7 md:gap-12;
+  }
+  .flash-blocks {
+    @apply grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-7;
+  }
+  .flash-block {
+    @apply rounded-2xl border-2 border-ink p-3 md:p-5;
+  }
+  .flash-row {
+    @apply mt-3 grid grid-cols-4 gap-2;
+  }
+  .flash-page {
+    @apply flex min-w-0 flex-col items-center justify-center gap-2 rounded-xl border border-ink px-1 py-3 md:gap-3 md:py-6;
+  }
+  .flash-page small {
+    @apply text-[10px] font-medium;
+  }
+  .flash-page strong {
+    @apply font-display text-2xl font-medium md:text-4xl;
+  }
+  .flash-page > span {
+    @apply flex h-4 items-center justify-center;
+  }
+  .flash-page.page-invalid {
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 6px,
+      #cad0db 6px,
+      #cad0db 7px
+    );
+  }
+  .flash-page.page-invalid strong {
+    @apply line-through;
+  }
+  .flash-page.page-new {
+    @apply text-white;
+  }
+  .checkpoint-focus {
+    @apply flex max-h-full flex-col items-center justify-center gap-7;
+  }
+  .question-orb {
+    @apply flex size-[clamp(110px,24vh,290px)] items-center justify-center rounded-full border-2 border-ink bg-white font-display text-[clamp(60px,12vh,150px)] font-medium;
+  }
+  .question-orb.answer-correct {
+    @apply border-blue bg-blue text-white;
+  }
+  .checkpoint-caption {
+    @apply flex flex-wrap items-center justify-center gap-3 font-display text-lg font-medium md:gap-6 md:text-3xl;
+  }
+  .access-lab {
+    @apply grid h-full min-h-0 w-full max-w-[1100px] grid-rows-[auto_minmax(0,1fr)_auto] gap-3;
+  }
+  .access-summary {
+    @apply flex shrink-0 items-center justify-center gap-5;
+  }
+  .access-summary > span {
+    @apply text-[10px] font-semibold tracking-wider text-slate-600;
+  }
+  .access-summary > div {
+    @apply flex items-baseline gap-2;
+  }
+  .access-summary strong {
+    @apply font-display text-4xl font-medium tracking-tight text-blue md:text-5xl;
+  }
+  .access-summary small {
+    @apply text-sm text-slate-600;
+  }
+  .latency-rings {
+    @apply flex min-h-0 items-center justify-center gap-3 md:gap-12;
+  }
+  .latency-metric {
+    @apply relative flex aspect-square max-h-full w-[min(26%,250px)] flex-col items-center justify-center;
+  }
+  .latency-metric svg {
+    @apply absolute inset-0 h-full w-full;
+  }
+  .ring-value {
+    @apply flex flex-col items-center;
+  }
+  .ring-value strong {
+    @apply font-display font-medium tracking-tight;
+    font-size: clamp(16px, 3.2vw, 44px);
+  }
+  .ring-value > span {
+    @apply text-[10px] text-slate-600;
+  }
+  .metric-label {
+    @apply absolute -bottom-5 text-xs font-semibold md:-bottom-7 md:text-base;
+  }
+  .access-controls {
+    @apply grid grid-cols-[1fr_1fr] items-center gap-x-6 gap-y-3 pt-7 md:grid-cols-[1fr_1fr_1fr_1fr_auto] md:gap-6 md:pt-10;
+  }
+  .access-controls label {
+    @apply min-w-0;
+  }
+  .access-controls label > span {
+    @apply flex items-baseline justify-between gap-2 text-[10px] text-slate-700 md:text-xs;
+  }
+  .access-controls strong {
+    @apply font-display text-sm font-medium text-ink md:text-lg;
+  }
+  .access-controls small {
+    @apply text-[9px] font-sans font-medium text-slate-600;
+  }
+  .access-controls input {
+    @apply mt-2 h-5 w-full cursor-pointer accent-blue;
+  }
+  .access-controls > .icon-button {
+    @apply hidden md:flex;
+  }
+}
+/* Intrinsic SVGs and short viewports use the available slide area, never page scrolling. */
+@media (max-height: 600px) {
+  .stage {
+    gap: 6px;
+    padding-top: 14px;
+    padding-bottom: 65px;
+  }
+  .stage-title {
+    font-size: clamp(22px, 4vw, 40px);
+  }
+  .choice {
+    min-height: 34px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .access-summary strong {
+    font-size: 30px;
+  }
+  .access-controls {
+    padding-top: 19px;
+    gap: 7px 20px;
+  }
+  .flash-block {
+    padding: 8px;
+  }
+  .flash-page {
+    padding: 8px 2px;
+    gap: 4px;
+  }
+  .flash-page strong {
+    font-size: 24px;
+  }
+  .roadmap-orb {
+    width: 65px;
+    height: 65px;
+  }
+  .roadmap-node {
+    gap: 6px;
+  }
+  .roadmap-node h2 {
+    font-size: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+.motion-off * {
+  animation: none !important;
+  transition: none !important;
+}

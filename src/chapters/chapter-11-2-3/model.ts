@@ -1,0 +1,232 @@
+export type ScheduleAlgorithm = "FCFS" | "SCAN" | "C-SCAN";
+export type ScheduleDirection = "up" | "down";
+export interface DiskRequest {
+  id: number;
+  cylinder: number;
+}
+export interface ScheduleInput {
+  head: number;
+  queue: number[];
+  direction: ScheduleDirection;
+}
+export interface ScheduleEvent {
+  position: number;
+  kind: "service" | "turn" | "wrap";
+  requestId?: number;
+  distance: number;
+  total: number;
+}
+export interface ScheduleResult {
+  algorithm: ScheduleAlgorithm;
+  start: number;
+  events: ScheduleEvent[];
+  serviceOrder: DiskRequest[];
+  path: number[];
+  total: number;
+}
+export const defaultSchedule: ScheduleInput = {
+  head: 35,
+  queue: [42, 12, 76, 24, 60],
+  direction: "up",
+};
+
+export function parseQueue(text: string): number[] {
+  if (!text.trim()) return [];
+  const tokens = text.trim().split(/[\s,]+/);
+  if (tokens.length > 20) throw new Error("En fazla 20 istek girilebilir.");
+  if (tokens.some((token) => !/^\d+$/.test(token) || Number(token) > 99))
+    throw new Error("Her istek 0–99 arasında bir tam sayı olmalı.");
+  return tokens.map(Number);
+}
+
+export function calculateSchedule(
+  algorithm: ScheduleAlgorithm,
+  input: ScheduleInput,
+): ScheduleResult {
+  if (!Number.isInteger(input.head) || input.head < 0 || input.head > 99)
+    throw new Error("Kafa 0–99 arasında bir tam sayı olmalı.");
+  if (
+    input.queue.length > 20 ||
+    input.queue.some((n) => !Number.isInteger(n) || n < 0 || n > 99)
+  )
+    throw new Error("Geçersiz istek kuyruğu.");
+  if (input.direction !== "up" && input.direction !== "down")
+    throw new Error("Geçersiz yön.");
+  if (!["FCFS", "SCAN", "C-SCAN"].includes(algorithm))
+    throw new Error("Geçersiz algoritma.");
+  const result: ScheduleResult = {
+    algorithm,
+    start: input.head,
+    events: [],
+    serviceOrder: [],
+    path: [input.head],
+    total: 0,
+  };
+  let position = input.head;
+  function visit(
+    next: number,
+    kind: ScheduleEvent["kind"],
+    request?: DiskRequest,
+  ) {
+    const distance = Math.abs(next - position);
+    result.total += distance;
+    result.events.push({
+      position: next,
+      kind,
+      requestId: request?.id,
+      distance,
+      total: result.total,
+    });
+    // Service events remain distinct even when two requests use the same cylinder.
+    if (position !== next || kind === "service") result.path.push(next);
+    if (request) result.serviceOrder.push(request);
+    position = next;
+  }
+  const requests = input.queue.map((cylinder, id) => ({ cylinder, id }));
+  if (algorithm === "FCFS") {
+    for (const request of requests) visit(request.cylinder, "service", request);
+    return result;
+  }
+  const sign = input.direction === "up" ? 1 : -1;
+  const sortForward = (a: DiskRequest, b: DiskRequest) =>
+    sign * (a.cylinder - b.cylinder) || a.id - b.id;
+  const here = requests.filter((r) => r.cylinder === input.head);
+  const forward = requests
+    .filter((r) => sign * (r.cylinder - input.head) > 0)
+    .sort(sortForward);
+  const behind = requests
+    .filter((r) => sign * (r.cylinder - input.head) < 0)
+    .sort(
+      algorithm === "SCAN"
+        ? (a, b) => -sign * (a.cylinder - b.cylinder) || a.id - b.id
+        : sortForward,
+    );
+  for (const request of [...here, ...forward])
+    visit(request.cylinder, "service", request);
+  if (behind.length) {
+    const edge = sign > 0 ? 99 : 0;
+    if (position !== edge) visit(edge, "turn");
+    if (algorithm === "C-SCAN") visit(sign > 0 ? 0 : 99, "wrap");
+    for (const request of behind) visit(request.cylinder, "service", request);
+  }
+  return result;
+}
+
+export interface FlashPage {
+  logical: number | null;
+  version: number;
+  status: "free" | "valid" | "invalid";
+}
+export interface FlashLocation {
+  block: number;
+  page: number;
+}
+export interface FlashState {
+  step: number;
+  blocks: FlashPage[][];
+  mapping: Record<number, FlashLocation>;
+  hostWrites: number;
+  physicalWrites: number;
+  erases: number;
+  reservedBlock: number;
+  event: string;
+}
+const emptyPage = (): FlashPage => ({
+  logical: null,
+  version: 0,
+  status: "free",
+});
+export function createFlashState(): FlashState {
+  const blocks = Array.from({ length: 3 }, () =>
+    Array.from({ length: 4 }, emptyPage),
+  );
+  const mapping: Record<number, FlashLocation> = {};
+  for (let logical = 0; logical < 6; logical++) {
+    const block = Math.floor(logical / 4),
+      page = logical % 4;
+    blocks[block][page] = { logical, version: 0, status: "valid" };
+    mapping[logical] = { block, page };
+  }
+  return {
+    step: 0,
+    blocks,
+    mapping,
+    hostWrites: 0,
+    physicalWrites: 0,
+    erases: 0,
+    reservedBlock: 2,
+    event: "Başlangıç · 6 mantıksal sayfa",
+  };
+}
+export function flashWriteAmplification(state: FlashState): number | null {
+  return state.hostWrites ? state.physicalWrites / state.hostWrites : null;
+}
+export function nextFlashStep(previous: FlashState): FlashState {
+  if (previous.step >= 5) return previous;
+  const state: FlashState = {
+    ...previous,
+    blocks: previous.blocks.map((block) => block.map((page) => ({ ...page }))),
+    mapping: Object.fromEntries(
+      Object.entries(previous.mapping).map(([logical, location]) => [
+        logical,
+        { ...location },
+      ]),
+    ),
+  };
+  function write(logical: number, block: number, page: number) {
+    if (
+      block === state.reservedBlock ||
+      state.blocks[block][page].status !== "free"
+    )
+      throw new Error("Host yazması için boş ve ayrılmamış sayfa gerekir.");
+    const old = state.mapping[logical];
+    const version = state.blocks[old.block][old.page].version + 1;
+    state.blocks[old.block][old.page].status = "invalid";
+    state.blocks[block][page] = { logical, version, status: "valid" };
+    state.mapping[logical] = { block, page };
+    state.hostWrites++;
+    state.physicalWrites++;
+  }
+  switch (state.step) {
+    case 0:
+      write(0, 1, 2);
+      state.event = "L0:v1 → B1.P2";
+      break;
+    case 1:
+      write(1, 1, 3);
+      state.event = "L1:v1 → B1.P3";
+      break;
+    case 2: {
+      const live = state.blocks[0]
+        .map((page, index) => ({ page, index }))
+        .filter(({ page }) => page.status === "valid");
+      live.forEach(({ page, index }, target) => {
+        if (page.logical === null || state.blocks[2][target].status !== "free")
+          throw new Error("GC kopyası için geçerli veri ve boş hedef gerekir.");
+        state.blocks[2][target] = { ...page };
+        state.mapping[page.logical] = { block: 2, page: target };
+        state.blocks[0][index].status = "invalid";
+        state.physicalWrites++;
+      });
+      state.event = "GC · L2 + L3 → B2";
+      break;
+    }
+    case 3:
+      if (
+        state.blocks[0].some((page) => page.status === "valid") ||
+        Object.values(state.mapping).some((location) => location.block === 0)
+      )
+        throw new Error("Geçerli veri korunmadan blok silinemez.");
+      state.blocks[0] = Array.from({ length: 4 }, emptyPage);
+      state.erases++;
+      state.reservedBlock = 0;
+      state.event = "B0 silindi · yeni GC alanı";
+      break;
+    case 4:
+      write(2, 2, 2);
+      state.event = "L2:v1 → B2.P2";
+      break;
+  }
+  state.step++;
+  return state;
+}

@@ -11,6 +11,8 @@ export interface SceneNotes {
 }
 export interface SceneContext {
   enabled: boolean;
+  stage: number;
+  setStage: (stage: number) => void;
   goTo: (id: string) => void;
   openMenu: () => void;
 }
@@ -21,5 +23,6 @@ export interface SceneDefinition {
   chapter: string;
   presenterId: 1 | 2 | 3 | 4;
   notes: SceneNotes;
+  stages?: readonly string[];
   render: (context: SceneContext) => ReactNode;
 }

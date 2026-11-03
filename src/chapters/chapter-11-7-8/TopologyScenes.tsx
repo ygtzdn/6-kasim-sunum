@@ -57,6 +57,7 @@ export function TopologyScene({
             </Choice>
           ))}
           <button
+            data-presentation-next
             className="primary-button"
             disabled={state.step === count - 1}
             onClick={() => change({ ...state, step: state.step + 1 })}

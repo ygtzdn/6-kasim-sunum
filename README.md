@@ -6,7 +6,7 @@ Operating System Concepts, **10. baskı, Bölüm 11** için yalnızca istemci ta
 
 ## Çalıştırma
 
-Node.js 22.12+ ve pnpm:
+Node.js 24 ve pnpm 11.25.0:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -17,11 +17,17 @@ Bu ortamda Node PATH'te değilse `./scripts/dev.sh` kullanılabilir. Yerel sunuc
 
 ```sh
 pnpm build          # TypeScript ve statik üretim paketi
-pnpm test           # 37 hesap/durum testi
-pnpm check:content  # 36 sahne, sunucu dağılımı ve ayrıntılı not sözleşmesi
+pnpm test           # 42 hesap/durum ve klavye testi
+pnpm check:content  # 36 sahne; ilk kişinin 38 aşaması ve yerel medya
 ```
 
 `dist/` statik olarak sunulur; backend, veritabanı veya çalışma sırasında dış API gerekmez.
+
+## Vercel
+
+`vercel.json`, Vite derlemesini ve `dist/` çıktı klasörünü tanımlar. Kurulum ve derleme pnpm 11.25.0 sürümünü kullanır; Node.js sürümü `package.json` içinde 24.x olarak sabittir. Ortam değişkeni gerekmez.
+
+Proje kökü depo köküdür. Sunum adresleri `/#/sunum/s01` biçiminde hash yönlendirmesi kullandığı için ek sunucu yönlendirme kuralına gerek yoktur. `.vercel/` içindeki yerel hesap/proje bağlantıları Git'e eklenmez.
 
 ## Sunucu dağılımı
 
@@ -38,15 +44,17 @@ S01–S02 açılış; S35–S36 ortak kapanıştır.
 
 Açık tema, yüksek kontrast, çok az görünür metin ve kaydırmasız sahneler. Küçük yan menüde bütün sayfalar sunucu gruplarıyla seçilebilir. Her sayfanın ayrıntılı anlamı, anlatım sırası, kavramları ve model sınırları **Notlar** sekmesindedir.
 
-HDD anatomisi Three.js / React Three Fiber / Drei ile döndürülüp yakınlaştırılabilir; dokuz parça grubu seçilebilir, katmanlar ayrılabilir. Hazır söküm stop-motion'u, çalışma videosu ve gerçek fotoğraf aynı modüldedir. Kaynak ve lisans bilgileri menüde ve [medya atıflarında](public/media/ATTRIBUTION.md) bulunur.
+İlk kişinin akışı HDD parçaları → Volatil / Non-Volatil karşılaştırması → okuma maliyeti → SSD fotoğrafları → flash sayfa/blok davranışı → RAM disk, teyp ve mantıksal bloklar şeklindedir. Volatil grupta RAM, Non-Volatil grupta HDD ve SSD bulunur. Gerçek donanım fotoğrafları arka plansız, kırpılmış ve alfa kanallı PNG olarak kullanılır. 3D model, söküm ve çalışma videoları kaldırıldı; yeni donanım animasyonu veya görsel üretilmedi. Kaynak ve lisans bilgileri menüde ve [medya atıflarında](public/media/ATTRIBUTION.md) bulunur.
+
+İçerik sınırı yazarların resmî 10. baskı Chapter 11 slaytlarıdır (ilk kişi için 4–16). Tam kitap metni yerel projede bulunmuyor. Konumlandırma gecikmesi (seek + dönme) ile aktarım dahil örnek servis süresi ayrı adlandırılır; örnek hesap denetleyici/kuyruk ek yükünü içermez.
 
 Diğer modüller gerçek hesap/durum modelleri içerir: FCFS/SCAN/C-SCAN, FTL/GC, parite/SECDED, aygıt hazırlığı, boot, remapping, swap, DAS/NAS/SAN, RAID kapasite/arıza/XOR/rebuild.
 
-Sol/sağ ok: önceki/sonraki; Home/End: ilk/son; M: menü; N: notlar; F: tam ekran. Menüden kısayollar ve hareket kapatılabilir. Hareketi azalt tercihi korunur; sekme gizlenince animasyonlar kapanır.
+**Enter:** aynı sahnenin sonraki aşaması; son aşamada sahne değişmez. Sol altta Enter düğmesi gösterilmez; aşama sayısı, adı ve başa alma kontrolü kalır. İlk kişinin bütün sahneleri aşamalandırılmıştır; diğer sunucuların açıkça işaretlenmiş adım demolarında da Enter kullanılabilir. **Space:** genel animasyon oynatma/duraklatma. **Sol/sağ ok:** önceki/sonraki sahne; Home/End: ilk/son; M: menü; N: notlar; F: tam ekran. Menü veya giriş alanı kullanılırken sunum tuşları devre dışıdır. Tuşa basılı tutma aşamaları atlamaz. Hareketi azalt tercihi korunur; sekme gizlenince animasyonlar duraklar.
 
 ## Teknoloji ve modüller
 
-React, TypeScript, Vite, Tailwind, Motion, Radix Dialog, Lucide ve Three.js ekosistemi. Fontlar ve medya yerel paketlenir. Ağdan büyük video indirmesi veya WebGL, temel navigasyonun ön koşulu değildir; HDD 3D görünümünün fotoğraf yedeği vardır.
+React, TypeScript, Vite, Tailwind, Motion, Radix Dialog ve Lucide. Fontlar ve fotoğraflar yerel paketlenir. WebGL veya video bağımlılığı yoktur.
 
 - `src/presentation/`: tipler, registry, navigasyon, yan menü ve not görünümü.
 - `src/chapters/`: sunucu kapsamlarına ayrılmış sahneler, notlar ve model motorları.
@@ -55,7 +63,7 @@ React, TypeScript, Vite, Tailwind, Motion, Radix Dialog, Lucide ve Three.js ekos
 
 ## Dokümantasyon
 
-Güncel kapsam: [08 — Modüler tam sunum](docs/08-moduler-tam-sunum.md).
+Güncel ilk kişi revizyonu ve uygulama öncesi plan: [09 — Kitaba bağlı revizyon](docs/09-kitaba-bagli-revizyon.md). Diğer sunucuların modüler kapsamı için [08 — Modüler tam sunum](docs/08-moduler-tam-sunum.md).
 
 - [İlk proje kapsamı](docs/01-proje-kapsami.md)
 - [36 sahnelik içerik planı](docs/02-icerik-ve-sunum-akisi.md)

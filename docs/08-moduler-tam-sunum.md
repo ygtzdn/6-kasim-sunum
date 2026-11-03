@@ -1,4 +1,5 @@
 # 08 — Modüler tam sunum
+> 3 Kasım 2026: İlk kişinin sahneleri ve klavye kontrolleri için [09 — Kitaba bağlı revizyon](09-kitaba-bagli-revizyon.md) bu belgenin ilgili kısımlarının yerini alır. Aşağıdaki 3D/söküm/çalışma modülü önceki sürümü anlatır; ilgili kod, videolar ve bağımlılıklar kaldırılmıştır. Diğer kişilerin kapsamı korunur.
 +
 +## Güncel kapsam
 +

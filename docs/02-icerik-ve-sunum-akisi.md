@@ -1,4 +1,5 @@
 # 02 — İçerik ve sunum akışı
+> 3 Kasım 2026: S01–S09 için güncel akış [09 — Kitaba bağlı revizyon](09-kitaba-bagli-revizyon.md) ve `src/chapters/chapter-11-1/` altındadır. Bu dosyanın ilk kişi sahne tablosu önceki tasarımı kaydeder.
 
 ## 1. Anlatım ilkesi
 

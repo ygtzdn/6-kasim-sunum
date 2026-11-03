@@ -17,6 +17,7 @@ export default function App() {
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={current.id}
+              data-scene-id={current.id}
               className="scene-frame"
               initial={enabled ? { opacity: 0, y: 14 } : false}
               animate={{ opacity: 1, y: 0 }}
@@ -28,7 +29,13 @@ export default function App() {
                   ?.focus({ preventScroll: true })
               }
             >
-              {current.render({ enabled, goTo, openMenu })}
+              {current.render({
+                enabled,
+                goTo,
+                openMenu,
+                stage: presentation.stage,
+                setStage: presentation.setStage,
+              })}
             </motion.div>
           </AnimatePresence>
         </main>

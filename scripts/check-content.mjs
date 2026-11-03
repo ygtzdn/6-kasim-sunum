@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { createServer } from "vite";
+import { existsSync } from "node:fs";
+import { renderToStaticMarkup } from "react-dom/server";
 
 // Inspect the actual module registry in Node. No browser, rendering, or screenshots.
 const server = await createServer({
@@ -52,8 +54,44 @@ try {
     "11.8",
   ])
     assert.ok(sections.has(section), `${section} eksik.`);
+  let stageCount = 0;
+  for (const scene of scenes.slice(0, 9)) {
+    assert.ok(
+      scene.stages?.length >= 3,
+      `${scene.id}: sahne içi aşamalar eksik.`,
+    );
+    for (let stage = 0; stage < scene.stages.length; stage++) {
+      const html = renderToStaticMarkup(
+        scene.render({
+          stage,
+          enabled: false,
+          setStage() {},
+          goTo() {
+            throw new Error("Aşama sahne değiştiremez.");
+          },
+          openMenu() {},
+        }),
+      );
+      assert.ok(
+        html.includes('id="scene-heading"'),
+        `${scene.id}: başlık eksik.`,
+      );
+      assert.ok(
+        !/<video|<canvas|undefined|NaN/.test(html),
+        `${scene.id}: eski medya veya geçersiz çıktı.`,
+      );
+      for (const [, asset] of html.matchAll(
+        /(?:src|href)="(\/media\/[^"#]+)"/g,
+      ))
+        assert.ok(
+          existsSync(`public${asset}`),
+          `${scene.id}: ${asset} bulunamadı.`,
+        );
+      stageCount++;
+    }
+  }
   console.log(
-    "36 sahne, dört sunucu, 11.1–11.8 kapsamı, menü grupları ve ayrıntılı notlar doğrulandı.",
+    `36 sahne, dört sunucu, 11.1–11.8 kapsamı, ayrıntılı notlar ve ilk kişinin ${stageCount} aşamasının HTML/medya sözleşmesi doğrulandı.`,
   );
 } finally {
   await server.close();

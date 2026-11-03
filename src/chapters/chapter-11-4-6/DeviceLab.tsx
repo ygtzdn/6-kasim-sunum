@@ -69,7 +69,7 @@ export function DeviceLab({ enabled }: { enabled: boolean }) {
           >
             <Undo2 size={20} />
           </button>
-          <button className="primary-button" onClick={advance}>
+          <button data-presentation-next className="primary-button" onClick={advance}>
             {labels[step]} <ArrowRight size={17} />
           </button>
           <button
@@ -271,6 +271,7 @@ export function BootLab({ enabled }: { enabled: boolean }) {
             BIOS / MBR
           </Choice>
           <button
+            data-presentation-next
             className="primary-button"
             onClick={() => setStep(step >= nodes.length - 1 ? -1 : step + 1)}
           >
@@ -354,6 +355,7 @@ export function RemapLab({ enabled }: { enabled: boolean }) {
       controls={
         <div className="flex items-center justify-center gap-2">
           <button
+            data-presentation-next
             className="primary-button"
             disabled={remapped}
             onClick={() => (failed ? setRemapped(true) : setFailed(true))}

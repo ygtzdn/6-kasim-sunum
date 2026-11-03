@@ -12,11 +12,11 @@ const format = (n: number, digits = 2) =>
 export default function AccessLab({
   input,
   onChange,
-  enabled,
+  stage,
 }: {
   input: AccessInput;
   onChange: (v: AccessInput) => void;
-  enabled: boolean;
+  stage: number;
 }) {
   const result = calculateAccess(input);
   const values = [
@@ -25,9 +25,9 @@ export default function AccessLab({
     { name: "Aktarım", value: result.transfer, color: "#7b35ce" },
   ];
   return (
-    <div className="access-lab">
+    <div className="access-lab" data-stage={stage}>
       <div className="access-summary">
-        <span>ERİŞİM SÜRESİ</span>
+        <span>ÖRNEK I/O SERVİS SÜRESİ</span>
         <div aria-live="polite">
           <strong>{format(result.total)}</strong>
           <small>ms</small>
@@ -35,7 +35,10 @@ export default function AccessLab({
       </div>
       <div className="latency-rings">
         {values.map((s, i) => (
-          <div className="latency-metric" key={s.name}>
+          <div
+            className={`latency-metric ${stage < 3 && stage !== i ? "metric-dimmed" : ""}`}
+            key={s.name}
+          >
             <svg viewBox="0 0 220 220" aria-hidden="true">
               <circle
                 cx="110"
@@ -60,19 +63,6 @@ export default function AccessLab({
                 transition={{ type: "spring", stiffness: 75, damping: 20 }}
                 style={{ rotate: -90, transformOrigin: "110px 110px" }}
               />
-              {enabled && (
-                <g>
-                  <animateTransform
-                    attributeName="transform"
-                    type="rotate"
-                    from="0 110 110"
-                    to="360 110 110"
-                    dur={`${3 + i}s`}
-                    repeatCount="indefinite"
-                  />
-                  <circle cx="110" cy="16" r="7" fill={s.color} />
-                </g>
-              )}
             </svg>
             <div className="ring-value">
               <strong>{format(s.value, s.name === "Aktarım" ? 3 : 2)}</strong>
@@ -86,6 +76,28 @@ export default function AccessLab({
             </span>
           </div>
         ))}
+      </div>
+      <div className="access-phase" aria-live="polite">
+        <strong>
+          {
+            [
+              "1 · Kafa hedef ize gider.",
+              "2 · Sektör kafa altına döner.",
+              "3 · Veri aktarılır.",
+              "Seek + dönme + aktarım",
+            ][stage]
+          }
+        </strong>
+        <span>
+          {stage === 3
+            ? `Konumlandırma: ${format(result.seek + result.rotation)} ms · Aktarım: ${format(result.transfer, 3)} ms`
+            : [
+                "Seek: kolun konumlanma süresi.",
+                "Ortalama dönme gecikmesi: yarım tur.",
+                "Aktarım: veri miktarı / aktarım hızı.",
+              ][stage]}
+        </span>
+        <small>Kuyruk ve denetleyici ek yükü bu örneğe dahil değildir.</small>
       </div>
       <div className="access-controls">
         {[

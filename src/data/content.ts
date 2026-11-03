@@ -58,41 +58,35 @@ export const resources = [
   },
   {
     kind: "FOTOĞRAF",
-    title: "Laptop hard drive exposed",
+    title: "HDD · Şeffaf PNG fotoğraf",
     detail:
-      "Evan-Amos / Wikimedia Commons · CC BY-SA 3.0. Yerel 1280 px kopya; içerik değiştirilmedi.",
-    href: "https://commons.wikimedia.org/wiki/File:Laptop-hard-drive-exposed.jpg",
+      "Evan-Amos / AGreuet · Wikimedia Commons · CC BY-SA 3.0. Arka planı kaldırılmış, kırpılmış gerçek fotoğraf.",
+    href: "https://commons.wikimedia.org/wiki/File:Laptop-hard-drive-exposed_remix_transparent.png",
   },
   {
-    kind: "ANİMASYON",
-    title: "Defragmenting disk",
+    kind: "SSD FOTOĞRAFLARI",
+    title: "SSD dış görünüşü · MatteX",
     detail:
-      "German / Wikimedia Commons · Public domain. HDD veri yerleşimi için ek görsel; zamanlama algoritması değil.",
-    href: "https://commons.wikimedia.org/wiki/File:Defragmenting_disk.gif",
+      "Gerçek SSD kasası. MatteX · CC0. Arka plan maskelendi ve şeffaf PNG olarak kırpıldı.",
+    href: "https://commons.wikimedia.org/wiki/File:Samsung_SSD_840_120GB_MZ-7TD120--1_TOP.JPG",
+  },
+  {
+    kind: "SSD FOTOĞRAFI",
+    title: "SSD iç kartı · MatteX",
+    detail:
+      "Flash bellek ve denetleyici. MatteX · CC0. Arka plan maskelendi ve şeffaf PNG olarak kırpıldı.",
+    href: "https://commons.wikimedia.org/wiki/File:Samsung_SSD_840_120GB_MZ-7TD120--6_BOARD_TOP.JPG",
+  },
+  {
+    kind: "RAM FOTOĞRAFI",
+    title: "RAM modülü · Şeffaf PNG",
+    detail:
+      "An-d / AGreuet · Wikimedia Commons · CC BY-SA 3.0. Arka planı kaldırılmış, kırpılmış gerçek RAM fotoğrafı.",
+    href: "https://commons.wikimedia.org/wiki/File:Swissbit_2GB_PC2-5300U-555_remix_crop_transparent.png",
   },
 ] as const;
 
 export const additionalResources = [
-  {
-    kind: "HAZIR ANİMASYON",
-    title: "Hardware Bug · HDD söküm stop-motion",
-    detail:
-      "Diego Alifano · CC BY 3.0. SCSI aygıtın gerçek parçaları; yerel WebM, değiştirilmedi.",
-    href: "https://commons.wikimedia.org/wiki/File:Hardware_Bug_-_Stop_motion_test_N%C2%BA1.webm",
-  },
-  {
-    kind: "HAZIR VİDEO",
-    title: "HDD spin-up",
-    detail:
-      "Wolfgang Ellsässer · CC BY 4.0 seçildi. Eski HDD’nin dönmeye başlaması; yerel WebM, değiştirilmedi.",
-    href: "https://commons.wikimedia.org/wiki/File:Hddspinup.webm",
-  },
-  {
-    kind: "3D KÜTÜPHANESİ",
-    title: "Three.js / React Three Fiber / Drei",
-    detail: "Seçilebilir kavramsal model. Hazır üretici CAD dosyası değildir.",
-    href: "https://r3f.docs.pmnd.rs/getting-started/introduction",
-  },
   {
     kind: "TEKNİK KAYNAK",
     title: "Hamming kodu",

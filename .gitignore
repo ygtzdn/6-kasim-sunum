@@ -4,3 +4,6 @@ dist/
 test-results/
 *.log
 *.tsbuildinfo
+.vercel/
+.vercel
+.env*

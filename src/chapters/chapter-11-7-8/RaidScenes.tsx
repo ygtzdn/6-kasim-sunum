@@ -597,6 +597,7 @@ export function RebuildRaidScene(context: SceneContext) {
           <RaidSettings state={state} />
           <div className="flex flex-wrap items-center justify-center gap-2">
             <button
+              data-presentation-next
               className="primary-button"
               disabled={!canRebuild && !state.rebuilding}
               onClick={

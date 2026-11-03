@@ -381,6 +381,7 @@ export function SchedulingLab({
       controls={
         <div className="flex flex-wrap items-center justify-center gap-2">
           <button
+            data-presentation-next
             className="primary-button disabled:opacity-35"
             disabled={done}
             onClick={() => {

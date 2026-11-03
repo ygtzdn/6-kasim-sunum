@@ -11,6 +11,7 @@ import {
   Menu,
   Pause,
   Play,
+  RotateCcw,
   X,
 } from "lucide-react";
 import { resources, additionalResources } from "../data/content";
@@ -36,7 +37,37 @@ export default function SideMenu(p: Props) {
     );
   return (
     <Dialog.Root modal={false} open={p.menu} onOpenChange={p.setMenu}>
+      {p.current.stages && (
+        <div className="stage-progress" aria-label="Sahne aşamaları">
+          <button
+            className="nav-button"
+            aria-label="Aşamaları başa al"
+            onClick={() => p.setStage(0)}
+          >
+            <RotateCcw size={16} />
+          </button>
+          <span className="stage-position">
+            {p.stage + 1}/{p.current.stages.length}
+          </span>
+          <span className="stage-name" aria-live="polite">
+            {p.current.stages[p.stage]}
+          </span>
+        </div>
+      )}
       <div className="floating-nav" aria-label="Sunum kontrolleri">
+        <button
+          className="nav-button"
+          aria-label={
+            p.motionOn
+              ? "Animasyonu duraklat (Space)"
+              : "Animasyonu başlat (Space)"
+          }
+          aria-pressed={p.motionOn}
+          title="Oynat / duraklat (Space)"
+          onClick={() => p.setMotionOn((v) => !v)}
+        >
+          {p.motionOn ? <Pause size={17} /> : <Play size={17} />}
+        </button>
         <button
           className="nav-button"
           aria-label="Önceki sahne"
@@ -183,31 +214,21 @@ export default function SideMenu(p: Props) {
                 ))}
                 <a
                   className="text-xs underline"
-                  href="https://creativecommons.org/licenses/by/3.0/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Söküm kaydı · CC BY 3.0
-                </a>
-                <a
-                  className="text-xs underline"
-                  href="https://creativecommons.org/licenses/by/4.0/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Spin-up kaydı · CC BY 4.0
-                </a>
-                <a
-                  className="text-xs underline"
                   href="https://creativecommons.org/licenses/by-sa/3.0/"
                   target="_blank"
                   rel="noreferrer"
                 >
                   Fotoğraf · CC BY-SA 3.0
                 </a>
+                <p className="py-3 text-xs text-slate-600">
+                  SSD fotoğrafları: MatteX · CC0.
+                </p>
               </div>
             )}
           </div>
+          <p className="text-[10px] text-slate-600">
+            Enter: aşama · Space: oynat/duraklat · ← →: sahne
+          </p>
           <div className="menu-tools">
             <button
               className="icon-button"

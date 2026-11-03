@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { scenes } from "./registry";
+import { nextStage, presentationKey } from "./controls.mjs";
 export type MenuTab = "scenes" | "notes" | "sources";
 function readIndex() {
   const match = location.hash.match(/^#\/sunum\/(s\d{2})$/);
@@ -17,6 +18,38 @@ export function usePresentation() {
   const [visible, setVisible] = useState(!document.hidden);
   const [shortcuts, setShortcuts] = useState(true);
   const [notice, setNotice] = useState("");
+  const [progress, setProgress] = useState({
+    sceneId: scenes[index].id,
+    stage: 0,
+  });
+  const current = scenes[index];
+  const stage = progress.sceneId === current.id ? progress.stage : 0;
+  const setStage = useCallback(
+    (value: number) => {
+      setProgress({
+        sceneId: current.id,
+        stage: Math.max(0, Math.min((current.stages?.length ?? 1) - 1, value)),
+      });
+    },
+    [current],
+  );
+  const advance = useCallback(() => {
+    if (current.stages) {
+      setProgress((p) => ({
+        sceneId: current.id,
+        stage: nextStage(
+          p.sceneId === current.id ? p.stage : 0,
+          current.stages!.length,
+        ),
+      }));
+    } else {
+      document
+        .querySelector<HTMLButtonElement>(
+          `[data-scene-id="${current.id}"] [data-presentation-next]:not(:disabled)`,
+        )
+        ?.click();
+    }
+  }, [current]);
   const reduced = useReducedMotion();
   const goTo = useCallback((id: string) => {
     if (!scenes.some((s) => s.id === id)) return;
@@ -52,6 +85,7 @@ export function usePresentation() {
     const update = () => {
       const n = readIndex();
       setIndex(n);
+      setProgress({ sceneId: scenes[n].id, stage: 0 });
       document.title = `${scenes[n].shortTitle} · Mass Storage`;
       if (location.hash !== `#/sunum/${scenes[n].id}`)
         history.replaceState(null, "", `#/sunum/${scenes[n].id}`);
@@ -70,37 +104,44 @@ export function usePresentation() {
   }, []);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
+      const editing =
+        e.target instanceof Element &&
+        !!e.target.closest(
+          'input,textarea,select,[contenteditable]:not([contenteditable="false"]),[role="slider"]',
+        );
       if (
-        e.defaultPrevented ||
-        e.altKey ||
-        e.metaKey ||
-        e.ctrlKey ||
-        (e.target instanceof HTMLElement &&
-          e.target.closest('input,textarea,select,[contenteditable="true"]'))
-      )
-        return;
-      const k = e.key.toLowerCase();
-      if (k === "escape" && menu) {
-        setMenu(false);
+        e.repeat &&
+        !menu &&
+        shortcuts &&
+        !editing &&
+        ["Enter", " "].includes(e.key)
+      ) {
+        e.preventDefault();
         return;
       }
-      if (menu || !shortcuts) return;
-      let used = true;
-      if (k === "arrowright") move(1);
-      else if (k === "arrowleft") move(-1);
-      else if (k === "home") goTo(scenes[0].id);
-      else if (k === "end") goTo(scenes.at(-1)!.id);
-      else if (k === "m") openMenu();
-      else if (k === "n") {
+      const action = presentationKey(e, {
+        menu,
+        shortcuts,
+        editing,
+      });
+      if (!action) return;
+      if (action === "close-menu") setMenu(false);
+      else if (action === "advance") advance();
+      else if (action === "toggle-motion") setMotionOn((v) => !v);
+      else if (action === "next-scene") move(1);
+      else if (action === "previous-scene") move(-1);
+      else if (action === "first-scene") goTo(scenes[0].id);
+      else if (action === "last-scene") goTo(scenes.at(-1)!.id);
+      else if (action === "menu") openMenu();
+      else if (action === "notes") {
         setTab("notes");
         setMenu(true);
-      } else if (k === "f") void fullscreen();
-      else used = false;
-      if (used) e.preventDefault();
+      } else if (action === "fullscreen") void fullscreen();
+      e.preventDefault();
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [menu, shortcuts, move, goTo, openMenu, fullscreen]);
+  }, [menu, shortcuts, move, goTo, openMenu, fullscreen, advance]);
   useEffect(() => {
     if (!notice) return;
     const timer = setTimeout(() => setNotice(""), 4000);
@@ -108,7 +149,10 @@ export function usePresentation() {
   }, [notice]);
   return {
     index,
-    current: scenes[index],
+    current,
+    stage,
+    setStage,
+    advance,
     menu,
     setMenu,
     tab,

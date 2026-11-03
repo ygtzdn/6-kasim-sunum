@@ -358,7 +358,7 @@
     @apply flex flex-wrap items-center justify-center gap-3 font-display text-lg font-medium md:gap-6 md:text-3xl;
   }
   .access-lab {
-    @apply grid h-full min-h-0 w-full max-w-[1100px] grid-rows-[auto_minmax(0,1fr)_auto] gap-3;
+    @apply grid h-full min-h-0 w-full max-w-[1100px] grid-rows-[auto_minmax(0,1fr)_auto_auto] gap-3;
   }
   .access-summary {
     @apply flex shrink-0 items-center justify-center gap-5;
@@ -471,6 +471,340 @@
   }
 }
 .motion-off * {
-  animation: none !important;
+  animation-play-state: paused !important;
   transition: none !important;
+}
+
+/* Presenter 1: real photographs, one concept per manual stage. */
+@layer components {
+  .cover-photo {
+    @apply block max-h-[62dvh] w-full object-contain;
+  }
+  .roadmap-muted {
+    opacity: 0.48;
+  }
+  .roadmap-active {
+    opacity: 1;
+  }
+  .stage-progress {
+    @apply fixed bottom-4 left-4 z-40 flex h-11 max-w-[calc(100vw-280px)] items-center gap-2 rounded-2xl border border-slate-300 bg-white p-1 shadow-sm md:bottom-5 md:left-6;
+  }
+  .stage-position {
+    @apply shrink-0 font-display text-xs text-blue;
+  }
+  .stage-name {
+    @apply truncate px-1 text-xs font-semibold text-slate-700;
+  }
+  .intro-focus {
+    @apply flex h-full min-h-0 w-full max-w-[1180px] flex-col items-center justify-center gap-5 md:gap-8;
+  }
+  .intro-explanation {
+    @apply shrink-0 text-center;
+    transition:
+      opacity 0.3s ease,
+      translate 0.3s ease;
+  }
+  .intro-explanation h2 {
+    @apply font-display text-xl leading-tight font-semibold text-ink md:text-3xl;
+    text-wrap: balance;
+  }
+  .intro-explanation p {
+    @apply mx-auto mt-3 max-w-[780px] text-sm leading-relaxed text-slate-600 md:text-lg;
+    text-wrap: balance;
+  }
+  .medium-comparison {
+    @apply grid min-h-0 w-full flex-1 grid-cols-2 gap-3 md:gap-8;
+    max-height: 440px;
+  }
+  .medium-card {
+    @apply grid min-h-0 grid-rows-[auto_minmax(0,1fr)_auto_auto] items-center justify-items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 md:p-6;
+  }
+  .medium-card h2 {
+    @apply font-display text-xl font-semibold md:text-3xl;
+  }
+  .medium-card > img {
+    @apply h-full min-h-0 w-full object-contain;
+  }
+  .medium-card > p {
+    @apply text-center text-xs font-semibold text-slate-600 md:text-base;
+  }
+  .intro-bits {
+    @apply grid w-full max-w-[280px] grid-cols-8 gap-1;
+  }
+  .intro-bits span {
+    @apply flex aspect-square items-center justify-center rounded-md bg-blue/10 font-display text-sm font-medium text-blue;
+    transition:
+      background-color 0.5s,
+      color 0.5s;
+  }
+  .bits-lost span {
+    @apply bg-slate-100 text-slate-400;
+  }
+  .volatile-device {
+    @apply flex h-full min-h-0 w-full flex-col items-center justify-center gap-3;
+  }
+  .volatile-device > img {
+    @apply max-h-[60%] w-full object-contain;
+  }
+  .device-name {
+    @apply text-sm font-semibold text-slate-700 md:text-lg;
+  }
+  .power-status {
+    @apply flex items-center gap-2 text-xs font-medium text-slate-600;
+  }
+  .nonvolatile-devices {
+    @apply grid h-full min-h-0 w-full grid-cols-2 items-center gap-3;
+  }
+  .nonvolatile-devices > figure {
+    @apply flex h-full min-h-0 flex-col items-center justify-center gap-3;
+  }
+  .nonvolatile-devices img {
+    @apply max-h-[75%] w-full min-h-0 object-contain;
+  }
+  .nonvolatile-devices figcaption {
+    @apply text-sm font-semibold text-slate-700 md:text-lg;
+  }
+  .ssd-emphasis figcaption {
+    @apply text-blue;
+  }
+  .ram-module-photo {
+    @apply max-h-[20dvh] w-full object-contain;
+  }
+  .photo-layout {
+    @apply grid h-full min-h-0 w-full max-w-[1200px] grid-cols-[1.4fr_1fr] items-center gap-8;
+  }
+  .photo-figure {
+    @apply flex h-full min-h-0 min-w-0 flex-col items-center justify-center;
+  }
+  .hardware-photo {
+    @apply block min-h-0 w-full flex-1;
+  }
+  .photo-figure figcaption {
+    @apply shrink-0 pt-2 text-[10px] text-slate-500;
+  }
+  .photo-description {
+    @apply flex min-w-0 flex-col items-start gap-4;
+  }
+  .photo-description .intro-explanation {
+    @apply text-left;
+  }
+  .photo-description .intro-explanation h2 {
+    @apply text-2xl md:text-4xl;
+  }
+  .photo-description .intro-explanation p {
+    @apply mt-4 text-base leading-relaxed md:text-xl;
+  }
+  .photo-detail {
+    @apply text-xs leading-relaxed text-slate-500 md:text-sm;
+  }
+  .hardware-contrast {
+    @apply mt-3 flex flex-wrap items-center gap-3 text-sm font-semibold text-blue;
+  }
+  .intro-flash {
+    @apply w-full;
+  }
+  .intro-flash .flash-page strong {
+    @apply text-sm md:text-2xl;
+  }
+  .intro-flash .flash-page > span {
+    @apply text-[9px] md:text-xs;
+  }
+  .intro-flash .flash-page {
+    transition:
+      background-color 0.6s ease,
+      color 0.6s ease,
+      border-color 0.6s ease;
+  }
+  .page-reading {
+    @apply border-blue bg-blue/10;
+  }
+  .erased-block {
+    @apply border-blue bg-blue/5;
+  }
+  .access-phase {
+    @apply flex flex-col items-center gap-1 pt-6 text-center;
+  }
+  .access-phase strong {
+    @apply font-display text-base font-semibold md:text-xl;
+  }
+  .access-phase > span {
+    @apply text-xs text-slate-600 md:text-sm;
+  }
+  .access-phase small {
+    @apply text-[9px] text-slate-500;
+  }
+  .access-lab .access-controls {
+    padding-top: 0;
+  }
+  .metric-dimmed {
+    opacity: 0.28;
+  }
+  .latency-metric {
+    transition: opacity 0.35s;
+  }
+  .ram-disk-visual {
+    @apply flex w-full flex-col items-center gap-6 rounded-3xl border border-slate-200 bg-white p-8 text-blue md:max-w-[600px] md:p-12;
+  }
+  .ram-disk-visual > span {
+    @apply text-center text-sm font-semibold text-slate-700 md:text-xl;
+  }
+  .tape-strip {
+    @apply flex w-full max-w-[950px] items-center gap-4 rounded-3xl border border-slate-300 bg-white p-5 md:p-10;
+  }
+  .tape-cells {
+    @apply flex min-w-0 flex-1 gap-1 overflow-hidden border-y-8 border-ink py-3;
+  }
+  .tape-cells > span {
+    @apply flex h-16 min-w-10 flex-1 items-center justify-center bg-blue/10 font-display text-xl;
+  }
+  .logical-block-row {
+    @apply grid w-full grid-cols-8 gap-2;
+  }
+  .logical-block-row > div {
+    @apply flex aspect-square flex-col items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white;
+  }
+  .logical-block-row small {
+    @apply text-[9px] font-semibold text-slate-500;
+  }
+  .logical-block-row strong {
+    @apply font-display text-2xl md:text-4xl;
+  }
+  .logical-block-row .selected {
+    @apply border-blue bg-blue/10 text-blue;
+  }
+  .io-route {
+    @apply flex w-full items-center justify-center gap-3;
+  }
+  .io-route > span {
+    @apply flex min-h-20 flex-1 items-center justify-center rounded-2xl border border-slate-300 bg-white p-3 text-center text-xs font-semibold md:min-h-28 md:text-base;
+  }
+  .io-route > svg {
+    @apply shrink-0 text-blue;
+  }
+  .dma-route {
+    @apply flex w-full max-w-[600px] items-center gap-5 text-sm font-semibold text-blue md:text-xl;
+  }
+  .data-stream {
+    @apply relative h-1 flex-1 overflow-hidden rounded-full bg-blue/15;
+  }
+  .data-stream > span {
+    @apply absolute top-0 left-0 h-full w-1/5 rounded-full bg-blue;
+    animation: data-transfer 2s linear infinite;
+  }
+}
+@starting-style {
+  .intro-explanation,
+  .photo-marker,
+  .intro-reveal {
+    opacity: 0;
+  }
+}
+.photo-marker,
+.intro-reveal {
+  transition: opacity 0.4s ease;
+}
+@keyframes data-transfer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(600%);
+  }
+}
+@media (max-width: 767px) {
+  .app:has(.stage-progress) .stage {
+    padding-bottom: 128px;
+  }
+  .stage-progress {
+    bottom: 70px;
+    max-width: calc(100vw - 32px);
+  }
+  .stage-name {
+    max-width: 44vw;
+  }
+  .photo-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 15px;
+  }
+  .photo-description {
+    gap: 6px;
+  }
+  .photo-description .eyebrow {
+    display: none;
+  }
+  .photo-description .intro-explanation h2 {
+    font-size: 22px;
+  }
+  .photo-description .intro-explanation p {
+    margin-top: 6px;
+    font-size: 14px;
+  }
+  .intro-focus {
+    gap: 16px;
+  }
+  .intro-explanation h2 {
+    font-size: 18px;
+  }
+  .intro-explanation p {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+  .medium-card {
+    padding: 8px;
+    gap: 8px;
+  }
+  .medium-card > p {
+    font-size: 10px;
+  }
+  .nonvolatile-devices {
+    gap: 7px;
+  }
+  .medium-card h2 {
+    font-size: clamp(16px, 3.7vw, 24px);
+  }
+  .intro-flash {
+    gap: 10px;
+  }
+  .intro-flash .flash-page {
+    padding: 8px 2px;
+    gap: 6px;
+  }
+  .intro-flash .flash-row {
+    margin-top: 6px;
+  }
+  .io-route {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .io-route > svg {
+    width: 15px;
+  }
+  .io-route > span {
+    padding: 6px;
+    font-size: 10px;
+  }
+}
+@media (max-height: 650px) {
+  .intro-focus {
+    gap: 12px;
+  }
+  .intro-explanation p {
+    margin-top: 7px;
+  }
+  .photo-description .intro-explanation h2 {
+    font-size: 24px;
+  }
+  .photo-description .intro-explanation p {
+    font-size: 15px;
+  }
+  .access-phase {
+    padding-top: 20px;
+  }
+  .access-phase strong {
+    font-size: 14px;
+  }
+  .access-summary strong {
+    font-size: 28px;
+  }
 }

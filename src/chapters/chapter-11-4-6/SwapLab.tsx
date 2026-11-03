@@ -311,6 +311,7 @@ export function SwapJourney({ enabled }: { enabled: boolean }) {
       controls={
         <div className="flex flex-wrap items-center justify-center gap-2">
           <button
+            data-presentation-next
             className="primary-button"
             onClick={advance}
             disabled={Boolean(state.pending) || step >= actions.length}

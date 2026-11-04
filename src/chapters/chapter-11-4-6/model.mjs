@@ -42,8 +42,8 @@ export function encodeSecded(data) {
   return code;
 }
 
-/** Decode only within the demo's 0/1/2-flip error model. Three or more errors
- * are intentionally not classified as correctable.
+/** Valid only within the demo's 0/1/2-flip error model. With three or more
+ * flips, classification and correction are not guaranteed.
  * @param {number[]} received */
 export function decodeSecded(received) {
   if (received.length !== 8 || received.some((bit) => bit !== 0 && bit !== 1)) {
@@ -259,7 +259,7 @@ export function beginPageIn(state, pageId) {
   };
 }
 
-/** Commit transfer only after animation/completion; write failure never releases RAM.
+/** Commit transfer only on an explicit completion step; write failure never releases RAM.
  * @param {SwapState} state @returns {SwapState} */
 export function completeTransfer(state) {
   const transfer = state.pending;
@@ -310,4 +310,98 @@ export function swapInvariant(state) {
     if (page.swapValid && page.slot === null) return false;
   }
   return true;
+}
+
+/** Reconstruct the preparation state for the requested presentation stage.
+ * Stage 0/1 differ in the physical-media diagram, before any partition exists.
+ * @param {number} stage @returns {DeviceState} */
+export function deviceAtStage(stage) {
+  if (!Number.isInteger(stage) || stage < 0 || stage > 5)
+    throw new RangeError("Aygıt aşaması 0–5 aralığında olmalı.");
+  let state = createDevice();
+  if (stage >= 2) state = partitionDevice(state);
+  if (stage >= 3) state = prepareDevice(state, "filesystem");
+  if (stage >= 4) state = prepareDevice(state, "mount");
+  if (stage >= 5) state = prepareDevice(state, "save");
+  return state;
+}
+
+/** Replay the finite swap story from scratch: no timer commits hidden state.
+ * 0 initial, 1 write A, 2 commit, 3 read D, 4 commit, 5 drop B,
+ * 6 read A, 7 commit, 8 new full-space example, 9 refused eviction.
+ * @param {number} stage @returns {SwapState} */
+export function swapJourneyAtStage(stage) {
+  if (!Number.isInteger(stage) || stage < 0 || stage > 9)
+    throw new RangeError("Swap aşaması 0–9 aralığında olmalı.");
+  if (stage >= 8) {
+    const full = createSwapState(true);
+    return stage === 8 ? full : beginPageOut(full, "A");
+  }
+  let state = createSwapState();
+  if (stage >= 1) state = beginPageOut(state, "A");
+  if (stage >= 2) state = completeTransfer(state);
+  if (stage >= 3) state = beginPageIn(state, "D");
+  if (stage >= 4) state = completeTransfer(state);
+  if (stage >= 5) state = beginPageOut(state, "B");
+  if (stage >= 6) state = beginPageIn(state, "A");
+  if (stage >= 7) state = completeTransfer(state);
+  return state;
+}
+
+/** @typedef {{stage:number, ram:string|null, slot:string|null, slotStatus:'free'|'reserved'|'valid', pending:'write'|'read'|null, reads:number, writes:number}} PageJourneyState */
+/** One selected page needing preservation; this is not an OS replacement policy.
+ * @returns {PageJourneyState} */
+export function createPageJourney() {
+  return {
+    stage: 0,
+    ram: "P",
+    slot: null,
+    slotStatus: "free",
+    pending: null,
+    reads: 0,
+    writes: 0,
+  };
+}
+
+/** Advance exactly one explicit teaching event. Never advances from elapsed time.
+ * @param {PageJourneyState} previous @returns {PageJourneyState} */
+export function advancePageJourney(previous) {
+  if (previous.stage >= 6) return previous;
+  const next = { ...previous, stage: previous.stage + 1 };
+  switch (previous.stage) {
+    case 0:
+      next.slot = "P";
+      next.slotStatus = "reserved";
+      break;
+    case 1:
+      next.pending = "write";
+      break;
+    case 2:
+      next.pending = null;
+      next.slotStatus = "valid";
+      next.ram = null;
+      next.writes++;
+      break;
+    case 3:
+      next.pending = "read";
+      break;
+    case 4:
+      next.pending = null;
+      next.ram = "P";
+      next.slot = null;
+      next.slotStatus = "free";
+      next.reads++;
+      break;
+    // Stage 6 highlights identity/cost; no additional I/O is invented.
+  }
+  return next;
+}
+
+/** @param {number} stage @returns {PageJourneyState} */
+export function pageJourneyAtStage(stage) {
+  if (!Number.isInteger(stage) || stage < 0 || stage > 6)
+    throw new RangeError("Tek sayfa yolculuğu aşaması 0–6 aralığında olmalı.");
+  let state = createPageJourney();
+  while (state.stage < stage) state = advancePageJourney(state);
+  return state;
 }

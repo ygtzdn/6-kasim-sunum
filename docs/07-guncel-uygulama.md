@@ -1,5 +1,7 @@
 # 07 — Güncel uygulama ve tasarım kararı
 
+> **Tarihsel belge:** Bu dosya önceki planı/uygulamayı kaydeder. Güncel kaynak, akış, örnek ve kabul kararları için [14 — Yeni sunum mimarisi](14-kitaba-dayali-yeni-sunum-mimarisi.md), mevcut mimari için [08 — Modüler tam sunum](08-moduler-tam-sunum.md) esas alınır. Aşağıdaki eski örnek toplamları, yapılacaklar ve kaldırılan özellikler güncel uygulama taahhüdü değildir.
+
 > Sonraki uygulama: Sunum 36 sahneye tamamlandı, HDD kütüphane/hazır içerik modülü ve ayrıntılı notlar eklendi. Güncel kapsam için [08 — Modüler tam sunum](08-moduler-tam-sunum.md) esas alınır; bu belgedeki dokuz sahnelik durum önceki aşamadır.
 
 **2 Kasım 2026.** Bu belge, kullanıcının son yönlendirmelerini kaydeder. İlk planlardaki koyu tema, framework kullanmama ve sunum ekranında uzun metin gösterme kararlarının yerine geçer.

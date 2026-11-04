@@ -1,35 +1,3 @@
-export const introStages = {
-  s01: ["Bir okuma isteği", "İşletim sistemi", "Fiziksel depolama"],
-  s02: ["Donanım", "Zamanlama", "Yönetim", "Bağlantı ve RAID"],
-  s04: [
-    "Volatil ve Non-Volatil",
-    "Güç kesilir",
-    "Güç geri gelir",
-    "SSD de Non-Volatil",
-  ],
-  s03: [
-    "Gerçek HDD",
-    "Plaka",
-    "Mil",
-    "Kol",
-    "Okuma / yazma kafası",
-    "İz, sektör ve silindir",
-  ],
-  s05: ["Seek", "Dönme gecikmesi", "Aktarım", "Toplam servis süresi"],
-  s06: [
-    "Gerçek SSD",
-    "İç kart",
-    "Flash bellek",
-    "Denetleyici",
-    "Hareketli parça yok",
-  ],
-  s07: ["Sayfa oku", "Yeni sürümü yaz", "Eski sayfa geçersiz", "Bloğu sil"],
-  s08: [
-    "RAM disk",
-    "Manyetik teyp",
-    "Mantıksal bloklar",
-    "Sektörlerle eşleme",
-    "Komut ve veri yolu",
-  ],
-  s09: ["Soruyu düşün", "Mekanik bekleme sürer", "Zamanlamaya geçiş"],
-} as const;
+import curriculum from "./curriculum.json";
+export const introStages: Record<string, readonly string[]> =
+  Object.fromEntries(curriculum.map((scene) => [scene.id, scene.stages]));

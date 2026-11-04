@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { StageTitle, StageVisual } from "../../presentation/PresentationMotion";
 
 export function Stage({
   title,
@@ -11,10 +12,8 @@ export function Stage({
 }) {
   return (
     <section className="stage">
-      <h1 id="scene-heading" tabIndex={-1} className="stage-title">
-        {title}
-      </h1>
-      <div className="stage-visual">{children}</div>
+      <StageTitle title={title} />
+      <StageVisual>{children}</StageVisual>
       <div className="stage-controls">{controls}</div>
     </section>
   );

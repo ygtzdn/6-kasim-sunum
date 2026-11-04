@@ -1,0 +1,304 @@
+[
+  {
+    "id": "hdd-anatomy",
+    "title": "HDD: hareketin kaynağı",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 75,
+      "full": 120
+    },
+    "legacyIds": ["s03"],
+    "stages": [
+      "Gerçek HDD",
+      "Plaka ve mil",
+      "Kol ve okuma/yazma kafası",
+      "Konumlanma ile dönme farklı",
+      "Normal boşluk ve head crash riski"
+    ],
+    "sections": ["11.1"],
+    "slides": [4, 5],
+    "takeaway": "HDD’de kol konumlanması ve plaka dönüşü farklı işlerdir; normal okumada kafa yüzeye temas etmez.",
+    "model": "Gerçek fotoğrafın işaretleri ile özgün küçük yan kesit kullanılır; fotoğrafta görünmeyen fiziksel çizgiler varmış gibi sunulmaz."
+  },
+  {
+    "id": "hdd-geometry",
+    "title": "İz, sektör ve silindir",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": [],
+    "stages": [
+      "Tek yüzey",
+      "İz: dairesel yol",
+      "Sektör: izin parçası",
+      "Silindir: aynı yarıçaptaki izler"
+    ],
+    "sections": ["11.1"],
+    "slides": [5, 14, 16],
+    "takeaway": "İz, sektör ve silindir farklı geometrik gruplardır; silindir tek bir yüzey parçası değildir.",
+    "model": "Özgün düz SVG geometri modelidir; gerçek aygıt geometrisi veya kaynaktaki şeklin birebir kopyası olduğu iddia edilmez."
+  },
+  {
+    "id": "hdd-access-cost",
+    "title": "Bir HDD okumasının maliyeti",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 150
+    },
+    "legacyIds": ["s05"],
+    "stages": [
+      "İstek ve açık birimler",
+      "Seek: 5 ms",
+      "Ortalama dönme: 4,1667 ms",
+      "Konumlandırma: 9,1667 ms",
+      "4 KiB aktarımı: 0,032768 ms",
+      "Denetleyici ve toplam: 9,30 ms"
+    ],
+    "sections": ["11.1"],
+    "slides": [4, 6, 7],
+    "takeaway": "Konumlandırma seek ve dönmedir; bu örneğin servis süresi aktarım ve denetleyici katkısını da içerir.",
+    "model": "Kaynak girdileri açık birimlerle hesaplanır: 4 KiB, 7200 RPM, 5 ms seek, 125 MB/s, 0,1 ms denetleyici. Kuyruk beklemesi dışarıdadır."
+  },
+  {
+    "id": "hdd-request-size",
+    "title": "Küçük istek, büyük mekanik pay",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 90
+    },
+    "legacyIds": ["s09"],
+    "stages": [
+      "4 KiB / 125 MB/s",
+      "1 MiB / aynı aygıt",
+      "Aktarım hızını iki katına çıkar",
+      "Değişen ve değişmeyen bileşenler"
+    ],
+    "sections": ["11.1"],
+    "slides": [7],
+    "takeaway": "Aktarım boyutu veya hızı değişince seek ve dönme aynı kalabilir; küçük I/O toplamı transfer hızıyla aynı oranda değişmez.",
+    "model": "İki istek boyutu aynı mekanik koşullarda karşılaştırılır; sonuçlar özgün birim gösterimiyle hesaplanır, ürün kıyası yapılmaz."
+  },
+  {
+    "id": "hdd-history",
+    "title": "Kitaptaki ilk ticari disk örneği",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "extension",
+    "seconds": {
+      "core": 0,
+      "full": 45
+    },
+    "legacyIds": [],
+    "stages": [
+      "1956: IBM Model 350",
+      "50 plaka ve 5 milyon 7-bit karakter",
+      "Tarihsel erişim ölçeği"
+    ],
+    "sections": ["11.1"],
+    "slides": [8],
+    "takeaway": "Kitaptaki IBM Model 350 örneği depolamanın tarihsel ölçeğini gösterir; güncel ürün özelliklerini anlatmaz.",
+    "model": "Tarihsel bilgi kısa tipografi ve özgün sayma şemasıyla gösterilir; kapasite birimi sessizce modern MB değerine dönüştürülmez."
+  },
+  {
+    "id": "hdd-performance-metrics",
+    "title": "Hız, gecikme ve bandwidth",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "extension",
+    "seconds": {
+      "core": 0,
+      "full": 75
+    },
+    "legacyIds": [],
+    "stages": [
+      "Tarihsel arayüz tavanı: 6 Gb/s",
+      "Tarihsel etkin örnek: 1 Gb/s",
+      "Tek I/O servis süresi: ms",
+      "Toplam byte / toplam geçen süre"
+    ],
+    "sections": ["11.1", "11.2"],
+    "slides": [6, 7, 17],
+    "takeaway": "Arayüz tavanı, etkin transfer, tek I/O gecikmesi ve toplam disk bandwidth’i aynı ölçü değildir.",
+    "model": "Kaynak sayıları tarihsel örnek olarak etiketlenir; farklı birimler aynı çubuk uzunluğuyla yanlış karşılaştırılmaz."
+  },
+  {
+    "id": "nvm-device",
+    "title": "SSD, NVM ailesinin bir örneği",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": ["s06"],
+    "stages": [
+      "Gerçek SSD dışı",
+      "İç kart: flash ve denetleyici",
+      "Mekanik maliyetleri karşılaştır",
+      "NVM aygıt ailesi"
+    ],
+    "sections": ["11.1"],
+    "slides": [9],
+    "takeaway": "Flash tabanlı SSD kalıcıdır ve hareketli parça taşımaz; bütün NVM biçimleri tek bir SSD ürünüyle aynı değildir.",
+    "model": "Mevcut gerçek SSD fotoğrafları temel görevler için kullanılır; fiyat, güncel hız, kapasite veya evrensel güvenilirlik iddiası eklenmez."
+  },
+  {
+    "id": "flash-page-block",
+    "title": "Sayfa oku, blok sil",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 135
+    },
+    "legacyIds": ["s07"],
+    "stages": [
+      "Sayfa ve silme bloğu",
+      "P0’ı oku: içerik değişmez",
+      "Yeni L0 sürümünü boş P6’ya yaz",
+      "Canlı verisi kalmayan A’yı sil",
+      "Geçerli, geçersiz ve silinmiş"
+    ],
+    "sections": ["11.1"],
+    "slides": [10, 11],
+    "takeaway": "Flash güncellemesi boş sayfaya gider; geçersiz sayfa yeniden yazılabilir boş sayfa değildir ve silme daha büyük blokta yapılır.",
+    "model": "İki küçük blok fiziksel kuralı öğretir. Tam FTL tablosu, GC canlı taşıması ve yazma büyütmesi hesabı burada tekrarlanmaz."
+  },
+  {
+    "id": "flash-endurance",
+    "title": "Sınırlı silme ömrü ve DWPD",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "extension",
+    "seconds": {
+      "core": 0,
+      "full": 90
+    },
+    "legacyIds": [],
+    "stages": [
+      "Sınırlı program/silme dayanıklılığı",
+      "Kaynaktaki 1 TB / 5 DWPD",
+      "Günlük örnek bütçe: 5 TB",
+      "3 TB ve 6 TB günlük yükü karşılaştır"
+    ],
+    "sections": ["11.1"],
+    "slides": [10, 11],
+    "takeaway": "Silme dayanıklılığı sınırlıdır; DWPD kapasiteye göre günlük yazma hacmi derecelendirmesidir, hücre silme sayısı değildir.",
+    "model": "1 TB × 5 DWPD = 5 TB/gün kaynaktaki örnektir. Garanti koşulu korunur; kesin ömür veya evrensel NAND silme limiti çıkarılmaz."
+  },
+  {
+    "id": "ram-disk",
+    "title": "Dosya sistemi RAM’i kalıcı yapmaz",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": ["s04"],
+    "stages": [
+      "RAM disk olarak sunulur",
+      "Dosya olarak veri yerleştir",
+      "Gücü kes: RAM verisi kaybolur",
+      "Güç geri gelir: eski RAM verisi dönmez"
+    ],
+    "sections": ["11.1"],
+    "slides": [4, 9, 12],
+    "takeaway": "RAM disk blok aygıtı ve dosya sistemi sunabilir; fiziksel ortamın uçuculuğunu değiştirmez.",
+    "model": "Kavramsal bitler ve gerçek RAM/HDD/SSD fotoğrafları kullanılır; fiziksel güç komutu gönderilmez ve tmpfs ayrıntısı genişletilmez."
+  },
+  {
+    "id": "magnetic-tape",
+    "title": "Önce konumu bul, sonra sırayla aktar",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 30,
+      "full": 60
+    },
+    "legacyIds": [],
+    "stages": [
+      "Sıralı kayıt şeridi",
+      "Uzak kaydın konumunu bul",
+      "Ardışık kayıtları oku"
+    ],
+    "sections": ["11.1"],
+    "slides": [13],
+    "takeaway": "Teypte bir kaydın konumunu bulma ile o noktadan ardışık aktarım farklı işlerdir; rastgele seçim imkânsız diye sunulmaz.",
+    "model": "Özgün kayıt şeridi ve seçici kullanılır; gerçek süre, ürün hızı veya doğrulanmamış kitap alt bölümü verilmez."
+  },
+  {
+    "id": "logical-blocks",
+    "title": "OS’nin mantıksal blok görünümü",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": ["s08"],
+    "stages": [
+      "Numaralı LBA dizisi",
+      "LBA3 okuma isteği",
+      "Temel sıralı sektör eşlemesi",
+      "Fiziksel ayrıntıyı gizle, LBA’yı koru"
+    ],
+    "sections": ["11.1"],
+    "slides": [14, 16],
+    "takeaway": "Disk OS’ye tek boyutlu mantıksal blok dizisi olarak görünür; LBA her aygıtta aynı fiziksel koordinatı garanti etmez.",
+    "model": "Küçük sıralı eşleme eğitim modelidir. Bozuk sektör ve değişken geometri notlarda anılır; yeniden eşleme demosu kişi3’e bırakılır."
+  },
+  {
+    "id": "storage-data-path",
+    "title": "Komut yolu ve DMA veri yolu",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 105
+    },
+    "legacyIds": [],
+    "stages": [
+      "OS isteği ve hedef RAM",
+      "Host denetleyicisine komut",
+      "Aygıt denetleyicisine mesaj",
+      "Aygıtta veri erişimi",
+      "DMA ile DRAM’e veri aktarımı"
+    ],
+    "sections": ["11.1", "11.2"],
+    "slides": [15, 18],
+    "takeaway": "Komutun controller’lar üzerinden iletilmesi ile verinin DMA ile DRAM’e aktarılması ayrı akışlardır.",
+    "model": "Özgün iki hatlı diyagram ve aşamadan türetilen payload konumu kullanılır; gerçek DMA protokolü veya ürün arayüz performansı ölçülmez."
+  }
+]

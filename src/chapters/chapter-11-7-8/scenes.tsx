@@ -1,96 +1,57 @@
 import type { SceneDefinition } from "../../presentation/types";
-import { CloudScene, TopologyScene } from "./TopologyScenes";
 import {
-  FailureRaidScene,
+  CloudScene,
+  HostAttachedScene,
+  NasScene,
+  SanScene,
+  StorageArrayScene,
+} from "./TopologyScenes";
+import {
+  NestedRaidScene,
   ParityRaidScene,
-  RaidOverviewScene,
-  RaidTradeoffScene,
+  RaidFeaturesScene,
+  RaidIntroScene,
+  RaidLevelsScene,
   RebuildRaidScene,
   StripingMirrorScene,
+  XorRaidScene,
 } from "./RaidScenes";
+import {
+  IntegrityScene,
+  ObjectStorageScene,
+  PoolScene,
+} from "./IntegrityScenes";
 import { attachmentRaidNotes } from "./notes";
+import { attachmentStoryData } from "./storyData";
 
-/** Presenter 4's §11.7–11.8 module. Shared RAID state persists across scene mounts. */
-export const attachmentRaidScenes: SceneDefinition[] = [
-  {
-    id: "s26",
-    title: "Depolama nereye bağlı?",
-    shortTitle: "DAS · NAS · SAN",
-    chapter: "11.7",
-    presenterId: 4,
-    notes: attachmentRaidNotes.s26,
-    render: (context) => <TopologyScene {...context} />,
-  },
-  {
-    id: "s27",
-    title: "Dosya erişimi ile blok erişimi",
-    shortTitle: "Dosya / blok",
-    chapter: "11.7",
-    presenterId: 4,
-    notes: attachmentRaidNotes.s27,
-    render: (context) => <TopologyScene {...context} semantic />,
-  },
-  {
-    id: "s28",
-    title: "Bağlantı türünü iş yüküyle eşleştir",
-    shortTitle: "Bulut ve API",
-    chapter: "11.7",
-    presenterId: 4,
-    notes: attachmentRaidNotes.s28,
-    render: (context) => <CloudScene {...context} />,
-  },
-  {
-    id: "s29",
-    title: "Birden fazla disk neden kullanılır?",
-    shortTitle: "Depolama dizisi",
-    chapter: "11.8",
-    presenterId: 4,
-    notes: attachmentRaidNotes.s29,
-    render: (context) => <RaidOverviewScene {...context} />,
-  },
-  {
-    id: "s30",
-    title: "Striping ve mirroring",
-    shortTitle: "Şerit ve ayna",
-    chapter: "11.8",
-    presenterId: 4,
-    notes: attachmentRaidNotes.s30,
-    render: (context) => <StripingMirrorScene {...context} />,
-  },
-  {
-    id: "s31",
-    title: "Parite ile yeniden kurma",
-    shortTitle: "RAID 4 · 5 · 6",
-    chapter: "11.8",
-    presenterId: 4,
-    notes: attachmentRaidNotes.s31,
-    render: (context) => <ParityRaidScene {...context} />,
-  },
-  {
-    id: "s32",
-    title: "Hangi arızalardan sağ çıkılır?",
-    shortTitle: "Arıza ve RAID 10",
-    chapter: "11.8",
-    presenterId: 4,
-    notes: attachmentRaidNotes.s32,
-    render: (context) => <FailureRaidScene {...context} />,
-  },
-  {
-    id: "s33",
-    title: "Kapasitenin ve yeniden kurmanın bedeli",
-    shortTitle: "Kapasite / rebuild",
-    chapter: "11.8",
-    presenterId: 4,
-    notes: attachmentRaidNotes.s33,
-    render: (context) => <RebuildRaidScene {...context} />,
-  },
-  {
-    id: "s34",
-    title: "RAID seviyesi bir ödünleşimdir",
-    shortTitle: "Koruma ve bütünlük",
-    chapter: "11.8",
-    presenterId: 4,
-    notes: attachmentRaidNotes.s34,
-    render: (context) => <RaidTradeoffScene {...context} />,
-  },
-];
+const renderers: Record<
+  (typeof attachmentStoryData)[number]["id"],
+  SceneDefinition["render"]
+> = {
+  "host-attached": (context) => <HostAttachedScene {...context} />,
+  nas: (context) => <NasScene {...context} />,
+  "cloud-storage": (context) => <CloudScene {...context} />,
+  "storage-arrays": (context) => <StorageArrayScene {...context} />,
+  san: (context) => <SanScene {...context} />,
+  "raid-intro": (context) => <RaidIntroScene {...context} />,
+  "raid-striping": (context) => <StripingMirrorScene {...context} />,
+  "raid-parity": (context) => <ParityRaidScene {...context} />,
+  "raid-xor": (context) => <XorRaidScene {...context} />,
+  "raid-levels": (context) => <RaidLevelsScene {...context} />,
+  "raid-nested": (context) => <NestedRaidScene {...context} />,
+  "raid-rebuild": (context) => <RebuildRaidScene {...context} />,
+  "raid-features": (context) => <RaidFeaturesScene {...context} />,
+  "raid-integrity": (context) => <IntegrityScene {...context} />,
+  "storage-pools": (context) => <PoolScene {...context} />,
+  "object-storage": (context) => <ObjectStorageScene {...context} />,
+};
+
+/** Finite, independent stories in the verified OSC10 source order. */
+export const attachmentRaidScenes: SceneDefinition[] = attachmentStoryData.map(
+  (topic) => ({
+    ...topic,
+    shortTitle: topic.title,
+    notes: attachmentRaidNotes[topic.id],
+    render: renderers[topic.id],
+  }),
+);

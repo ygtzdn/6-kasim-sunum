@@ -18,11 +18,15 @@ export interface SceneContext {
 }
 export interface SceneDefinition {
   id: string;
+  legacyIds?: readonly string[];
+  kind: "intro" | "chapter" | "closing";
+  depth: "core" | "extension";
+  seconds: { core: number; full: number };
   title: string;
   shortTitle: string;
   chapter: string;
   presenterId: 1 | 2 | 3 | 4;
   notes: SceneNotes;
-  stages?: readonly string[];
+  stages: readonly string[];
   render: (context: SceneContext) => ReactNode;
 }

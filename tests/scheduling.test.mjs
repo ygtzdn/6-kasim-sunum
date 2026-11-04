@@ -2,29 +2,31 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   calculateSchedule,
+  cylinderMaximum,
   defaultSchedule,
   parseQueue,
   createFlashState,
   nextFlashStep,
   flashWriteAmplification,
+  flashStateAtStage,
 } from "../src/chapters/chapter-11-2-3/model.ts";
 
 test("default FCFS / SCAN / C-SCAN paths and totals match the teaching contract", () => {
   const expected = {
     FCFS: {
-      path: [35, 42, 12, 76, 24, 60],
-      order: [42, 12, 76, 24, 60],
-      total: 189,
+      path: [53, 98, 183, 37, 122, 14, 124, 65, 67],
+      order: [98, 183, 37, 122, 14, 124, 65, 67],
+      total: 640,
     },
     SCAN: {
-      path: [35, 42, 60, 76, 99, 24, 12],
-      order: [42, 60, 76, 24, 12],
-      total: 151,
+      path: [53, 37, 14, 0, 65, 67, 98, 122, 124, 183],
+      order: [37, 14, 65, 67, 98, 122, 124, 183],
+      total: 236,
     },
     "C-SCAN": {
-      path: [35, 42, 60, 76, 99, 0, 12, 24],
-      order: [42, 60, 76, 12, 24],
-      total: 187,
+      path: [53, 37, 14, 0, 199, 183, 124, 122, 98, 67, 65],
+      order: [37, 14, 183, 124, 122, 98, 67, 65],
+      total: 386,
     },
   };
   for (const [algorithm, result] of Object.entries(expected)) {
@@ -42,19 +44,35 @@ test("default FCFS / SCAN / C-SCAN paths and totals match the teaching contract"
   }
 });
 
-test("SCAN visits the physical edge before reversing; C-SCAN charges the wrap", () => {
-  const input = { head: 35, queue: [42, 12, 76, 24, 60], direction: "down" };
+test("upward SCAN visits the physical edge before reversing; C-SCAN charges the wrap", () => {
+  const input = { ...defaultSchedule, direction: "up" };
   assert.deepEqual(
     calculateSchedule("SCAN", input).path,
-    [35, 24, 12, 0, 42, 60, 76],
+    [53, 65, 67, 98, 122, 124, 183, 199, 37, 14],
   );
+  assert.equal(calculateSchedule("SCAN", input).total, 331);
   const circular = calculateSchedule("C-SCAN", input);
-  assert.deepEqual(circular.path, [35, 24, 12, 0, 99, 76, 60, 42]);
-  assert.equal(circular.total, 191);
+  assert.deepEqual(
+    circular.path,
+    [53, 65, 67, 98, 122, 124, 183, 199, 0, 14, 37],
+  );
+  assert.equal(circular.total, 382);
   assert.equal(
     circular.events.find((event) => event.kind === "wrap").distance,
-    99,
+    199,
   );
+});
+
+test("downward SCAN includes the physical edge; stopping at the last request would be LOOK", () => {
+  const result = calculateSchedule("SCAN", defaultSchedule);
+  // SCAN reaches cylinder 0 before serving the opposite side: 53 + 183.
+  assert.equal(result.total, 53 + 183);
+  const turn = result.events.find((event) => event.kind === "turn");
+  assert.equal(turn.position, 0);
+  assert.equal(turn.distance, 14);
+  // LOOK turns at 14: (53 - 14) + (183 - 14) = 208, not this SCAN path.
+  assert.equal(53 - 14 + (183 - 14), 208);
+  assert.notEqual(result.total, 208);
 });
 
 test("empty, repeated, current-head and endpoint requests preserve identities and terminate", () => {
@@ -66,7 +84,7 @@ test("empty, repeated, current-head and endpoint requests preserve identities an
     );
     const result = calculateSchedule(algorithm, {
       head: 35,
-      queue: [35, 99, 99, 0, 35],
+      queue: [35, 199, 199, 0, 35],
       direction: "up",
     });
     assert.equal(result.serviceOrder.length, 5);
@@ -76,7 +94,7 @@ test("empty, repeated, current-head and endpoint requests preserve identities an
     );
     assert.equal(
       result.events.filter(
-        (event) => event.kind === "service" && event.position === 99,
+        (event) => event.kind === "service" && event.position === 199,
       ).length,
       2,
     );
@@ -91,13 +109,13 @@ test("empty, repeated, current-head and endpoint requests preserve identities an
     );
   }
   assert.deepEqual(
-    calculateSchedule("SCAN", { head: 0, queue: [99], direction: "up" }).path,
-    [0, 99],
+    calculateSchedule("SCAN", { head: 0, queue: [199], direction: "up" }).path,
+    [0, 199],
   );
   assert.deepEqual(
-    calculateSchedule("C-SCAN", { head: 35, queue: [99, 0], direction: "up" })
+    calculateSchedule("C-SCAN", { head: 35, queue: [199, 0], direction: "up" })
       .path,
-    [35, 99, 0, 0],
+    [35, 199, 0, 0],
   );
   assert.deepEqual(
     calculateSchedule("FCFS", {
@@ -112,17 +130,19 @@ test("empty, repeated, current-head and endpoint requests preserve identities an
 test("queue parsing accepts separators and duplicates, rejects invalid bounds and fractions", () => {
   assert.deepEqual(parseQueue("42, 12 76,24\n60,42"), [42, 12, 76, 24, 60, 42]);
   assert.deepEqual(parseQueue("  "), []);
+  assert.equal(cylinderMaximum, 199);
+  assert.deepEqual(parseQueue("0, 100, 199"), [0, 100, 199]);
   for (const input of [
     "-1",
     "1.2",
     "abc",
-    "100",
+    "200",
     "1e1",
     Array(21).fill("1").join(","),
   ])
     assert.throws(() => parseQueue(input));
   assert.throws(() =>
-    calculateSchedule("SCAN", { head: 100, queue: [], direction: "up" }),
+    calculateSchedule("SCAN", { head: 200, queue: [], direction: "up" }),
   );
   assert.throws(() =>
     calculateSchedule("FCFS", { head: 35, queue: [1.5], direction: "up" }),
@@ -130,9 +150,9 @@ test("queue parsing accepts separators and duplicates, rejects invalid bounds an
 });
 
 test("every schedule services every request once, and cumulative totals match actual movement", () => {
-  for (const head of [0, 35, 99])
+  for (const head of [0, 53, 199])
     for (const direction of ["up", "down"])
-      for (const queue of [[0, 99, 0, 35], [35, 35], [10, 20, 80], []])
+      for (const queue of [[0, 199, 0, 53], [53, 53], [10, 120, 180], []])
         for (const algorithm of ["FCFS", "SCAN", "C-SCAN"]) {
           const result = calculateSchedule(algorithm, {
             head,
@@ -207,4 +227,27 @@ test("flash transitions are immutable and refuse to erase a block with live data
   nextFlashStep(initial);
   assert.equal(JSON.stringify(initial), snapshot);
   assert.throws(() => nextFlashStep({ ...initial, step: 3 }), /korunmadan/);
+});
+
+test("selecting flash stages out of order replays mappings, reserves and counters exactly", () => {
+  const expected = [];
+  let state = createFlashState();
+  expected.push(state);
+  for (let stage = 1; stage <= 5; stage++) {
+    state = nextFlashStep(state);
+    expected.push(state);
+  }
+  for (const stage of [5, 4, 2, 0, 3, 1, 5]) {
+    assert.deepEqual(flashStateAtStage(stage), expected[stage]);
+  }
+  const beforeErase = flashStateAtStage(3);
+  assert.equal(beforeErase.erases, 0);
+  assert.equal(beforeErase.reservedBlock, 2);
+  assert.ok(beforeErase.blocks[0].every((page) => page.status === "invalid"));
+  const afterErase = flashStateAtStage(4);
+  assert.equal(afterErase.erases, 1);
+  assert.equal(afterErase.reservedBlock, 0);
+  assert.ok(afterErase.blocks[0].every((page) => page.status === "free"));
+  afterErase.blocks[0][0].status = "invalid";
+  assert.deepEqual(flashStateAtStage(4), expected[4]);
 });

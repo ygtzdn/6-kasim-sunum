@@ -1,4 +1,3 @@
-import { useState, useSyncExternalStore } from "react";
 import { motion } from "motion/react";
 import {
   ArrowRight,
@@ -9,28 +8,10 @@ import {
   X,
 } from "lucide-react";
 import { Stage } from "../../components/presentation/ScenePrimitives";
-import {
-  createFlashState,
-  flashWriteAmplification,
-  nextFlashStep,
-} from "./model";
+import type { SceneContext } from "../../presentation/types";
+import { flashStateAtStage, flashWriteAmplification } from "./model";
+import { StageCaption } from "../../presentation/PresentationMotion";
 
-let flashState = createFlashState();
-const listeners = new Set<() => void>();
-function subscribe(listener: () => void) {
-  listeners.add(listener);
-  return () => {
-    listeners.delete(listener);
-  };
-}
-function advance() {
-  flashState = nextFlashStep(flashState);
-  listeners.forEach((listener) => listener());
-}
-function reset() {
-  flashState = createFlashState();
-  listeners.forEach((listener) => listener());
-}
 const actions = [
   "L0’ı güncelle",
   "L1’i güncelle",
@@ -40,20 +21,23 @@ const actions = [
   "Tamamlandı",
 ];
 
-export function FlashLab({ enabled }: { enabled: boolean }) {
-  const state = useSyncExternalStore(subscribe, () => flashState);
-  const [selected, setSelected] = useState(0);
+export function FlashLab({ enabled, stage, setStage }: SceneContext) {
+  const state = flashStateAtStage(stage);
+  const selected = [0, 0, 1, 2, 2, 2][state.step];
   const ratio = flashWriteAmplification(state);
   return (
     <Stage
-      title="3 yazma. 5 fiziksel yazma."
+      title={
+        state.step >= 5
+          ? "3 host yazması. 5 fiziksel yazma."
+          : "Host yazması = fiziksel yazma mı?"
+      }
       controls={
         <div className="flex flex-wrap items-center justify-center gap-2">
           <button
-            data-presentation-next
             className="primary-button disabled:opacity-40"
             disabled={state.step >= 5}
-            onClick={advance}
+            onClick={() => setStage(stage + 1)}
           >
             {actions[state.step]}
             <SkipForward size={18} />
@@ -61,7 +45,7 @@ export function FlashLab({ enabled }: { enabled: boolean }) {
           <button
             className="icon-button"
             aria-label="Flash yazma ve GC modelini sıfırla"
-            onClick={reset}
+            onClick={() => setStage(0)}
           >
             <RotateCcw size={19} />
           </button>
@@ -96,6 +80,9 @@ export function FlashLab({ enabled }: { enabled: boolean }) {
             </strong>
             <span className="text-[9px] font-semibold text-slate-600 md:text-xs">
               Yazma büyütmesi
+            </span>
+            <span className="text-[8px] text-slate-500 md:text-[10px]">
+              Fiziksel / host
             </span>
           </div>
         </div>
@@ -185,24 +172,19 @@ export function FlashLab({ enabled }: { enabled: boolean }) {
             FTL
           </span>
           {Object.entries(state.mapping).map(([logical, location]) => (
-            <button
+            <span
               key={logical}
-              onClick={() => setSelected(Number(logical))}
-              aria-pressed={selected === Number(logical)}
+              aria-label={`L${logical} → B${location.block}.P${location.page}${selected === Number(logical) ? ", bu aşamada izlenen eşleme" : ""}`}
               className={`inline-flex items-center gap-1 rounded-md border px-1.5 py-1 text-[9px] font-semibold md:px-2 md:text-[10px] ${selected === Number(logical) ? "border-blue bg-blue text-white" : "border-slate-300 bg-white"}`}
             >
               L{logical}
               <ArrowRight size={10} />B{location.block}.P{location.page}
-            </button>
+            </span>
           ))}
         </div>
-        <div
-          className="h-4 text-center text-[10px] font-semibold text-slate-600 md:h-5 md:text-xs"
-          role="status"
-          aria-live="polite"
-        >
+        <StageCaption className="h-4 text-center text-[10px] font-semibold text-slate-600 md:h-5 md:text-xs">
           {state.event}
-        </div>
+        </StageCaption>
       </div>
     </Stage>
   );

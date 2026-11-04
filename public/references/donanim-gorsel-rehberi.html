@@ -1,0 +1,119 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HDD ve SSD · Görsel parça rehberi</title><style>
+.hardware-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+}
+.hardware-photo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 48dvh;
+  overflow: visible;
+}
+.hardware-callout {
+  font-family: Manrope, Arial, sans-serif;
+  pointer-events: none;
+}
+.hardware-photo figcaption {
+  flex-shrink: 0;
+  font-size: 9px;
+  line-height: 1.4;
+  color: #64748b;
+  text-align: center;
+}
+.hardware-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+}
+.hardware-parts > div {
+  transition: opacity 240ms ease;
+}
+.hardware-parts .part-context {
+  opacity: 0.55;
+}
+.hardware-parts dt {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: "Space Grotesk", Manrope, Arial, sans-serif;
+  font-size: clamp(16px, 1.7vw, 25px);
+  font-weight: 600;
+  line-height: 1.2;
+}
+.hardware-parts dt span {
+  font-size: 0.7em;
+}
+.hardware-parts dd {
+  margin: 5px 0 0 0;
+  font-size: clamp(11px, 1.1vw, 15px);
+  line-height: 1.55;
+  color: #475569;
+}
+.hardware-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  width: 100%;
+  min-height: 0;
+  align-items: center;
+  gap: 28px;
+}
+.hardware-explanation {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+@media (max-width: 767px) {
+  .hardware-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .hardware-photo svg {
+    max-height: 32dvh;
+  }
+  .hardware-explanation {
+    gap: 8px;
+  }
+  .hardware-parts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 16px;
+  }
+  .hardware-parts dt {
+    font-size: 14px;
+  }
+  .hardware-parts dd {
+    font-size: 10px;
+    line-height: 1.35;
+  }
+}
+@media (max-height: 700px) and (min-width: 768px) {
+  .hardware-parts {
+    gap: 10px;
+  }
+  .hardware-parts dt {
+    font-size: 18px;
+  }
+  .hardware-parts dd {
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hardware-parts > div {
+    transition: none;
+  }
+}
+
+*{box-sizing:border-box}body{margin:0;background:#f8f9fc;color:#111827;font:16px/1.6 Manrope,Arial,sans-serif}main{width:min(1200px,100% - 48px);margin:auto}.guide-cover{padding:48px 0 20px}.eyebrow{color:#2247eb;text-transform:uppercase;font-size:11px;font-weight:700;letter-spacing:.12em}h1,h2{font-family:'Space Grotesk',Arial,sans-serif;line-height:1.15;letter-spacing:-.035em}h1{font-size:clamp(32px,5vw,56px);margin:12px 0}h2{font-size:clamp(26px,3vw,38px);margin:12px 0}.lead{font-size:18px;max-width:900px;color:#475569}.guide-sheet{padding:36px 0 44px;border-top:2px solid #111827}.guide-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);align-items:center;gap:40px;margin:28px 0}.guide-layout .hardware-photo svg{max-height:none}.hardware-parts dt{font-size:22px}.hardware-parts dd{font-size:14px}.function-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;list-style:none;counter-reset:flow;padding:20px 0;margin:0;border-block:1px solid #cbd5e1}.function-flow li{counter-increment:flow;font-size:16px;font-weight:600}.function-flow li:before{content:counter(flow,decimal-leading-zero);display:block;color:#2247eb;font-size:11px;margin-bottom:6px}.explanation{font-size:18px;max-width:1000px}.limit,.source{font-size:13px;color:#475569}.source{margin-top:24px}a{color:#2247eb}footer{font-size:12px;color:#64748b;padding:0 0 32px}
+@media(max-width:767px){main{width:calc(100% - 28px)}.guide-layout{grid-template-columns:1fr;gap:20px}.hardware-parts{grid-template-columns:1fr}.hardware-parts dt{font-size:19px}.hardware-parts dd{font-size:14px}.function-flow{gap:12px}.function-flow li{font-size:13px}}
+@page{size:A4 landscape;margin:12mm}@media print{body{background:white;font-size:10pt}main{width:100%}.guide-cover{display:none}.guide-cover h1{font-size:24pt}.guide-cover p{font-size:10pt}.guide-sheet{break-before:page;padding:0;border:0}.guide-sheet:first-of-type{break-before:auto}.guide-layout{grid-template-columns:1.6fr 1fr;gap:8mm;margin:5mm 0}.guide-layout .hardware-photo svg{max-height:105mm}.hardware-parts{display:flex;gap:3mm}.hardware-parts dt{font-size:13pt}.hardware-parts dd{font-size:9pt}.function-flow{padding:3mm 0}.function-flow li,.lead,.explanation{font-size:11pt}.limit,.source{font-size:8pt}h2{font-size:22pt}.source{margin-top:3mm}footer{display:none}}
+</style></head><body><main><header class="guide-cover"><span class="eyebrow">Operating System Concepts · 10. baskı · 11.1</span><h1>HDD ve SSD<br>Görsel parça rehberi</h1><p>Fotoğraftaki numarayı sağdaki açıklamayla eşleştir. Önce parçayı, ardından işlevini ve erişim maliyetini düşün.</p></header><section class="guide-sheet" id="hdd"><header><span class="eyebrow">1 / 2 · Aygıtı tanı</span><h2>HDD: iki farklı mekanik hareket</h2><p class="lead">Veri plaka üzerinde tutulur. Mil plakayı döndürürken kol, kafa ucunu hedef yarıçapa götürür.</p></header><div class="guide-layout"><figure class="hardware-photo"><svg viewBox="0 0 1000 739.5" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Açık HDD: manyetik plaka, merkezde mil, üstte kol ve park alanındaki kafa ucu. İşaretler: 1 Plaka, 2 Mil, 3 Kol, 4 Kafa ucu · parkta"><image href="../media/hdd-open.png" width="1000" height="739.5"></image><g data-hardware-part="platter" class="hardware-callout" style="opacity:1"><path d="M 280 384.54 L 80 384.54 L 80 295.8" fill="none" stroke="white" stroke-width="7" stroke-linejoin="round"></path><path d="M 280 384.54 L 80 384.54 L 80 295.8" fill="none" stroke="#2247eb" stroke-width="2.5" stroke-linejoin="round"></path><circle cx="280" cy="384.54" r="7" fill="white" stroke="#2247eb" stroke-width="3"></circle><text x="80" y="285.8" text-anchor="start" fill="#2247eb" font-size="30" font-weight="700" stroke="white" stroke-width="7" paint-order="stroke" stroke-linejoin="round">1 · Plaka</text></g><g data-hardware-part="spindle" class="hardware-callout" style="opacity:1"><path d="M 438 379.3635 L 640 379.3635 L 640 523.415" fill="none" stroke="white" stroke-width="7" stroke-linejoin="round"></path><path d="M 438 379.3635 L 640 379.3635 L 640 523.415" fill="none" stroke="#2247eb" stroke-width="2.5" stroke-linejoin="round"></path><circle cx="438" cy="379.3635" r="7" fill="white" stroke="#2247eb" stroke-width="3"></circle><text x="640" y="559.415" text-anchor="start" fill="#2247eb" font-size="30" font-weight="700" stroke="white" stroke-width="7" paint-order="stroke" stroke-linejoin="round">2 · Mil</text></g><g data-hardware-part="arm" class="hardware-callout" style="opacity:1"><path d="M 590 195.9675 L 770 195.9675 L 770 118.32000000000001" fill="none" stroke="white" stroke-width="7" stroke-linejoin="round"></path><path d="M 590 195.9675 L 770 195.9675 L 770 118.32000000000001" fill="none" stroke="#c2410c" stroke-width="2.5" stroke-linejoin="round"></path><circle cx="590" cy="195.9675" r="7" fill="white" stroke="#c2410c" stroke-width="3"></circle><text x="770" y="108.32000000000001" text-anchor="start" fill="#c2410c" font-size="30" font-weight="700" stroke="white" stroke-width="7" paint-order="stroke" stroke-linejoin="round">3 · Kol</text></g><g data-hardware-part="head" class="hardware-callout" style="opacity:1"><path d="M 460 150.1185 L 170 150.1185 L 170 110.925" fill="none" stroke="white" stroke-width="7" stroke-linejoin="round"></path><path d="M 460 150.1185 L 170 150.1185 L 170 110.925" fill="none" stroke="#c2410c" stroke-width="2.5" stroke-linejoin="round"></path><circle cx="460" cy="150.1185" r="7" fill="white" stroke="#c2410c" stroke-width="3"></circle><text x="170" y="100.925" text-anchor="start" fill="#c2410c" font-size="30" font-weight="700" stroke="white" stroke-width="7" paint-order="stroke" stroke-linejoin="round">4 · Kafa ucu · parkta</text></g></svg><figcaption>Evan-Amos / AGreuet · CC BY-SA 3.0 · Gerçek aygıt örneği</figcaption></figure><dl class="hardware-parts"><div class="part-active"><dt><span style="color:#2247eb">01</span>Plaka</dt><dd>Veri, plakanın manyetik yüzeyinde tutulur.</dd></div><div class="part-active"><dt><span style="color:#2247eb">02</span>Mil</dt><dd>Merkezdeki mil ve motor, plakayı döndürür.</dd></div><div class="part-active"><dt><span style="color:#c2410c">03</span>Kol</dt><dd>Kol, kafa ucunu hedef izin yarıçapına taşır.</dd></div><div class="part-active"><dt><span style="color:#c2410c">04</span>Kafa ucu · parkta</dt><dd>İşaret, park rampasındaki kol ucunu gösterir. Çok küçük okuma/yazma elemanı bu ölçekte ayrı seçilemez.</dd></div></dl></div><ol class="function-flow"><li>Seek · kolun konumu</li><li>Dönme · sektörün konumu</li><li>Aktarım · veri hareketi</li></ol><p class="explanation">Seek, kafanın hedef ize konumlanmasıdır. Dönme beklemesi ise istenen sektörün kafa altına gelmesidir. Bu iki maliyet farklıdır.</p><p class="limit">Kafa ucu fotoğrafta park alanındadır. Okuma/yazma elemanı bu ölçekte ayrı seçilemez. İz ve sektör çizgileri fotoğrafta görünmez; sonraki geometri slaydı bunları kavramsal olarak gösterir.</p><p class="source">Fotoğraf: <a href="https://commons.wikimedia.org/wiki/File:Laptop-hard-drive-exposed_remix_transparent.png">Evan-Amos / AGreuet · CC BY-SA 3.0</a>. Kavramlar: Operating System Concepts, 10. baskı, Bölüm 11.1.</p></section>
+<section class="guide-sheet" id="ssd-board"><header><span class="eyebrow">2 / 2 · Aygıtı tanı</span><h2>SSD: yönetim, kalıcı bellek ve bağlantı</h2><p class="lead">Denetleyici işlemleri yönetir. NAND flash yongaları veriyi tutar. Bağlantı ucu, aygıtı bilgisayara bağlar.</p></header><div class="guide-layout"><figure class="hardware-photo"><svg viewBox="0 0 1000 635.0502512562814" preserveAspectRatio="xMidYMid meet" role="img" aria-label="SSD iç kartı: solda SATA bağlantısı ve denetleyici, sağda NAND flash yongaları. İşaretler: 1 Denetleyici, 2 NAND flash, 3 SATA bağlantısı"><image href="../media/ssd-board.png" width="1000" height="635.0502512562814"></image><g data-hardware-part="controller" class="hardware-callout" style="opacity:1"><path d="M 288 260.37060301507535 L 100 260.37060301507535 L 100 190.51507537688443" fill="none" stroke="white" stroke-width="7" stroke-linejoin="round"></path><path d="M 288 260.37060301507535 L 100 260.37060301507535 L 100 190.51507537688443" fill="none" stroke="#2247eb" stroke-width="2.5" stroke-linejoin="round"></path><circle cx="288" cy="260.37060301507535" r="7" fill="white" stroke="#2247eb" stroke-width="3"></circle><text x="100" y="180.51507537688443" text-anchor="start" fill="#2247eb" font-size="30" font-weight="700" stroke="white" stroke-width="7" paint-order="stroke" stroke-linejoin="round">1 · Denetleyici</text></g><g data-hardware-part="nand" class="hardware-callout" style="opacity:1"><path d="M 663 311.1746231155779 L 950 311.1746231155779 L 950 322.3291457286432" fill="none" stroke="white" stroke-width="7" stroke-linejoin="round"></path><path d="M 663 311.1746231155779 L 950 311.1746231155779 L 950 322.3291457286432" fill="none" stroke="#c2410c" stroke-width="2.5" stroke-linejoin="round"></path><circle cx="663" cy="311.1746231155779" r="7" fill="white" stroke="#c2410c" stroke-width="3"></circle><text x="950" y="358.3291457286432" text-anchor="end" fill="#c2410c" font-size="30" font-weight="700" stroke="white" stroke-width="7" paint-order="stroke" stroke-linejoin="round">2 · NAND flash</text></g><g data-hardware-part="connector" class="hardware-callout" style="opacity:1"><path d="M 65 431.8341708542714 L 120 431.8341708542714 L 120 525.5452261306533" fill="none" stroke="white" stroke-width="7" stroke-linejoin="round"></path><path d="M 65 431.8341708542714 L 120 431.8341708542714 L 120 525.5452261306533" fill="none" stroke="#475569" stroke-width="2.5" stroke-linejoin="round"></path><circle cx="65" cy="431.8341708542714" r="7" fill="white" stroke="#475569" stroke-width="3"></circle><text x="120" y="561.5452261306533" text-anchor="start" fill="#475569" font-size="30" font-weight="700" stroke="white" stroke-width="7" paint-order="stroke" stroke-linejoin="round">3 · SATA bağlantısı</text></g></svg><figcaption>MatteX · CC0 · Gerçek aygıt örneği</figcaption></figure><dl class="hardware-parts"><div class="part-active"><dt><span style="color:#2247eb">01</span>Denetleyici</dt><dd>Host isteklerini işler ve flash üzerindeki işlemleri yönetir.</dd></div><div class="part-active"><dt><span style="color:#c2410c">02</span>NAND flash</dt><dd>Veri bu bellek yongalarında kalıcı olarak tutulur. İşaret, bir NAND yongasını örnek gösterir.</dd></div><div class="part-active"><dt><span style="color:#475569">03</span>SATA bağlantısı</dt><dd>Bu aygıtın güç ve veri bağlantısıdır. Her SSD&#x27;nin bağlantı biçimi aynı değildir.</dd></div></dl></div><ol class="function-flow"><li>SATA · komut ve veri</li><li>Denetleyici · yönetim</li><li>NAND · kalıcı kayıt</li></ol><p class="explanation">SSD'de mekanik seek ve dönme yoktur. Buna rağmen komut iletimi, veri aktarımı ve flash yönetimi işleri devam eder.</p><p class="limit">Fotoğraf belirli bir SATA SSD örneğidir. Her SSD aynı kart düzenini veya bağlantıyı kullanmaz. NAND işareti bütün yongaları sınıflandırmak yerine bir bellek yongasını örnek gösterir.</p><p class="source">Fotoğraf: <a href="https://commons.wikimedia.org/wiki/File:Samsung_SSD_840_120GB_MZ-7TD120--6_BOARD_TOP.JPG">MatteX · CC0</a>. Kavramlar: Operating System Concepts, 10. baskı, Bölüm 11.1.</p></section><footer>Fotoğraflar bu HTML dosyasının yanındaki ../media klasöründen okunur. Yerel proje veya sunum sunucusu üzerinden çevrimdışı kullanılabilir. Tarayıcının yazdır komutuyla yatay sayfa düzeninde yazdırılabilir.</footer></main></body></html>

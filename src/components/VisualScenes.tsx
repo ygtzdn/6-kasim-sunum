@@ -8,6 +8,7 @@ import {
   Layers3,
 } from "lucide-react";
 import { Stage } from "./presentation/ScenePrimitives";
+import { StageCaption } from "../presentation/PresentationMotion";
 
 export function Cover({
   start,
@@ -61,13 +62,15 @@ export function Cover({
         />
         <div className="flex items-center gap-3 text-xs font-semibold">
           <span className="h-2 w-2 rounded-full bg-blue" />
-          {
-            [
-              "Bir dosyayı okumak…",
-              "İşletim sistemi isteği iletir.",
-              "Depolama aygıtı veriye erişir.",
-            ][stage]
-          }
+          <StageCaption>
+            {
+              [
+                "Bir dosyayı okumak…",
+                "İşletim sistemi isteği iletir.",
+                "Depolama aygıtı veriye erişir.",
+              ][stage]
+            }
+          </StageCaption>
         </div>
       </motion.div>
     </section>
@@ -76,18 +79,20 @@ export function Cover({
 export function Roadmap({
   goTo,
   stage,
+  enabled,
 }: {
   goTo: (id: string) => void;
   stage: number;
+  enabled: boolean;
 }) {
-  const labels = ["Donanım", "Zamanlama", "Yönetim", "RAID"];
+  const labels = ["Donanım", "Zamanlama", "Yönetim", "Bağlantı ve RAID"];
   const sections = ["11.1", "11.2–11.3", "11.4–11.6", "11.7–11.8"];
   const icons = [HardDrive, Cpu, Layers3, Database];
   return (
     <Stage
       title="Dört bakış."
       controls={
-        <button className="primary-button" onClick={() => goTo("s03")}>
+        <button className="primary-button" onClick={() => goTo("hdd-anatomy")}>
           11.1’e başla <ArrowRight size={19} />
         </button>
       }
@@ -97,11 +102,26 @@ export function Roadmap({
           const Icon = icons[i];
           return (
             <motion.button
-              onClick={() => goTo(["s03", "s10", "s18", "s26"][i])}
+              onClick={() =>
+                goTo(
+                  [
+                    "hdd-anatomy",
+                    "hdd-request-queue",
+                    "error-detection",
+                    "host-attached",
+                  ][i],
+                )
+              }
               aria-label={`${i + 1}. kişinin bölümüne geç`}
-              className={`roadmap-node ${stage === i ? "roadmap-active" : "roadmap-muted"}`}
+              className="roadmap-node"
               key={name}
-              whileHover={{ y: -8 }}
+              initial={false}
+              animate={{
+                opacity: stage === i ? 1 : 0.48,
+                y: stage === i ? -6 : 0,
+              }}
+              whileHover={enabled ? { y: -9 } : undefined}
+              transition={{ duration: enabled ? 0.28 : 0 }}
             >
               <span className="text-sm font-medium text-slate-600">
                 0{i + 1} / {sections[i]}

@@ -1,5 +1,7 @@
 # 03 — Etkileşim ve simülasyon şartnamesi
 
+> **Tarihsel belge:** Bu dosya önceki planı/uygulamayı kaydeder. Güncel kaynak, akış, örnek ve kabul kararları için [14 — Yeni sunum mimarisi](14-kitaba-dayali-yeni-sunum-mimarisi.md), mevcut mimari için [08 — Modüler tam sunum](08-moduler-tam-sunum.md) esas alınır. Aşağıdaki eski örnek toplamları, yapılacaklar ve kaldırılan özellikler güncel uygulama taahhüdü değildir.
+
 ## 1. Ortak davranış
 
 Sekiz demo eğitim amaçlı deterministik modellerdir. Gerçek aygıta erişmez, performans ölçmez, ağ isteği göndermez ve kişisel veri kullanmaz. Her modelde görünür başlangıç durumu, açıklanan bir eylem, sayısal/metinsel sonuç ve sıfırlama bulunur.

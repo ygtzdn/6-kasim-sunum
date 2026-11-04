@@ -1,5 +1,7 @@
 # 01 — Proje kapsamı ve deneyim tasarımı
 
+> **Tarihsel belge:** Bu dosya önceki planı/uygulamayı kaydeder. Güncel kaynak, akış, örnek ve kabul kararları için [14 — Yeni sunum mimarisi](14-kitaba-dayali-yeni-sunum-mimarisi.md), mevcut mimari için [08 — Modüler tam sunum](08-moduler-tam-sunum.md) esas alınır. Aşağıdaki eski örnek toplamları, yapılacaklar ve kaldırılan özellikler güncel uygulama taahhüdü değildir.
+
 > Güncel yönlendirme: Açık tema, az metin, Tailwind ve kaydırmasız sahneler için [07 — Güncel uygulama](07-guncel-uygulama.md) esas alınır. Aşağıdaki ilk tasarım kararlarından çelişenler geçersizdir; bölüm ve sunucu kapsamı korunur.
 
 **Tarih:** 2 Kasım 2026 · **Aşama:** Uygulama öncesi · **Doküman sürümü:** 1.0

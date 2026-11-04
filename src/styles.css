@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./chapters/chapter-11-1/hardware-photo.css";
 
 @theme {
   --font-sans: "Manrope", sans-serif;
@@ -27,6 +28,7 @@
   button:focus-visible,
   a:focus-visible,
   input:focus-visible,
+  select:focus-visible,
   [role="button"]:focus-visible {
     outline: 3px solid #2247eb;
     outline-offset: 4px;
@@ -42,6 +44,362 @@
   }
 }
 @layer components {
+  .flow-diagram {
+    width: 100%;
+    height: clamp(220px, 43dvh, 450px);
+    min-height: 0;
+    flex-shrink: 1;
+    margin: 0;
+  }
+  .flow-diagram.diagram-expanded {
+    height: 100%;
+    flex: 1 1 0%;
+    min-height: 0;
+  }
+  .diagram-expanded .diagram-node strong {
+    font-size: 22px;
+  }
+  .diagram-expanded .diagram-detail {
+    font-size: 15px;
+  }
+  .diagram-expanded .diagram-badge {
+    font-size: 12px;
+  }
+  .remap-scene {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    min-height: 0;
+    gap: 12px;
+  }
+  .remap-address-row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .remap-address-row > div > span {
+    padding: 7px 2px;
+    border-radius: 6px;
+    background: #e9edf4;
+    text-align: center;
+  }
+  .remap-address-row .address-selected {
+    background: #2247eb;
+    color: white;
+  }
+  .remap-address-row .address-failed {
+    background: #ffedd5;
+    color: #9a3412;
+  }
+  .endurance-scene {
+    width: 100%;
+    max-width: 1200px;
+  }
+  .endurance-with-chart {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .endurance-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .endurance-facts strong {
+    font-size: clamp(25px, 3vw, 42px);
+  }
+  .endurance-facts span {
+    font-size: 14px;
+  }
+  .endurance-chart {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 3dvh, 30px);
+  }
+  .endurance-chart-heading {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .endurance-chart-heading > span {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+  }
+  .endurance-bar-row > div:first-child {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 15px;
+  }
+  .endurance-bar-row strong {
+    font-size: 24px;
+  }
+  .endurance-track {
+    position: relative;
+    height: clamp(40px, 8dvh, 64px);
+    background: #e9edf4;
+    border-radius: 8px;
+  }
+  .endurance-track > div {
+    height: 100%;
+    border-radius: 8px;
+  }
+  .endurance-track > i {
+    position: absolute;
+    top: -7px;
+    bottom: -7px;
+    border-left: 3px dashed #111827;
+  }
+  .exercise-scene {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: 44px;
+    width: 100%;
+    max-width: 1240px;
+    height: 100%;
+    min-height: 0;
+  }
+  .exercise-question {
+    min-width: 0;
+  }
+  .exercise-question > a {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2247eb;
+    text-decoration: underline;
+  }
+  .exercise-question h2 {
+    font-size: clamp(21px, 2vw, 30px);
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 14px 0 20px;
+    text-wrap: balance;
+  }
+  .exercise-prompt {
+    color: #64748b;
+    font-size: 15px;
+  }
+  .exercise-answer {
+    border-top: 3px solid #2247eb;
+    padding-top: 16px;
+    font-size: clamp(14px, 1.2vw, 18px);
+    line-height: 1.6;
+  }
+  .exercise-answer > strong {
+    color: #2247eb;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .exercise-answer p {
+    margin-top: 8px;
+  }
+  .exercise-evidence {
+    min-width: 0;
+  }
+  .exercise-device-pair {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 18px;
+  }
+  .exercise-device-pair > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 32px 16px;
+    border-block: 2px solid #cbd5e1;
+    text-align: center;
+  }
+  .exercise-device-pair > div > svg {
+    width: 60px;
+    height: 60px;
+    color: #2247eb;
+  }
+  .exercise-device-pair strong {
+    font-size: 23px;
+  }
+  .exercise-device-pair p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .exercise-equation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    text-align: center;
+  }
+  .exercise-equation > span {
+    font-size: 18px;
+    color: #475569;
+  }
+  .exercise-equation > strong {
+    font-size: clamp(21px, 2.4vw, 36px);
+  }
+  .exercise-equation > b {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 72px);
+    color: #2247eb;
+  }
+  .exercise-schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .exercise-schedule > p {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+  }
+  .exercise-queue {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .exercise-queue > span {
+    padding: 8px 2px;
+    border: 1px solid #cbd5e1;
+    text-align: center;
+    font-size: 14px;
+    font-family: var(--font-display);
+  }
+  .exercise-result {
+    display: grid;
+    grid-template-columns: 75px minmax(0, 1fr) 80px;
+    gap: 12px;
+    align-items: center;
+  }
+  .exercise-result > strong {
+    font-size: 15px;
+  }
+  .exercise-result > div {
+    height: 36px;
+    background: #e9edf4;
+    border-radius: 5px;
+  }
+  .exercise-result > div > span {
+    display: block;
+    height: 100%;
+    background: #2247eb;
+    border-radius: 5px;
+  }
+  .exercise-result > b {
+    text-align: right;
+    font-size: 25px;
+    font-family: var(--font-display);
+  }
+  .exercise-calculation {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #2247eb;
+  }
+  .exercise-io-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .exercise-io-grid > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    padding: 28px 20px;
+    border: 2px solid #2247eb;
+    background: #eef1ff;
+  }
+  .exercise-io-grid span {
+    font-size: 12px;
+    color: #475569;
+  }
+  .exercise-io-grid strong {
+    font-size: 20px;
+  }
+  .exercise-io-grid > b {
+    grid-column: 1 / -1;
+    font-size: 25px;
+    text-align: center;
+    color: #2247eb;
+  }
+  .diagram-node {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+    border: 2px solid;
+    border-radius: 18px;
+    text-align: center;
+    font-family: var(--font-sans);
+  }
+  .diagram-node-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    max-width: 100%;
+  }
+  .diagram-node-heading svg {
+    flex-shrink: 0;
+  }
+  .diagram-node strong {
+    min-width: 0;
+    font-size: 17px;
+    line-height: 1.2;
+    font-family: var(--font-display);
+  }
+  .diagram-detail {
+    max-width: 100%;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  .diagram-badge {
+    max-width: 100%;
+    font-size: 10px;
+    font-weight: 700;
+    color: #9a3412;
+    background: #ffedd5;
+    padding: 3px 7px;
+    border-radius: 6px;
+  }
+  .diagram-body {
+    max-width: 100%;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+  .diagram-handle {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .state-cell {
+    transition:
+      background-color 240ms ease,
+      border-color 240ms ease,
+      color 240ms ease,
+      opacity 240ms ease,
+      box-shadow 240ms ease;
+  }
+  .diagram-edge .react-flow__edge-path {
+    transition:
+      stroke 280ms ease,
+      stroke-width 280ms ease,
+      opacity 280ms ease;
+  }
   .app {
     @apply relative h-dvh w-full overflow-hidden;
   }
@@ -51,6 +409,21 @@
   .presentation-canvas,
   .scene-frame {
     @apply h-full min-h-0 w-full;
+  }
+  .presentation-canvas {
+    position: relative;
+    isolation: isolate;
+  }
+  .scene-layer {
+    position: absolute;
+    inset: 0;
+    will-change: transform, opacity;
+  }
+  .stage-title-stack {
+    display: grid;
+  }
+  .stage-title-layer {
+    grid-area: 1 / 1;
   }
   .scene-frame {
     @apply outline-none;
@@ -492,8 +865,12 @@
   .stage-position {
     @apply shrink-0 font-display text-xs text-blue;
   }
-  .stage-name {
-    @apply truncate px-1 text-xs font-semibold text-slate-700;
+  .stage-selector {
+    @apply h-9 min-w-0 flex-1 rounded-lg bg-transparent px-1 text-xs font-semibold text-slate-700;
+    max-width: 290px;
+  }
+  .stage-hint {
+    @apply shrink-0 pr-2 text-[10px] font-semibold text-slate-600;
   }
   .intro-focus {
     @apply flex h-full min-h-0 w-full max-w-[1180px] flex-col items-center justify-center gap-5 md:gap-8;
@@ -719,8 +1096,12 @@
     bottom: 70px;
     max-width: calc(100vw - 32px);
   }
-  .stage-name {
+  .stage-selector {
     max-width: 44vw;
+  }
+  .stage-hint {
+    max-width: 92px;
+    font-size: 9px;
   }
   .photo-layout {
     grid-template-columns: 1fr;
@@ -806,5 +1187,101 @@
   }
   .access-summary strong {
     font-size: 28px;
+  }
+}
+@media (max-width: 767px) {
+  .endurance-with-chart {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .endurance-facts {
+    gap: 12px;
+  }
+  .endurance-facts strong {
+    font-size: 23px;
+  }
+  .endurance-facts span {
+    font-size: 11px;
+  }
+  .endurance-track {
+    height: 40px;
+  }
+  .endurance-chart {
+    gap: 16px;
+  }
+  .remap-address-row {
+    grid-template-columns: 66px minmax(0, 1fr);
+    gap: 6px;
+    font-size: 9px;
+  }
+  .remap-address-row > div {
+    gap: 3px;
+  }
+  .exercise-scene {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    align-content: center;
+  }
+  .exercise-question h2 {
+    font-size: 18px;
+    margin: 6px 0 10px;
+  }
+  .exercise-answer {
+    font-size: 12px;
+    line-height: 1.4;
+    padding-top: 8px;
+  }
+  .exercise-equation {
+    gap: 7px;
+  }
+  .exercise-equation > span {
+    font-size: 12px;
+  }
+  .exercise-equation > strong {
+    font-size: 20px;
+  }
+  .exercise-equation > b {
+    font-size: 32px;
+  }
+  .exercise-device-pair > div {
+    gap: 8px;
+    padding: 12px;
+  }
+  .exercise-device-pair > div > svg {
+    width: 32px;
+    height: 32px;
+  }
+  .exercise-device-pair strong {
+    font-size: 16px;
+  }
+  .exercise-device-pair p {
+    font-size: 12px;
+  }
+  .exercise-schedule {
+    gap: 8px;
+  }
+  .exercise-queue > span {
+    padding: 4px 2px;
+    font-size: 11px;
+  }
+  .exercise-result > div {
+    height: 22px;
+  }
+  .exercise-result > b {
+    font-size: 20px;
+  }
+  .exercise-calculation {
+    font-size: 12px;
+  }
+  .exercise-io-grid {
+    gap: 8px;
+  }
+  .exercise-io-grid > div {
+    padding: 12px;
+    gap: 4px;
+  }
+  .exercise-io-grid strong,
+  .exercise-io-grid > b {
+    font-size: 16px;
   }
 }

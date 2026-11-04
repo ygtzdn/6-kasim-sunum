@@ -1,0 +1,1770 @@
+[
+  {
+    "id": "storage-opening",
+    "title": "Depolama isteğinin arkasındaki kararlar",
+    "chapter": "Bölüm 11 · Açılış",
+    "presenterId": 1,
+    "kind": "intro",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 60
+    },
+    "legacyIds": [
+      "s01"
+    ],
+    "stages": [
+      "Bir dosya isteği",
+      "İşletim sistemi kararı",
+      "Fiziksel depolama maliyeti"
+    ],
+    "sections": [
+      "11.1",
+      "11.2",
+      "11.3",
+      "11.4",
+      "11.5",
+      "11.6",
+      "11.7",
+      "11.8"
+    ],
+    "slides": [
+      1,
+      2,
+      3
+    ],
+    "takeaway": "Bir depolama isteğini aygıt yapısı, işletim sistemi politikası, yönetim ve güvenilirlik kararları birlikte belirler.",
+    "model": "Açılış sorusu, fotoğraf vurguları ve Türkçe anlatım özgündür; gerçek I/O veya aygıt performansı ölçülmez."
+  },
+  {
+    "id": "presentation-map",
+    "title": "Dört soru, bir depolama sistemi",
+    "chapter": "Bölüm 11 · Yol haritası",
+    "presenterId": 1,
+    "kind": "intro",
+    "depth": "core",
+    "seconds": {
+      "core": 75,
+      "full": 120
+    },
+    "legacyIds": [
+      "s02"
+    ],
+    "stages": [
+      "Aygıt hangi maliyeti doğurur?",
+      "İstekleri nasıl sıralarız?",
+      "Veriyi ve alanı nasıl yönetiriz?",
+      "Nasıl bağlar ve koruruz?"
+    ],
+    "sections": [
+      "11.1",
+      "11.2",
+      "11.3",
+      "11.4",
+      "11.5",
+      "11.6",
+      "11.7",
+      "11.8"
+    ],
+    "slides": [
+      2,
+      3
+    ],
+    "takeaway": "Donanım, zamanlama, veri ve alan yönetimi, bağlantı ve güvenilirlik aynı bölümün birbirini tamamlayan kararlarıdır.",
+    "model": "Sunuculara dağılım ve kısa/tam rota proje tasarımıdır; bu harita her I/O isteğinin zorunlu işlem sırası değildir."
+  },
+  {
+    "id": "hdd-anatomy",
+    "title": "HDD: hareketin kaynağı",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 75,
+      "full": 120
+    },
+    "legacyIds": [
+      "s03"
+    ],
+    "stages": [
+      "Gerçek HDD",
+      "Plaka ve mil",
+      "Kol ve okuma/yazma kafası",
+      "Konumlanma ile dönme farklı",
+      "Normal boşluk ve head crash riski"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      4,
+      5
+    ],
+    "takeaway": "HDD’de kol konumlanması ve plaka dönüşü farklı işlerdir; normal okumada kafa yüzeye temas etmez.",
+    "model": "Gerçek fotoğrafın işaretleri ile özgün küçük yan kesit kullanılır; fotoğrafta görünmeyen fiziksel çizgiler varmış gibi sunulmaz."
+  },
+  {
+    "id": "hdd-geometry",
+    "title": "İz, sektör ve silindir",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": [],
+    "stages": [
+      "Tek yüzey",
+      "İz: dairesel yol",
+      "Sektör: izin parçası",
+      "Silindir: aynı yarıçaptaki izler"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      5,
+      14,
+      16
+    ],
+    "takeaway": "İz, sektör ve silindir farklı geometrik gruplardır; silindir tek bir yüzey parçası değildir.",
+    "model": "Özgün düz SVG geometri modelidir; gerçek aygıt geometrisi veya kaynaktaki şeklin birebir kopyası olduğu iddia edilmez."
+  },
+  {
+    "id": "hdd-access-cost",
+    "title": "Bir HDD okumasının maliyeti",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 150
+    },
+    "legacyIds": [
+      "s05"
+    ],
+    "stages": [
+      "İstek ve açık birimler",
+      "Seek: 5 ms",
+      "Ortalama dönme: 4,1667 ms",
+      "Konumlandırma: 9,1667 ms",
+      "4 KiB aktarımı: 0,032768 ms",
+      "Denetleyici ve toplam: 9,30 ms"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      4,
+      6,
+      7
+    ],
+    "takeaway": "Konumlandırma seek ve dönmedir; bu örneğin servis süresi aktarım ve denetleyici katkısını da içerir.",
+    "model": "Kaynak girdileri açık birimlerle hesaplanır: 4 KiB, 7200 RPM, 5 ms seek, 125 MB/s, 0,1 ms denetleyici. Kuyruk beklemesi dışarıdadır."
+  },
+  {
+    "id": "hdd-request-size",
+    "title": "Küçük istek, büyük mekanik pay",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 90
+    },
+    "legacyIds": [
+      "s09"
+    ],
+    "stages": [
+      "4 KiB / 125 MB/s",
+      "1 MiB / aynı aygıt",
+      "Aktarım hızını iki katına çıkar",
+      "Değişen ve değişmeyen bileşenler"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      7
+    ],
+    "takeaway": "Aktarım boyutu veya hızı değişince seek ve dönme aynı kalabilir; küçük I/O toplamı transfer hızıyla aynı oranda değişmez.",
+    "model": "İki istek boyutu aynı mekanik koşullarda karşılaştırılır; sonuçlar özgün birim gösterimiyle hesaplanır, ürün kıyası yapılmaz."
+  },
+  {
+    "id": "hdd-history",
+    "title": "Kitaptaki ilk ticari disk örneği",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "extension",
+    "seconds": {
+      "core": 0,
+      "full": 45
+    },
+    "legacyIds": [],
+    "stages": [
+      "1956: IBM Model 350",
+      "50 plaka ve 5 milyon 7-bit karakter",
+      "Tarihsel erişim ölçeği"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      8
+    ],
+    "takeaway": "Kitaptaki IBM Model 350 örneği depolamanın tarihsel ölçeğini gösterir; güncel ürün özelliklerini anlatmaz.",
+    "model": "Tarihsel bilgi kısa tipografi ve özgün sayma şemasıyla gösterilir; kapasite birimi sessizce modern MB değerine dönüştürülmez."
+  },
+  {
+    "id": "hdd-performance-metrics",
+    "title": "Hız, gecikme ve bandwidth",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "extension",
+    "seconds": {
+      "core": 0,
+      "full": 75
+    },
+    "legacyIds": [],
+    "stages": [
+      "Tarihsel arayüz tavanı: 6 Gb/s",
+      "Tarihsel etkin örnek: 1 Gb/s",
+      "Tek I/O servis süresi: ms",
+      "Toplam byte / toplam geçen süre"
+    ],
+    "sections": [
+      "11.1",
+      "11.2"
+    ],
+    "slides": [
+      6,
+      7,
+      17
+    ],
+    "takeaway": "Arayüz tavanı, etkin transfer, tek I/O gecikmesi ve toplam disk bandwidth’i aynı ölçü değildir.",
+    "model": "Kaynak sayıları tarihsel örnek olarak etiketlenir; farklı birimler aynı çubuk uzunluğuyla yanlış karşılaştırılmaz."
+  },
+  {
+    "id": "nvm-device",
+    "title": "SSD, NVM ailesinin bir örneği",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": [
+      "s06"
+    ],
+    "stages": [
+      "Gerçek SSD dışı",
+      "İç kart: flash ve denetleyici",
+      "Mekanik maliyetleri karşılaştır",
+      "NVM aygıt ailesi"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      9
+    ],
+    "takeaway": "Flash tabanlı SSD kalıcıdır ve hareketli parça taşımaz; bütün NVM biçimleri tek bir SSD ürünüyle aynı değildir.",
+    "model": "Mevcut gerçek SSD fotoğrafları temel görevler için kullanılır; fiyat, güncel hız, kapasite veya evrensel güvenilirlik iddiası eklenmez."
+  },
+  {
+    "id": "flash-page-block",
+    "title": "Sayfa oku, blok sil",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 135
+    },
+    "legacyIds": [
+      "s07"
+    ],
+    "stages": [
+      "Sayfa ve silme bloğu",
+      "P0’ı oku: içerik değişmez",
+      "Yeni L0 sürümünü boş P6’ya yaz",
+      "Canlı verisi kalmayan A’yı sil",
+      "Geçerli, geçersiz ve silinmiş"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      10,
+      11
+    ],
+    "takeaway": "Flash güncellemesi boş sayfaya gider; geçersiz sayfa yeniden yazılabilir boş sayfa değildir ve silme daha büyük blokta yapılır.",
+    "model": "İki küçük blok fiziksel kuralı öğretir. Tam FTL tablosu, GC canlı taşıması ve yazma büyütmesi hesabı burada tekrarlanmaz."
+  },
+  {
+    "id": "flash-endurance",
+    "title": "Sınırlı silme ömrü ve DWPD",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "extension",
+    "seconds": {
+      "core": 0,
+      "full": 90
+    },
+    "legacyIds": [],
+    "stages": [
+      "Sınırlı program/silme dayanıklılığı",
+      "Kaynaktaki 1 TB / 5 DWPD",
+      "Günlük örnek bütçe: 5 TB",
+      "3 TB ve 6 TB günlük yükü karşılaştır"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      10,
+      11
+    ],
+    "takeaway": "Silme dayanıklılığı sınırlıdır; DWPD kapasiteye göre günlük yazma hacmi derecelendirmesidir, hücre silme sayısı değildir.",
+    "model": "1 TB × 5 DWPD = 5 TB/gün kaynaktaki örnektir. Garanti koşulu korunur; kesin ömür veya evrensel NAND silme limiti çıkarılmaz."
+  },
+  {
+    "id": "ram-disk",
+    "title": "Dosya sistemi RAM’i kalıcı yapmaz",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": [
+      "s04"
+    ],
+    "stages": [
+      "RAM disk olarak sunulur",
+      "Dosya olarak veri yerleştir",
+      "Gücü kes: RAM verisi kaybolur",
+      "Güç geri gelir: eski RAM verisi dönmez"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      4,
+      9,
+      12
+    ],
+    "takeaway": "RAM disk blok aygıtı ve dosya sistemi sunabilir; fiziksel ortamın uçuculuğunu değiştirmez.",
+    "model": "Kavramsal bitler ve gerçek RAM/HDD/SSD fotoğrafları kullanılır; fiziksel güç komutu gönderilmez ve tmpfs ayrıntısı genişletilmez."
+  },
+  {
+    "id": "magnetic-tape",
+    "title": "Önce konumu bul, sonra sırayla aktar",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 30,
+      "full": 60
+    },
+    "legacyIds": [],
+    "stages": [
+      "Sıralı kayıt şeridi",
+      "Uzak kaydın konumunu bul",
+      "Ardışık kayıtları oku"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      13
+    ],
+    "takeaway": "Teypte bir kaydın konumunu bulma ile o noktadan ardışık aktarım farklı işlerdir; rastgele seçim imkânsız diye sunulmaz.",
+    "model": "Özgün kayıt şeridi ve seçici kullanılır; gerçek süre, ürün hızı veya doğrulanmamış kitap alt bölümü verilmez."
+  },
+  {
+    "id": "logical-blocks",
+    "title": "OS’nin mantıksal blok görünümü",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": [
+      "s08"
+    ],
+    "stages": [
+      "Numaralı LBA dizisi",
+      "LBA3 okuma isteği",
+      "Temel sıralı sektör eşlemesi",
+      "Fiziksel ayrıntıyı gizle, LBA’yı koru"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      14,
+      16
+    ],
+    "takeaway": "Disk OS’ye tek boyutlu mantıksal blok dizisi olarak görünür; LBA her aygıtta aynı fiziksel koordinatı garanti etmez.",
+    "model": "Küçük sıralı eşleme eğitim modelidir. Bozuk sektör ve değişken geometri notlarda anılır; yeniden eşleme demosu kişi3’e bırakılır."
+  },
+  {
+    "id": "storage-data-path",
+    "title": "Komut yolu ve DMA veri yolu",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 105
+    },
+    "legacyIds": [],
+    "stages": [
+      "OS isteği ve hedef RAM",
+      "Host denetleyicisine komut",
+      "Aygıt denetleyicisine mesaj",
+      "Aygıtta veri erişimi",
+      "DMA ile DRAM’e veri aktarımı"
+    ],
+    "sections": [
+      "11.1",
+      "11.2"
+    ],
+    "slides": [
+      15,
+      18
+    ],
+    "takeaway": "Komutun controller’lar üzerinden iletilmesi ile verinin DMA ile DRAM’e aktarılması ayrı akışlardır.",
+    "model": "Özgün iki hatlı diyagram ve aşamadan türetilen payload konumu kullanılır; gerçek DMA protokolü veya ürün arayüz performansı ölçülmez."
+  },
+  {
+    "id": "hdd-request-queue",
+    "title": "Aynı kuyruk, aynı başlangıç",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 90
+    },
+    "legacyIds": [
+      "s10"
+    ],
+    "stages": [
+      "İsteğin kaynağı ve kuyruk",
+      "Resmî geliş sırası",
+      "Kafa53 ve 0–199 sınırları",
+      "Azalan yön ve hareket ölçüsü"
+    ],
+    "sections": [
+      "11.2"
+    ],
+    "slides": [
+      17,
+      18,
+      19
+    ],
+    "takeaway": "Birden çok bekleyen istek sıralama seçimi doğurur; adil karşılaştırma kuyruk, kafa, sınırlar ve yönü sabit tutar.",
+    "model": "Resmî sekiz istek, kafa53 ve azalan ortak yön kullanılır. Bütün istekler başlangıçta hazırdır; yeni geliş veya gerçek bekleme süresi yoktur."
+  },
+  {
+    "id": "fcfs-path",
+    "title": "FCFS: geliş sırasını koru",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 80,
+      "full": 120
+    },
+    "legacyIds": [
+      "s11"
+    ],
+    "stages": [
+      "Başlangıç53",
+      "İstek1:98",
+      "İstek2:183",
+      "İstek3:37",
+      "İstek4:122",
+      "İstek5:14",
+      "İstek6:124",
+      "İstek7:65",
+      "İstek8:67",
+      "Sonuç:640"
+    ],
+    "sections": [
+      "11.2"
+    ],
+    "slides": [
+      19,
+      20
+    ],
+    "takeaway": "FCFS geliş sırasını korur; resmî sekiz istek için tamamlanmış yol toplamı 640 silindir hareketidir.",
+    "model": "Saf motor her aşamada kafa, tamamlanan kimlikler ve toplamı yeniden hesaplar. Dikey olay sırası zaman ekseni değildir."
+  },
+  {
+    "id": "scan-path",
+    "title": "SCAN: fiziksel uca git, dön",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 135
+    },
+    "legacyIds": [
+      "s12"
+    ],
+    "stages": [
+      "Başlangıç53",
+      "İstek:37",
+      "İstek:14",
+      "Fiziksel uç:0",
+      "İstek:65",
+      "İstek:67",
+      "İstek:98",
+      "İstek:122",
+      "İstek:124",
+      "İstek:183",
+      "Sonuç236 ve LOOK208 ayrımı"
+    ],
+    "sections": [
+      "11.2"
+    ],
+    "slides": [
+      21,
+      22
+    ],
+    "takeaway": "Fiziksel0 ucuna giden azalan SCAN yolu236’dır; 14’te dönen LOOK yolu208 verir ve aynı davranış değildir.",
+    "model": "Resmî21.slaytın208 ifadesi açık fiziksel uç kuralıyla uyuşmaz. Tam kitap hatası iddia edilmeden iki yol ve hesap gösterilir."
+  },
+  {
+    "id": "cscan-path",
+    "title": "C-SCAN: dönüşte servis yok",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 135
+    },
+    "legacyIds": [
+      "s13"
+    ],
+    "stages": [
+      "Başlangıç53",
+      "İstek:37",
+      "İstek:14",
+      "Fiziksel uç:0",
+      "0→199: servis yok",
+      "İstek:183",
+      "İstek:124",
+      "İstek:122",
+      "İstek:98",
+      "İstek:67",
+      "İstek:65",
+      "Sonuç:386"
+    ],
+    "sections": [
+      "11.2"
+    ],
+    "slides": [
+      23,
+      24
+    ],
+    "takeaway": "C-SCAN dönüşte servis vermez, fakat 199 silindirlik fiziksel dönüş azalan örneğin386 toplamına dahildir.",
+    "model": "Ortak azalan yön kullanılır; kaynaktaki artan yönün382 sonucu alternatif olarak notlanır. Geri aşama toplamı ve servis durumunu birlikte geri kurar."
+  },
+  {
+    "id": "scheduling-tradeoffs",
+    "title": "Kısa yol tek ölçüt değil",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 75,
+      "full": 120
+    },
+    "legacyIds": [
+      "s14"
+    ],
+    "stages": [
+      "FCFS640",
+      "SCAN236",
+      "C-SCAN386",
+      "Dönüşü ayır:53+199+134",
+      "Hareket ve servis sırası farklı",
+      "Politika: eski bekleyen isteği gözet"
+    ],
+    "sections": [
+      "11.2"
+    ],
+    "slides": [
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25
+    ],
+    "takeaway": "Bu sabit kuyrukta kısa yol SCAN’indir; bekleme, adalet ve politika seçimi yalnız toplam mesafeden çıkarılmaz.",
+    "model": "Çubuklar hesaplanan toplamdır, adalet puanı değildir. Deadline/NOOP/CFQ anlatımı kaynağın tarihsel bağlamında tutulur."
+  },
+  {
+    "id": "nvm-scheduling",
+    "title": "Seek yok, kuyruk işi sürer",
+    "chapter": "11.3",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 75,
+      "full": 120
+    },
+    "legacyIds": [
+      "s15"
+    ],
+    "stages": [
+      "OS kuyruğu",
+      "Bitişik L10/L11’i birleştir",
+      "Komutları aygıta gönder",
+      "Aygıt içi paralellik",
+      "Host ve denetleyici görevleri"
+    ],
+    "sections": [
+      "11.3",
+      "11.1"
+    ],
+    "slides": [
+      11,
+      15,
+      26
+    ],
+    "takeaway": "NVM’de mekanik seek yoktur; bitişik istek birleştirme, yazılım/kuyruk maliyeti ve denetleyici işleri sürer.",
+    "model": "L10/L11 birleşimi özgün örnektir. NVM ortamı, NVMe arayüzü ve FTL görevi ayrılır; kanal sayısı veya ürün hızı vaat edilmez."
+  },
+  {
+    "id": "flash-write-amplification",
+    "title": "Host yazması neden fiziksel yazma değildir?",
+    "chapter": "11.3",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 120,
+      "full": 180
+    },
+    "legacyIds": [
+      "s16"
+    ],
+    "stages": [
+      "Başlangıç eşlemesi",
+      "L0’ı güncelle",
+      "L1’i güncelle",
+      "GC: canlı L2/L3’ü taşı",
+      "B0’ı sil",
+      "L2’yi güncelle:5/3 oranı"
+    ],
+    "sections": [
+      "11.3",
+      "11.1"
+    ],
+    "slides": [
+      10,
+      11,
+      26
+    ],
+    "takeaway": "GC canlı sayfaları kopyalarken host yazması olmadan fiziksel yazmayı artırır; örnek3host/5fiziksel/1silme ile biter.",
+    "model": "Üçblok×dörtsayfa özgün senaryodur. Her aşama başlangıçtan saf tekrar ile kurulur;1,67 bütün SSD’lerin sabit oranı değildir."
+  },
+  {
+    "id": "nvm-management-summary",
+    "title": "Alanı geri kazan, aşınmayı geri alma",
+    "chapter": "11.3",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 105
+    },
+    "legacyIds": [
+      "s17"
+    ],
+    "stages": [
+      "Host ve denetleyici görevleri",
+      "Birikmiş silmeler:[8,2,2,1]",
+      "Yeni19döngü:[8,8,8,8]",
+      "B0’da1silme:[9,8,8,8]",
+      "Host’a sunulmayan GC çalışma alanı"
+    ],
+    "sections": [
+      "11.3",
+      "11.1"
+    ],
+    "slides": [
+      10,
+      11,
+      26
+    ],
+    "takeaway": "FTL, GC, wear leveling ve ayrılmış alan farklı görevlerdir; alanı geri kazanmak geçmiş aşınmayı geri almaz.",
+    "model": "Birikmiş sayaçlar ileri aşamalarda azalmaz; yeni19döngü B1+6/B2+6/B3+7 dağıtılır. Gerçek wear-leveling verimliliği veya ömür hesaplanmaz."
+  },
+  {
+    "id": "error-detection",
+    "title": "Veri bozulduğunu nasıl anlarız?",
+    "chapter": "11.4",
+    "presenterId": 3,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 75,
+      "full": 120
+    },
+    "legacyIds": [
+      "s18"
+    ],
+    "stages": [
+      "Saklanan denetim bilgisi",
+      "Tek bit değişimi",
+      "Çift hata sınırı",
+      "Diğer denetim yöntemleri"
+    ],
+    "sections": [
+      "11.4"
+    ],
+    "slides": [
+      27
+    ],
+    "takeaway": "Veriyle saklanan denetim bilgisi bazı bozulmaları saptar; tek paritenin geçmesi kesin veri doğruluğu değildir.",
+    "model": "1011001 ve sabit P=0 özgün parite örneğidir. CRC/checksum için algoritma veya sahte hesap sonucu üretilmez."
+  },
+  {
+    "id": "error-correction",
+    "title": "Tespit etmek, düzeltmek değildir",
+    "chapter": "11.4",
+    "presenterId": 3,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": [
+      "s19"
+    ],
+    "stages": [
+      "Veri ve ek kod",
+      "Tek bozuk bit",
+      "Tespit ve düzeltme",
+      "İki bozuk bit",
+      "Kodun sınırı"
+    ],
+    "sections": [
+      "11.4"
+    ],
+    "slides": [
+      27
+    ],
+    "takeaway": "Uygun ECC, tasarlandığı hata sınırları içinde bazı hataları düzeltebilir; tespit edilen her hata düzeltilemez.",
+    "model": "Gerçek SECDED hesabı genel ECC fikrini somutlaştıran özgün ve sınırlı örnektir; Hamming konumları/sendromu ana anlatıma alınmaz, kapasite bütün aygıtlara genellenmez."
+  },
+  {
+    "id": "device-preparation",
+    "title": "Ham ortamdan dosyaya",
+    "chapter": "11.5",
+    "presenterId": 3,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 105,
+      "full": 150
+    },
+    "legacyIds": [
+      "s20"
+    ],
+    "stages": [
+      "Ham ortam",
+      "Fiziksel biçim",
+      "Bölümleme",
+      "Dosya sistemi",
+      "Bağlama",
+      "Dosya erişimi"
+    ],
+    "sections": [
+      "11.5"
+    ],
+    "slides": [
+      28,
+      29
+    ],
+    "takeaway": "Fiziksel biçimlendirme, bölümleme, dosya sistemi oluşturma ve bağlama farklı hazırlık katmanlarıdır.",
+    "model": "60/40 bölümler ve örnek dosya özgün eğitim durumudur. Gerçek format işlemi yapılmaz; geri aşama seçimi gerçek aygıtta geri alma garantisi değildir."
+  },
+  {
+    "id": "storage-access-modes",
+    "title": "Blokları kim yönetiyor?",
+    "chapter": "11.5",
+    "presenterId": 3,
+    "kind": "chapter",
+    "depth": "extension",
+    "seconds": {
+      "core": 0,
+      "full": 90
+    },
+    "legacyIds": [],
+    "stages": [
+      "Aygıt blokları",
+      "Dosya sistemi gruplaması",
+      "Normal dosya yolu",
+      "Raw erişim"
+    ],
+    "sections": [
+      "11.5"
+    ],
+    "slides": [
+      28,
+      29,
+      30
+    ],
+    "takeaway": "Dosya sistemi blokların üstünde düzen kurar; uygun uygulamalar kendi blok yönetimleri için raw erişim de isteyebilir.",
+    "model": "Cluster grupları ve veritabanı yolu kavramsal örnektir; grup boyutu standart değildir. Raw erişim bütün OS sürücülerinin ortadan kalktığı anlamına gelmez."
+  },
+  {
+    "id": "boot-sequence",
+    "title": "Kernel'den önce hangi kod çalışır?",
+    "chapter": "11.5",
+    "presenterId": 3,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 105
+    },
+    "legacyIds": [
+      "s21"
+    ],
+    "stages": [
+      "İlk kod sorusu",
+      "ROM / firmware",
+      "Boot block",
+      "Yükleyici",
+      "Kernel RAM'de"
+    ],
+    "sections": [
+      "11.5"
+    ],
+    "slides": [
+      29,
+      30
+    ],
+    "takeaway": "Firmware ve depolamadaki yükleyici kodu, kernel'in RAM'e yüklenip başlatılmasını sağlar.",
+    "model": "Bootstrap/boot block kavramlarının soyut akışıdır. Kitaptaki Windows/MBR bağlamı belirli bir örnektir; bütün platformlar için tek açılış düzeni varsayılmaz."
+  },
+  {
+    "id": "bad-block-remapping",
+    "title": "Adres aynı kalırken yer değişebilir",
+    "chapter": "11.5",
+    "presenterId": 3,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": [
+      "s22"
+    ],
+    "stages": [
+      "Geçerli eşleme",
+      "Sektör arızası",
+      "Sector sparing"
+    ],
+    "sections": [
+      "11.5"
+    ],
+    "slides": [
+      30
+    ],
+    "takeaway": "Sorunlu fiziksel sektör yedek alana eşlenirken üst katmanın mantıksal blok adresi korunabilir.",
+    "model": "LBA 5, P45 ve P90 özgün öğretim kimlikleridir. Adres devamlılığı eski okunamayan verinin kesin kurtarılması değildir; üretici remap politikası modellenmez."
+  },
+  {
+    "id": "swap-space",
+    "title": "RAM yetmezse neyi, nereye taşırız?",
+    "chapter": "11.6",
+    "presenterId": 3,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 90
+    },
+    "legacyIds": [
+      "s23"
+    ],
+    "stages": [
+      "RAM baskısı",
+      "Taşınan birim",
+      "Swap dosyası",
+      "Raw bölüm",
+      "Birden çok alan"
+    ],
+    "sections": [
+      "11.6"
+    ],
+    "slides": [
+      31
+    ],
+    "takeaway": "Swap, RAM dışına taşınan içerik için arka alan sağlar; dosya/bölüm yerleşimi ve I/O yükünün dağıtılması ayrı kararlardır.",
+    "model": "Alan ve aygıt sayıları özgün şemadır. Hız çarpanı, evrensel swap kapasitesi veya güncel Linux veri yapısı iddiası üretilmez."
+  },
+  {
+    "id": "swap-journey",
+    "title": "Bir sayfanın dışarı ve geri yolculuğu",
+    "chapter": "11.6",
+    "presenterId": 3,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 105,
+      "full": 165
+    },
+    "legacyIds": [
+      "s24"
+    ],
+    "stages": [
+      "RAM'deki P",
+      "Hedef ayır",
+      "Dışarı yaz",
+      "Yazma tamam",
+      "Yeniden eriş",
+      "Okuma tamam",
+      "Maliyet ve kimlik"
+    ],
+    "sections": [
+      "11.6"
+    ],
+    "slides": [
+      31
+    ],
+    "takeaway": "Sayfa kimliği, RAM frame ve swap konumu farklıdır; aktarımın başlaması ve tamamlanması ayrı durumlardır.",
+    "model": "Tek P/F0/S0 modeli özgün ve basitleştirilmiştir. 1 yazma ve 1 okuma açık tamamlanma aşamalarında sayılır. Page-in sonunda slot'u bırakmak model tercihidir, evrensel OS politikası değildir."
+  },
+  {
+    "id": "management-decisions",
+    "title": "Üç sorumluluğu ayır",
+    "chapter": "11.4–11.6",
+    "presenterId": 3,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 90
+    },
+    "legacyIds": [
+      "s25"
+    ],
+    "stages": [
+      "Doğruluk sorusu",
+      "Tespit sınırı",
+      "Hazırlık sorusu",
+      "Katman ayrımı",
+      "Swap sorusu",
+      "Tamamlanma ve teslim"
+    ],
+    "sections": [
+      "11.4",
+      "11.5",
+      "11.6"
+    ],
+    "slides": [
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "takeaway": "Doğruluk kontrolü, aygıtın mantıksal hazırlığı ve swap aktarım yönetimi ayrı bilgi ve durum gerektirir.",
+    "model": "Üç soru/cevap çifti özgün sentezdir. Yanıt görünürlüğü ortak aşamaya bağlıdır; bağımsız veya geriye gitmeyen bir cevap hafızası tutulmaz."
+  },
+  {
+    "id": "host-attached",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.7"
+    ],
+    "slides": [
+      15,
+      32
+    ],
+    "stages": [
+      "Bağlantı sorusu",
+      "Host portu ve aygıt",
+      "Bus ile birden çok aygıt",
+      "FC fabric örneği",
+      "Bağlantı yolu ve hizmet arayüzü"
+    ],
+    "seconds": {
+      "core": 30,
+      "full": 50
+    },
+    "title": "Depolamaya hangi yoldan ulaşırız?",
+    "legacyIds": [
+      "s26"
+    ],
+    "takeaway": "Bağlantı yolu ile istemciye sunulan dosya, blok veya API arayüzü ayrı eksenlerdir.",
+    "model": "Yerel port, bus ve fabric kavramsal çizimlerdir; aygıt/protokol hızı ölçülmez ve üç evrensel, birbirini dışlayan ürün sınıfı oluşturulmaz.",
+    "chapter": "11.7"
+  },
+  {
+    "id": "nas",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.7"
+    ],
+    "slides": [
+      33
+    ],
+    "stages": [
+      "Dosya yolu isteği",
+      "NFS ve CIFS",
+      "IP üzerinde uzak çağrı",
+      "Sunucuda dosya sistemi",
+      "iSCSI ile blok karşı örneği",
+      "Dosya ve blok sorumluluğu"
+    ],
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "title": "Ağda dosya mı, blok mu?",
+    "legacyIds": [
+      "s27"
+    ],
+    "takeaway": "NAS uzak dosya sistemi hizmeti verir; aynı IP ağı üzerindeki iSCSI ise SCSI/blok erişimi taşıyabilir.",
+    "model": "Tipik istemci/sunucu sorumluluklarının özgün şemasıdır. NFS/CIFS kaynak bağlamıdır; iSCSI NAS dosya protokolü olarak etiketlenmez.",
+    "chapter": "11.7"
+  },
+  {
+    "id": "cloud-storage",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.7"
+    ],
+    "slides": [
+      34
+    ],
+    "stages": [
+      "Uygulama işlemi",
+      "WAN ve Internet yolu",
+      "Hizmet API arayüzü",
+      "Uzak hizmet ve yanıt",
+      "Gecikme ve başarısızlık"
+    ],
+    "seconds": {
+      "core": 30,
+      "full": 50
+    },
+    "title": "Uzak depolamaya API ile erişim",
+    "legacyIds": [
+      "s28"
+    ],
+    "takeaway": "Kitabın bulut örneğinde program uzak veri merkezine API üzerinden ulaşır; gecikme ve başarısızlık tasarımın parçasıdır.",
+    "model": "Yerel istek şemasıdır; gerçek API çağrısı veya güncel bulut ürünleri sınıflandırması yapılmaz. API fiziksel bir aygıt değildir.",
+    "chapter": "11.7"
+  },
+  {
+    "id": "storage-arrays",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.7"
+    ],
+    "slides": [
+      35
+    ],
+    "stages": [
+      "Tek aygıttan diziye",
+      "Host portları ve denetleyici",
+      "Bellek, yazılım ve diskler",
+      "Paylaşım ve hizmetler",
+      "Dizi özelliği ile RAID seviyesi"
+    ],
+    "seconds": {
+      "core": 45,
+      "full": 65
+    },
+    "title": "Bir depolama dizisinin içi",
+    "legacyIds": [
+      "s29"
+    ],
+    "takeaway": "Storage array host bağlantılarını, denetleyiciyi ve aygıtları birleştirir; RAID ve snapshot gibi hizmetler aynı kavram değildir.",
+    "model": "Diskler ve denetleyici temsildir. Kitabın doğrudan dizi/NAS ağ yükü karşılaştırması bütün diziler ağsızdır biçiminde genellenmez.",
+    "chapter": "11.7"
+  },
+  {
+    "id": "san",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.7"
+    ],
+    "slides": [
+      33,
+      36,
+      37
+    ],
+    "stages": [
+      "Hostlar ve diziler",
+      "Switch ve fabric",
+      "Depolama yolu",
+      "LUN ve hacimler",
+      "LUN masking ile görünürlük",
+      "Ayrı ağlar ve arayüz ayrımı"
+    ],
+    "seconds": {
+      "core": 45,
+      "full": 70
+    },
+    "title": "Birçok host, birçok dizi",
+    "legacyIds": [],
+    "takeaway": "SAN çok host ve diziyi bağlar; belirli hacimlerin hostlara görünürlüğü dosya sistemi koordinasyonundan ayrı bir karardır.",
+    "model": "LUN görünürlüğü çizimde değişir; gerçek ağ, yetkilendirme veya küme dosya sistemi kurulmaz. Kaynaktaki FC/InfiniBand ve iSCSI/FCoE bağlamı korunur.",
+    "chapter": "11.7"
+  },
+  {
+    "id": "raid-intro",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      38,
+      39
+    ],
+    "stages": [
+      "Kapasite, paralellik ve güvenilirlik",
+      "Bağımsız sağlam kopya",
+      "Disk arızası ve MTTF",
+      "Onarım penceresi ve MTTR",
+      "Veri kaybı ve varsayımlar"
+    ],
+    "seconds": {
+      "core": 45,
+      "full": 70
+    },
+    "title": "Yedeklilik ve onarım penceresi",
+    "legacyIds": [],
+    "takeaway": "Yedeklilik ve onarım birlikte değerlendirilir; onarım tamamlanana kadar ek arızaya maruz kalınan pencere önemlidir.",
+    "model": "MTTF/MTTR ilişkisi kavramsaldır. Kaynak metin çıkarımında bozuk görünen ömür sayısı/formülü kullanılmaz; bağımsız arıza varsayımı garantiye dönüştürülmez.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "raid-striping",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      39,
+      40
+    ],
+    "stages": [
+      "RAID 0 parçaları",
+      "RAID 0 tek disk kaybı",
+      "RAID 1 aynı kopyalar",
+      "RAID 1 bir sağlam kopya",
+      "RAID 1 iki kopya kaybı",
+      "Kapasite ve koruma karşılığı"
+    ],
+    "seconds": {
+      "core": 60,
+      "full": 95
+    },
+    "title": "Veriyi dağıtmak mı, kopyalamak mı?",
+    "legacyIds": [
+      "s30"
+    ],
+    "takeaway": "Şeritleme tek başına koruma sağlamaz; aynalama sağlam kopya karşılığında fiziksel alan kullanır.",
+    "model": "Dört diskli RAID0 ve iki diskli RAID1 özgün eş kapasiteli örneklerdir. Nominal kapasite ile erişilebilirlik ayrı gösterilir; performans çarpanı üretilmez.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "raid-parity",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      39,
+      40
+    ],
+    "stages": [
+      "Veri ve P ilişkisi",
+      "RAID 4 ayrılmış parite",
+      "RAID 5 dağıtılmış parite",
+      "Tek kayıp ve yeterli bilgi",
+      "RAID 6 bağımsız P ve Q",
+      "Parite seviyelerini karşılaştır"
+    ],
+    "seconds": {
+      "core": 60,
+      "full": 95
+    },
+    "title": "Koruma bilgisini nereye koyarız?",
+    "legacyIds": [
+      "s31"
+    ],
+    "takeaway": "RAID4/5 tek P korumasını farklı yerleştirir; RAID6 ikinci bağımsız korumayla iki tam disk kaybını karşılayabilir.",
+    "model": "Eş boyutlu disk/şerit gösterimi özgündür. RAID6 Q cebiri semboliktir; aynı XOR bilgisinin ikinci kopyası iki bağımsız denklem diye sunulmaz.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "raid-xor",
+    "kind": "chapter",
+    "depth": "extension",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      39,
+      40
+    ],
+    "stages": [
+      "Üç veri bloğu",
+      "P paritesini hesapla",
+      "A1 kayıp: önce tahmin et",
+      "Sağlam hücrelerden A1 üret",
+      "İkinci bilinmeyenin sınırı"
+    ],
+    "seconds": {
+      "core": 0,
+      "full": 70
+    },
+    "title": "Kayıp bloğu sağlam bilgilerden üret",
+    "legacyIds": [],
+    "takeaway": "Tek kayıp blok sağlam veri ve P üzerinden yeniden hesaplanabilir; aynı denklem iki bilinmeyeni çözmez.",
+    "model": "1100,1010,0110 ve 0000 bitleri özgün eğitim örneğidir, kitabın hazır sayısal örneği değildir. XOR sonucu gerçekten sağlam hücrelerden hesaplanır.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "raid-levels",
+    "kind": "chapter",
+    "depth": "extension",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      40
+    ],
+    "stages": [
+      "Bilinen RAID seviye haritası",
+      "P ve Q yerleşimi",
+      "İki boyutlu aygıt düzeni",
+      "Satır ve sütun koruma rolleri"
+    ],
+    "seconds": {
+      "core": 0,
+      "full": 35
+    },
+    "title": "Koruma bilgisini iki boyutta yerleştirmek",
+    "legacyIds": [],
+    "takeaway": "Resmî slayt40 çok boyutlu RAID6 yerleşimini de gösterir; yalnız seviye adından evrensel hata garantisi çıkarılmaz.",
+    "model": "Kaynak figürünü açıklayan dar bir yerleşim şemasıdır; GF cebiri, keyfî boyutlarda kapasite veya arıza garantisi hesaplanmaz. Kaynakta doğrulanmayan RAID2/3 eklenmez.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "raid-nested",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      39,
+      41
+    ],
+    "stages": [
+      "Aynı diskler, iki gruplama",
+      "0+1: şerit gruplarını aynala",
+      "0+1: bir disk ve grup kaybı",
+      "1+0: aynaları şeritle",
+      "1+0: bir ayna kopyası kayıp",
+      "D0 ve D1 sonuçları",
+      "D0 ve D2 sonuçları"
+    ],
+    "seconds": {
+      "core": 60,
+      "full": 85
+    },
+    "title": "Önce ayna mı, önce şerit mi?",
+    "legacyIds": [
+      "s32"
+    ],
+    "takeaway": "Şeritleme ve aynalamanın sırası, bir disk kaybının hangi koruma grubunu etkilediğini değiştirir.",
+    "model": "Slayt41 kavramının özgün dört diskli indirgemesidir. 0+1 şerit grupları ve 1+0 ayna çiftleri açıkça çizilir; aynı fiziksel kayıp seçiminde farklı sonuç gerçekten hesaplanır.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "raid-rebuild",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      38,
+      39,
+      42
+    ],
+    "stages": [
+      "Sağlıklı dizi ve boş hot spare",
+      "D0 arızası",
+      "Yedek devrede, içerik boş",
+      "Birinci şerit yeniden kuruldu",
+      "İkinci şerit yeniden kuruldu",
+      "Son şerit ve korumanın dönüşü",
+      "Onarım maliyeti ve sınırı"
+    ],
+    "seconds": {
+      "core": 75,
+      "full": 105
+    },
+    "title": "Boş yedek nasıl sağlam kopya olur?",
+    "legacyIds": [
+      "s33"
+    ],
+    "takeaway": "Yedek disk devreye girse bile eksik içerik tamamlanana kadar tam koruma geri gelmez; rebuild yeterli sağlam bilgi gerektirir.",
+    "model": "Üç temsili şerit özgün durum modelidir; gerçek süre/bant genişliği tahmini değildir. Backspace kısmi şerit durumunu ve eksik hücreleri geri kurar.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "raid-features",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      35,
+      39,
+      42
+    ],
+    "stages": [
+      "Üç ayrı ihtiyaç",
+      "Snapshot: zamandaki görünüm",
+      "Replication: iki site",
+      "Senkron ve asenkron yazı akışı",
+      "Hot spare ve onarım penceresi",
+      "Özelliklerin görevlerini ayır"
+    ],
+    "seconds": {
+      "core": 45,
+      "full": 70
+    },
+    "title": "Snapshot, replication ve hot spare",
+    "legacyIds": [],
+    "takeaway": "Snapshot geçmiş görünümü, replication siteler arası yazı kopyasını, hot spare arızalı aygıtın yerine geçmeyi hedefler.",
+    "model": "Özgün zaman/yazı akışı şemasıdır; gerçek snapshot veya uzak kopya oluşturulmaz. Senkron/asenkron ayrımı onay sırasıyla gösterilir; RPO/RTO veya bağımsız yedek garantisi üretilmez.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "raid-integrity",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      43
+    ],
+    "stages": [
+      "Sağlam disk, değişmiş içerik",
+      "Veri ve metadata checksum",
+      "Pointer ile kontrol bilgisi",
+      "İçerik ve kimlik uyuşmazlığı",
+      "Tespit ve düzeltme sınırı"
+    ],
+    "seconds": {
+      "core": 45,
+      "full": 65
+    },
+    "title": "Disk çalışırken veri bozulabilir",
+    "legacyIds": [
+      "s34"
+    ],
+    "takeaway": "RAID disk arızasına odaklanır; kaynakta ZFS veri ve metadata bütünlüğünü checksum ile de denetler.",
+    "model": "Checksum ve pointer ilişkisi kavramsal gösterilir. C1/C2 adları kullanılırsa temsili olduğu belirtilir; tek checksumdan doğru veri üretildiği veya her hata yakalandığı iddia edilmez.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "storage-pools",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      43,
+      44
+    ],
+    "stages": [
+      "Geleneksel bölüm ve volume sınırları",
+      "Bir dosya sistemi dolarken boş alan",
+      "Diskleri ortak havuza ayır",
+      "Havuzdan alan kullan",
+      "Alan bırak ve farkı özetle"
+    ],
+    "seconds": {
+      "core": 30,
+      "full": 60
+    },
+    "title": "Sabit sınırlar mı, ortak alan mı?",
+    "legacyIds": [],
+    "takeaway": "Havuz yaklaşımında dosya sistemleri ortak alanı kullanıp bırakabilir; yönetim sınırları değişir, fiziksel kapasite sınırlı kalır.",
+    "model": "Küçük alan sayıları özgün örnek olabilir; toplam kapasite korunur. Slayt43–44 ZFS bağlamıdır; tüm dosya sistemleri için güncel bir özellik genellemesi değildir.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "object-storage",
+    "kind": "chapter",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      45,
+      46
+    ],
+    "stages": [
+      "Havuzda veri nesnesi",
+      "Oluştur ve ID al",
+      "ID ile eriş",
+      "ID ile sil",
+      "Ayrı yerleştirme örneğinde N kopya",
+      "Yeni sistemle yatay büyüme"
+    ],
+    "seconds": {
+      "core": 45,
+      "full": 75
+    },
+    "title": "Nesneyi kimliğiyle bulmak",
+    "legacyIds": [],
+    "takeaway": "Program nesne kimliğiyle erişir; yerleştirme, koruma ve birden çok sistemde kopyaları depolama yönetim yazılımı düzenleyebilir.",
+    "model": "Oluştur/eriş/sil ve kopya yerleştirme özgün sonlu örneklerdir. Silinmiş nesne sonraki aşamada nedensiz geri gelmez; yerleştirme için yeni örnek açıkça başlatılır. Güncel HDFS/Ceph mimarisi iddiası eklenmez.",
+    "chapter": "11.8"
+  },
+  {
+    "id": "io-journey",
+    "kind": "closing",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.1",
+      "11.2",
+      "11.3",
+      "11.4",
+      "11.5",
+      "11.6",
+      "11.7",
+      "11.8"
+    ],
+    "slides": [
+      7,
+      11,
+      15,
+      17,
+      18,
+      27,
+      31,
+      33,
+      35,
+      37,
+      39,
+      43,
+      45,
+      46
+    ],
+    "stages": [
+      "Bütün sistem görünümü",
+      "Uygulama isteği",
+      "OS kuyruğu",
+      "Erişim arayüzü ve bağlantı",
+      "Varsa dizi ve RAID",
+      "HDD veya NVM aygıt maliyeti",
+      "ECC ve veri bütünlüğü"
+    ],
+    "seconds": {
+      "core": 60,
+      "full": 75
+    },
+    "title": "Bütün bölüm, tek istek",
+    "legacyIds": [
+      "s35"
+    ],
+    "takeaway": "Aygıt, kuyruk, yönetim, bağlantı ve koruma aynı depolama sistemindeki farklı sorumluluklardır.",
+    "model": "Bölümün özgün bütünleştirme yoludur; tek zorunlu mimari veya gerçek I/O zaman çizelgesi değildir. RAID her sistemde, swap her dosya okumasında zorunlu aşama değildir.",
+    "chapter": "Ortak kapanış"
+  },
+  {
+    "id": "exercise-nvm-fcfs",
+    "title": "Alıştırma 11.13 · NVM ve FCFS",
+    "chapter": "Kapanış · Exercises",
+    "presenterId": 4,
+    "kind": "closing",
+    "depth": "core",
+    "seconds": {
+      "core": 30,
+      "full": 60
+    },
+    "legacyIds": [],
+    "stages": [
+      "Soruyu tartış",
+      "Çözüm ve gerekçe"
+    ],
+    "sections": [
+      "11.3"
+    ],
+    "slides": [
+      26
+    ],
+    "takeaway": "Mekanik seek ve dönme olmadığından silindir sırasıyla kafa hareketini azaltma kazancı yoktur. FCFS basit ve düşük ek yüklüdür. Kuyruk, paralellik ve flash yönetimi işleri yine sürer.",
+    "model": "Kullanıcının paylaştığı 11.pdf, Exercises 11.13, PDF sayfa 1. Türkçe soru uyarlaması ve açıklamalı çözüm bu sunum için hazırlanmıştır; resmî cevap anahtarı aktarımı değildir. Yalnız belirtilen alt maddeler seçilmiştir."
+  },
+  {
+    "id": "exercise-scheduling",
+    "title": "Alıştırma 11.14 · 5000 silindirli disk",
+    "chapter": "Kapanış · Exercises",
+    "presenterId": 4,
+    "kind": "closing",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 150
+    },
+    "legacyIds": [],
+    "stages": [
+      "Soruyu tartış",
+      "Çözüm ve gerekçe"
+    ],
+    "sections": [
+      "11.2"
+    ],
+    "slides": [
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+    ],
+    "takeaway": "Sonuçlar: FCFS 13011, SCAN 7492, C-SCAN 9917 silindir. Yön artandır: 1805'ten 2150'ye gelindi. SCAN fiziksel 4999 ucuna gider. C-SCAN'ın 4999'dan 0'a dönüşü de hareket toplamına eklenir. Son bekleyen istek servis edildiğinde ölçüm biter.",
+    "model": "Kullanıcının paylaştığı 11.pdf, Exercises 11.14, PDF sayfa 1. Türkçe soru uyarlaması ve açıklamalı çözüm bu sunum için hazırlanmıştır; resmî cevap anahtarı aktarımı değildir. Yalnız belirtilen alt maddeler seçilmiştir."
+  },
+  {
+    "id": "exercise-rotation",
+    "title": "Alıştırma 11.16(a) · Ortalama dönme beklemesi",
+    "chapter": "Kapanış · Exercises",
+    "presenterId": 4,
+    "kind": "closing",
+    "depth": "core",
+    "seconds": {
+      "core": 30,
+      "full": 60
+    },
+    "legacyIds": [],
+    "stages": [
+      "Soruyu tartış",
+      "Çözüm ve gerekçe"
+    ],
+    "sections": [
+      "11.1"
+    ],
+    "slides": [
+      6,
+      7
+    ],
+    "takeaway": "Bir tur 60000 / 7200 = 8,3333 ms sürer. Sektörün açısal konumu için eşit olasılık varsayımıyla ortalama bekleme yarım turdur: 4,1667 ms. Seek ve aktarım bu hesaba dahil değildir.",
+    "model": "Kullanıcının paylaştığı 11.pdf, Exercises 11.16(a), PDF sayfa 2. Türkçe soru uyarlaması ve açıklamalı çözüm bu sunum için hazırlanmıştır; resmî cevap anahtarı aktarımı değildir. Yalnız belirtilen alt maddeler seçilmiştir."
+  },
+  {
+    "id": "exercise-hdd-nvm",
+    "title": "Alıştırma 11.17 · HDD ve NVM karşılaştırması",
+    "chapter": "Kapanış · Exercises",
+    "presenterId": 4,
+    "kind": "closing",
+    "depth": "core",
+    "seconds": {
+      "core": 30,
+      "full": 60
+    },
+    "legacyIds": [],
+    "stages": [
+      "Soruyu tartış",
+      "Çözüm ve gerekçe"
+    ],
+    "sections": [
+      "11.1",
+      "11.3"
+    ],
+    "slides": [
+      4,
+      6,
+      7,
+      9,
+      10,
+      11,
+      26
+    ],
+    "takeaway": "HDD'de seek ve dönme maliyeti vardır; büyük sıralı aktarımlar bu maliyetin payını azaltabilir. NVM mekanik beklemeyi kaldırır; küçük rastgele I/O ve düşük gecikme gereksinimi için bu önemlidir. Sonuç iş yüküne ve aygıta bağlıdır.",
+    "model": "Kullanıcının paylaştığı 11.pdf, Exercises 11.17, PDF sayfa 2. Türkçe soru uyarlaması ve açıklamalı çözüm bu sunum için hazırlanmıştır; resmî cevap anahtarı aktarımı değildir. Yalnız belirtilen alt maddeler seçilmiştir."
+  },
+  {
+    "id": "exercise-raid-write",
+    "title": "Alıştırma 11.21(a) · RAID 5'te tek blok yazma",
+    "chapter": "Kapanış · Exercises",
+    "presenterId": 4,
+    "kind": "closing",
+    "depth": "core",
+    "seconds": {
+      "core": 30,
+      "full": 60
+    },
+    "legacyIds": [],
+    "stages": [
+      "Soruyu tartış",
+      "Çözüm ve gerekçe"
+    ],
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      39,
+      40
+    ],
+    "takeaway": "Eski veri ve eski parite okunur; yeni veri ve yeni parite yazılır. Toplam 2 okuma + 2 yazma = 4 blok I/O yapılır. İki farklı blok konumuna erişilir; erişim sayısı ile benzersiz blok sayısı aynı değildir.",
+    "model": "Kullanıcının paylaştığı 11.pdf, Exercises 11.21(a), PDF sayfa 3. Türkçe soru uyarlaması ve açıklamalı çözüm bu sunum için hazırlanmıştır; resmî cevap anahtarı aktarımı değildir. Yalnız belirtilen alt maddeler seçilmiştir."
+  },
+  {
+    "id": "exercise-mtbf",
+    "title": "Alıştırma 11.25(a,c) · MTBF ve garanti",
+    "chapter": "Kapanış · Exercises",
+    "presenterId": 4,
+    "kind": "closing",
+    "depth": "core",
+    "seconds": {
+      "core": 30,
+      "full": 60
+    },
+    "legacyIds": [],
+    "stages": [
+      "Soruyu tartış",
+      "Çözüm ve gerekçe"
+    ],
+    "sections": [
+      "11.8"
+    ],
+    "slides": [
+      38,
+      42
+    ],
+    "takeaway": "Bağımsız ve sabit arıza hızı varsayımıyla toplam arıza hızı 1000 / 750000'dir. Ortalama aralık 750 saat, yaklaşık 31,25 gündür. MTBF'den tek diskin ömrü veya garanti süresi çıkarılamaz.",
+    "model": "Kullanıcının paylaştığı 11.pdf, Exercises 11.25(a,c), PDF sayfa 3. Türkçe soru uyarlaması ve açıklamalı çözüm bu sunum için hazırlanmıştır; resmî cevap anahtarı aktarımı değildir. Yalnız belirtilen alt maddeler seçilmiştir."
+  },
+  {
+    "id": "storage-wrap-up",
+    "kind": "closing",
+    "depth": "core",
+    "presenterId": 4,
+    "sections": [
+      "11.1",
+      "11.2",
+      "11.3",
+      "11.4",
+      "11.5",
+      "11.6",
+      "11.7",
+      "11.8"
+    ],
+    "slides": [
+      3,
+      7,
+      17,
+      18,
+      38,
+      39,
+      41,
+      42,
+      43
+    ],
+    "stages": [
+      "Tasarım sorusu",
+      "İş yükünü tanımla",
+      "Gecikme bileşenlerini ayır",
+      "Hata kapsamını belirt",
+      "Bağımsız geri dönüş kopyası",
+      "Birlikte değerlendir ve sorular"
+    ],
+    "seconds": {
+      "core": 60,
+      "full": 75
+    },
+    "title": "Doğru tasarım için dört soru",
+    "legacyIds": [
+      "s36"
+    ],
+    "takeaway": "İş yükü, gecikme, hata modeli ve geri dönüş ihtiyacı birlikte tanımlanır; tek hız veya kapasite sayısı tasarımı belirlemez.",
+    "model": "Özgün kapanış ve gerekçeli değerlendirme kartlarıdır; notlandırma, ürün önerisi veya üretim sistemi yapılandırması üretilmez. Soru geldiğinde semantic konuya dönülür.",
+    "chapter": "Ortak kapanış"
+  }
+]

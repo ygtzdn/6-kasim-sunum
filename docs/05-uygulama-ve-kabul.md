@@ -1,5 +1,7 @@
 # 05 — Uygulama ve doğrulama planı
 
+> **Tarihsel belge:** Bu dosya önceki planı/uygulamayı kaydeder. Güncel kaynak, akış, örnek ve kabul kararları için [14 — Yeni sunum mimarisi](14-kitaba-dayali-yeni-sunum-mimarisi.md), mevcut mimari için [08 — Modüler tam sunum](08-moduler-tam-sunum.md) esas alınır. Aşağıdaki eski örnek toplamları, yapılacaklar ve kaldırılan özellikler güncel uygulama taahhüdü değildir.
+
 ## 1. Mevcut aşama ve teslim sınırı
 
 İlk dokümantasyon tesliminden sonra S01–S09 uygulandı. Güncel kapsam ve tasarım [07 — Güncel uygulama](07-guncel-uygulama.md) içindedir. Aşağıdaki tablo bütün bölüm için kabul planıdır; tüm maddelerin tamamlandığını göstermez. Son tasarım revizyonunda kullanıcı isteğiyle tarayıcı doğrulaması yapılmaz; derleme ve dört HDD hesap testi kullanılır.

@@ -1,194 +1,192 @@
 import type { SceneNotes } from "../../presentation/types";
+import curriculum from "./curriculum.json";
 
-export const introNotes: Record<string, SceneNotes> = {
-  s01: {
-    represents:
-      "Açılıştaki gerçek HDD fotoğrafı, yazılımın okuma isteği ile fiziksel depolama arasındaki ilişkiyi somutlaştırır. Enter ile istek, işletim sistemi ve aygıt olmak üzere üç anlatım odağı açılır. Görsel bir çalışma videosu veya aygıt hızını gösteren simülasyon değildir.",
-    learningGoal:
-      "Bir okuma isteğinin fiziksel bir aygıt üzerinden karşılandığını ve zaman maliyeti olduğunu fark etmek.",
-    walkthrough: [
-      "Fotoğraf üzerinden bir dosyayı okurken neyi beklediğimizi sorun.",
-      "Enter ile OS ve fiziksel aygıt odağını sırayla gösterin; sağ okla sunucu haritasına geçin.",
-    ],
-    keyPoints: [
-      "İşletim sistemi mantıksal isteği aygıta iletir.",
-      "11.1 fiziksel ortam ve performans özelliklerine giriş yapar.",
-    ],
-    limits:
-      "Gerçek fotoğraf temel parçaları tanıtmak içindir; ürün performansı veya tüm depolama ortamlarının mekanik olduğu iddia edilmez.",
-    transition: "Sunumun dört bakış açısını görelim.",
+export const hardwareCaptions: Record<string, string[]> = {
+  "hdd-anatomy": [
+    "Manyetik yüzeydeki veriye mekanik hareketle ulaşılır.",
+    "1: manyetik plaka. 2: plakayı döndüren mil. Verinin tutulması ve hareketin üretilmesi farklı görevlerdir.",
+    "3: kol. 4: park alanındaki kafa ucu. Kol, okuma/yazma kafasını hedef yarıçapa götürür.",
+    "Kolun konumlanması ve sektörün kafa altına dönmesi ayrı işlerdir.",
+    "Fotoğraftaki kafa park alanındadır. Yan kesit şemasında normal okuma yüzeye temas etmez; temas head crash riskidir.",
+  ],
+  "hdd-geometry": [
+    "Şema bir disk yüzeyini temsil eder; gerçek aygıtın birebir geometrisi değildir.",
+    "İz, yüzeydeki dairesel kayıt yoludur.",
+    "Sektör, bir izin parçasıdır; izin bütünü değildir.",
+    "Silindir, farklı yüzeylerde aynı yarıçaptaki izlerin geometrik grubudur.",
+  ],
+  "hdd-access-cost": [
+    "4 KiB = 4096 B. 1 Gb/s = 125 MB/s. Kuyruk beklemesi bu servis hesabının dışındadır.",
+    "Seek: kafa hedef ize gelir. Örnekte 5 ms.",
+    "7200 RPM → bir tur 8,3333 ms → ortalama dönme beklemesi 4,1667 ms.",
+    "Konumlandırma = seek + ortalama dönme = 9,1667 ms.",
+    "Aktarım = 4096 B / 125.000.000 B/s = 0,032768 ms.",
+    "Denetleyici 0,1 ms de eklenir: örnek servis süresi 9,30 ms. Uygulamanın toplam gecikmesi değildir.",
+  ],
+  "hdd-request-size": [
+    "4 KiB için aktarım çok küçük; konumlandırma toplamda baskındır.",
+    "1 MiB daha fazla aktarım işi getirir. Seek, dönme ve denetleyici aynı kaldı.",
+    "Hız 125’ten 250 MB/s’ye çıktı: yalnız aktarım süreleri yarıya indi.",
+    "Küçük I/O’nun toplamı yarıya inmedi. Mekanik pay, daha hızlı aktarımın kazancını sınırlar.",
+  ],
+  "hdd-history": [
+    "1956: kitabın tarihsel örneği IBM Model 350.",
+    "50 adet 24 inç plaka; 5 milyon 7-bit karakter. Modern MB birimine sessizce çevirmiyoruz.",
+    "Erişim bir saniyenin altındaydı. Bu sayılar bugünün ürün özellikleri değildir.",
+  ],
+  "hdd-performance-metrics": [
+    "6 Gb/s: kaynaktaki tarihsel teorik arayüz örneği. Tek I/O’nun gecikmesi değildir.",
+    "1 Gb/s: kaynaktaki etkin aktarım örneği. Arayüz tavanıyla aynı değer değildir.",
+    "9,30 ms: bir önceki açık birimli tek I/O hesabı. Hız ile süre farklı birimlerdir.",
+    "Disk bandwidth’i: toplam aktarılan byte / ilk isteğin başlangıcından son tamamlanmaya kadar geçen süre.",
+  ],
+  "nvm-device": [
+    "Flash tabanlı SSD, veriyi güç kesildiğinde de tutan bir NVM aygıtıdır.",
+    "1: denetleyici istekleri yönetir. 2: NAND flash veriyi tutar. 3: bu aygıtın SATA güç/veri bağlantısı.",
+    "SSD’de seek ve dönme yoktur. Aktarım, yazılım ve flash yönetimi işi devam eder.",
+    "SSD, USB flash ve gömülü aygıtlar NVM ailesinin farklı örnekleridir; hepsi aynı ürün değildir.",
+  ],
+  "flash-page-block": [
+    "Küçük kutular sayfa, büyük çerçeveler silme bloğudur. Geometri eğitim ölçeğidir.",
+    "P0’daki L0 okunuyor. Okuma, sayfanın içeriğini değiştirmez.",
+    "L0’ın yeni sürümü boş P6’ya yazıldı; eski P0 geçersiz oldu, fakat silinmedi.",
+    "A’da canlı veri kalmadı; dört sayfa birlikte silindi. B’deki canlı veriler korunur.",
+    "P6 geçerli, P5 geçersiz, P0 silinmiş. Geçersiz veri ile yeniden yazılabilir boş sayfa aynı değildir.",
+  ],
+  "flash-endurance": [
+    "Yeniden kullanılabilir alan kazanmak, birikmiş aşınmayı geri almaz. Silme ömrü sınırlıdır.",
+    "Resmî slaydın örneği: 1 TB aygıt, 5 DWPD derecesi.",
+    "1 TB × 5 = 5 TB/gün. Bu bir yazma hacmi derecelendirmesidir, hücre silme sayısı değildir.",
+    "3 TB/gün örnek bütçenin altında; 6 TB/gün üzerinde. Bu karşılaştırma kesin bir arıza günü tahmini değildir.",
+  ],
+  "ram-disk": [
+    "RAM, blok aygıtı gibi sunulup dosya sistemiyle kullanılabilir; uçuculuğu değişmez.",
+    "Örnek dosya RAM diske yazıldı. Dosya sistemi arayüzü kalıcılık sağlamaz.",
+    "Güç kesildi: RAM içeriği kayboldu. HDD ve flash SSD’deki kayıt korunur.",
+    "Güç geri geldi: eski RAM verisi kendiliğinden dönmez. Uçuculuk ve mekanik hareket ayrı özelliklerdir.",
+  ],
+  "magnetic-tape": [
+    "Manyetik teyp, kayıtların sıralı veri akışıyla işlendiği kalıcı bir ortamdır.",
+    "Uzak bir kaydı seçmek için önce konum bulunur; konum bulma işi vardır.",
+    "Konum bulunduğunda ardışık kayıtlar aktarılır. Arşiv ve yedekleme bu erişim biçiminin bağlamıdır.",
+  ],
+  "logical-blocks": [
+    "OS, diski tek boyutlu numaralı mantıksal blok dizisi olarak adresler.",
+    "İstek LBA 3’ü seçti; bu sayı bir fiziksel yüzey resmi değildir.",
+    "Kitabın temel modeli blokları sektörlere sıralı eşler. Buradaki geometri küçük bir eğitim modelidir.",
+    "Fiziksel ayrıntı gizlenebilir; LBA 3 isteği korunur. Bozuk sektör ve geometri ayrıntıları eşlemeyi karmaşıklaştırabilir.",
+  ],
+  "storage-data-path": [
+    "OS, bir LBA okuma isteğini ve verinin yerleştirileceği DRAM alanını belirler.",
+    "Komut, bilgisayar tarafındaki host denetleyicisine iletilir.",
+    "Host denetleyicisi aygıt denetleyicisine mesaj gönderir.",
+    "Aygıt veriye erişir. Komutun gelmesi, verinin DRAM’e taşındığı anlamına gelmez.",
+    "DMA ile veri aygıttan DRAM’e aktarılır. Kontrol yolu ile veri yolu ayrı akışlardır.",
+  ],
+};
+const questions: Record<string, { prompt: string; answer: string }> = {
+  "hdd-anatomy": {
+    prompt:
+      "Disk dönerken hedef iz kafanın altında değilse yalnız dönüşü beklemek yeter mi?",
+    answer: "Hayır; kafa hedef yarıçapa da konumlanmalıdır.",
   },
-  s02: {
-    represents:
-      "Dört düğüm Chapter 11 içindeki dört sunucunun konu kapsamını gösterir. Enter sırayla ilgili düğümü vurgular, herhangi bir bölüme kendiliğinden geçmez. Düğüme tıklamak veya sahne oklarını kullanmak ilgili anlatıma geçmeyi sağlar.",
-    learningGoal:
-      "11.1 ile sonraki zamanlama, yönetim ve bağlantı bölümleri arasındaki kapsam ayrımını bilmek.",
-    walkthrough: [
-      "Enter ile dört konu grubunu sırayla vurgulayın.",
-      "Sağ ok veya 11.1’e başla düğmesiyle ilk kişinin anlatımına geçin.",
-    ],
-    keyPoints: [
-      "Birinci kişi 11.1; ikinci kişi 11.2–11.3 kapsamındadır.",
-      "Üçüncü kişi 11.4–11.6; dördüncü kişi 11.7–11.8 kapsamındadır.",
-    ],
-    limits:
-      "Bu harita konu organizasyonudur; her I/O isteğinin izlediği zorunlu bir işlem sırası değildir.",
-    transition: "Önce HDD’nin temel parçalarını inceleyelim.",
+  "hdd-geometry": {
+    prompt: "Bir sektör bütün bir silindir midir?",
+    answer:
+      "Hayır; sektör bir iz parçası, silindir aynı yarıçaptaki izler grubudur.",
   },
-  s04: {
-    represents:
-      "Volatil ve Non-Volatil başlıklı iki grup karşılaştırılır. Volatil tarafta gerçek RAM modülü; Non-Volatil tarafta gerçek HDD ve SSD fotoğrafları vardır. Güç kesildiğinde yalnızca Volatil taraftaki bitler kaybolur. Güç geri geldiğinde eski RAM içeriği geri gelmez; HDD ve SSD’deki kayıt korunur.",
-    learningGoal:
-      "Mekanik/elektronik yapıyı ve kalıcı/uçucu olmayı birbirinden ayrı özellikler olarak değerlendirmek.",
-    walkthrough: [
-      "İlk aşamada Volatil (RAM) ve Non-Volatil (HDD, SSD) gruplarını ve örnek bitleri işaretleyin.",
-      "Enter ile gücü kesin; Non-Volatil gruptaki kaydın korunduğunu, RAM içeriğinin kaybolduğunu gösterin.",
-      "Enter ile gücü geri getirin; eski RAM verisinin dönmediğini vurgulayın.",
-      "Son aşamada SSD etiketini vurgulayın; elektronik yapının tek başına uçuculuk anlamına gelmediğini açıklayın.",
-    ],
-    keyPoints: [
-      "RAM uçucudur; RAM disk kullanımı bu özelliği değiştirmez.",
-      "Flash tabanlı SSD, NVM aygıtlarının somut bir örneğidir.",
-      "Kaynak: resmî Chapter 11 slaytları 4, 9 ve 12.",
-    ],
-    limits:
-      "Bit kutuları kavramsal durum gösterimidir; fiziksel hücre sayısını, güç elektroniğini veya gerçek performansı simüle etmez.",
-    question: {
-      prompt: "Elektronik olan her depolama ortamı uçucu mudur?",
-      answer:
-        "Hayır. RAM uçucudur; flash tabanlı SSD veriyi güç kesildiğinde de korur.",
-    },
-    transition: "HDD’deki mekanik hareketin okuma maliyetine bakalım.",
+  "hdd-access-cost": {
+    prompt: "9,1667 ms ile 9,30 ms neden farklı adlandırılıyor?",
+    answer:
+      "İlki konumlandırma, ikincisi aktarım ve denetleyici dahil örnek servis süresidir.",
   },
-  s03: {
-    represents:
-      "Evan-Amos’un yüksek çözünürlüklü gerçek HDD fotoğrafı üzerinde plaka, mil, kol ve okuma/yazma kafası sırayla numaralı işaretlerle tanıtılır. Kafa fotoğrafta park konumundadır. Son aşamada iz, sektör ve silindir tanımlanır; bu kayıt düzeni fotoğrafta boyalı çizgilerle varmış gibi gösterilmez.",
-    learningGoal:
-      "Kitaptaki temel HDD parçalarını ve iz/sektör/silindir kavramlarını tanımak.",
-    walkthrough: [
-      "Gerçek HDD fotoğrafını tanıtın; Enter ile plaka, mil, kol ve kafayı sırayla işaretleyin.",
-      "Plakanın veri tuttuğunu, kolun kafayı hedef yarıçapa götürdüğünü açıklayın.",
-      "Son aşamada izin dairesel yol, sektörün izin parçası, silindirin aynı yarıçaptaki yüzey izleri olduğunu anlatın.",
-    ],
-    keyPoints: [
-      "Plakalar mil çevresinde döner; kafa okuma ve yazmayı gerçekleştirir.",
-      "Kafa hareketi ile hedef sektörün dönmesi ayrı beklemeler doğurur.",
-      "Kaynak: resmî slaytlar 4–5, Moving-head Disk Mechanism.",
-    ],
-    limits:
-      "Fotoğraf statiktir; gerçek çalışma animasyonu üretilmedi. Bobin, mıknatıs, motor sürücüsü ve devre ayrıntıları kapsam dışında bırakıldı. İz/sektör ve çok yüzeyli silindir bu fotoğrafta gözle seçilemez.",
-    transition: "Bu aygıtın kalıcılığını RAM ile karşılaştıralım.",
+  "hdd-request-size": {
+    prompt: "Aktarım iki kat hızlanınca küçük I/O toplamı yarıya iner mi?",
+    answer: "Hayır; seek, dönme ve denetleyici terimleri aynı kalır.",
   },
-  s05: {
-    represents:
-      "Üç halka, seek, ortalama dönme gecikmesi ve aktarımı gösterir. Enter her bileşeni sırayla vurgular, son aşamada toplam servis süresini birleştirir. Konumlandırma gecikmesi seek + dönmedir; üstteki toplam aktarımı da içerir ve ek yüklerin dışarıda bırakıldığı örnek I/O servis süresidir.",
-    learningGoal:
-      "Konumlandırma gecikmesini aktarım dahil örnek servis süresinden ayırmak ve birimlerle hesaplamak.",
-    walkthrough: [
-      "Başlangıçtaki 7200 RPM, 6 ms seek, 4 KiB ve 200 MB/s parametrelerini okuyun.",
-      "Enter ile seek, dönme ve aktarımı sırayla anlatın. Ortalama dönme gecikmesi 30000/RPM ms’dir.",
-      "Toplam aşamasında yaklaşık 10,19 ms ile bunun içindeki yaklaşık 10,17 ms konumlandırmayı ayırın.",
-      "Veri boyutunu artırın: aktarım büyür; seek ve dönme aynı kalır. Sıfırlama düğmesi kayıtlı parametreleri geri getirir.",
-    ],
-    keyPoints: [
-      "Konumlandırma = seek + ortalama dönme gecikmesi.",
-      "Örnek servis = konumlandırma + aktarım; denetleyici ve kuyruk bu hesapta yoktur.",
-      "1 KiB = 1024 byte; 1 MB = 1.000.000 byte.",
-      "Kaynak: resmî slaytlar 6–7. Sayısal parametreler eğitim örneğidir.",
-    ],
-    limits:
-      "Kitaptaki tam ortalama I/O ifadesi denetleyici ek yükünü de içerir. Burada bu ek yük ve kuyruk dışarıda bırakılarak sadeleştirme görünür biçimde belirtilir; sonuç uçtan uca uygulama gecikmesi değildir.",
-    transition:
-      "HDD’deki bu mekanik beklemelerin SSD’de neden bulunmadığına bakalım.",
+  "hdd-history": {
+    prompt: "Bu sayılar bugün satılan HDD özellikleri midir?",
+    answer: "Hayır; 1956 IBM Model 350’nin kitaptaki tarihsel örneğidir.",
   },
-  s06: {
-    represents:
-      "Aynı SSD’nin önce dış kasası, ardından gerçek iç kartı gösterilir. Flash bellek yongaları ve denetleyici fotoğraf üzerindeki numaralı işaretlerle ayrılır. Son aşama dönen plaka ve hareket eden kafa bulunmamasını, dolayısıyla seek ve dönme gecikmesinin olmamasını vurgular.",
-    learningGoal:
-      "Flash tabanlı SSD’nin temel görev ayrımını ve HDD’den mekanik farkını açıklamak.",
-    walkthrough: [
-      "Enter ile SSD dış görünüşünden iç kart fotoğrafına geçin.",
-      "Bir sonraki aşamada veriyi kalıcı tutan NAND flash yongalarını gösterin.",
-      "Denetleyiciyi yalnızca istekleri flash işlemlerine dönüştürme göreviyle tanıtın.",
-      "Son aşamada HDD’nin seek ve dönme beklemesini hatırlatın.",
-    ],
-    keyPoints: [
-      "SSD, NVM aygıtlarının bir biçimidir; NVM daha geniş bir kategoridir.",
-      "Hareketli parça bulunmaz; seek ve dönme beklemesi yoktur.",
-      "Flash bellekte sayfa okuma/yazma ve blok silme farklıdır.",
-      "Kaynak: resmî slaytlar 9–11; fotoğraflar MatteX, Wikimedia Commons, CC0.",
-    ],
-    limits:
-      "Fotoğraf gerçek bir ürün örneğidir; bütün SSD’lerin aynı kart düzenine sahip olduğu veya bu modelin güncel performansı temsil ettiği iddia edilmez. Önbellek, yonga paketleme ve devre ayrıntıları anlatılmaz.",
-    transition: "Şimdi flash’ın sayfa ve blok kurallarını inceleyelim.",
+  "hdd-performance-metrics": {
+    prompt:
+      "6 Gb/s arayüz her küçük okumanın o hızla tamamlandığını mı söyler?",
+    answer:
+      "Hayır; arayüz tavanı, etkin aktarım ve tek I/O gecikmesi farklı ölçülerdir.",
   },
-  s07: {
-    represents:
-      "İki küçük kutu grubu iki silme bloğunu; her küçük kutu bir flash sayfasını temsil eder. Başlangıçta A bloğunda L0’ın güncel sürümü ve geçersiz sayfalar vardır. Güncelleme B bloğundaki boş P6’ya yazılır; eski P0 geçersiz olur. A’da canlı veri kalmayınca bütün blok silinir; B’deki canlı veriler korunur.",
-    learningGoal:
-      "Sayfa okuma/yazma ile daha büyük blokta silmeyi ve yerinde üzerine yazamama kuralını ayırmak.",
-    walkthrough: [
-      "İlk aşamada P0’ın okunduğunu, okumanın içeriği değiştirmediğini gösterin.",
-      "Enter ile L0’ın yeni sürümünü boş P6’ya yazın.",
-      "Eski sayfa aşamasında P0’ın geçersiz ancak fiziksel olarak henüz silinmemiş olduğunu anlatın.",
-      "Son aşamada yalnızca canlı verisi kalmayan A bloğunu tamamen silin; tek sayfa silme göstermeyin.",
-    ],
-    keyPoints: [
-      "Flash okuma/yazma sayfa, silme daha büyük blok birimindedir.",
-      "Güncelleme aynı sayfanın üstüne yazılmaz.",
-      "Geçersiz sayfa ile silinmiş, yeniden yazılabilir sayfa aynı değildir.",
-      "Kaynak: resmî slaytlar 10–11. Silme ömrü sınırlıdır; ayrıntılı FTL/GC ikinci kişidedir.",
-    ],
-    limits:
-      "İki blok ve dört sayfa eğitim boyutlarıdır. Canlı veri içeren blok silinmez. Bu sahnede GC taşıma algoritması, write amplification ve wear leveling simüle edilmez.",
-    transition:
-      "RAM disk ve teybi tamamlayıp OS’nin ortak blok görünümüne bakalım.",
+  "nvm-device": {
+    prompt: "Elektronik olan her bellek uçucu mudur?",
+    answer: "Hayır; flash SSD kalıcıdır, RAM uçucudur.",
   },
-  s08: {
-    represents:
-      "İlk aşama RAM üzerinde blok aygıtı ve dosya sistemi kullanımını, ikinci aşama manyetik teypteki sıralı kayıt düzenini gösterir. Ardından tek boyutlu mantıksal blok dizisi ve disk sektörlerine eşleme açılır. Son aşamada komutun host/aygıt denetleyicileri üzerinden iletilmesi ve verinin DMA ile DRAM’e aktarılması ayrı gösterilir.",
-    learningGoal:
-      "RAM diskin uçuculuğunu, teybin sıralı niteliğini ve işletim sisteminin ortak mantıksal blok soyutlamasını açıklamak.",
-    walkthrough: [
-      "RAM diskte dosya sistemi kurulabilse de içeriğin uçucu kaldığını hatırlatın.",
-      "Teypte konum bulma ve sıralı aktarımı ayırın. Rastgele erişimin imkânsız olduğunu söylemeyin.",
-      "Enter ile numaralı mantıksal blokları ve seçili LBA 3’ü gösterin.",
-      "Sektör eşlemesini kitabın temel sıralı modeliyle açıklayın; bozuk sektör istisnasını isim düzeyinde belirtin.",
-      "Son aşamada komut zincirini ve DMA veri yolunu ayırın.",
-    ],
-    keyPoints: [
-      "RAM disk çok hızlı geçici depolama olarak kullanılabilir.",
-      "Teyp arşiv/yedekleme için kullanılan bir manyetik ortamdır.",
-      "Disk OS’ye tek boyutlu mantıksal blok dizisi olarak görünür.",
-      "NVM ortam kategorisidir; NVMe erişim arayüzüdür.",
-      "Kaynak: resmî slaytlar 12–16.",
-    ],
-    limits:
-      "Kutu sayıları, gösterge hızı ve veri yolu mesafeleri temsilidir. Eşleme temel modeldir; gerçek geometri, DMA protokolü ve bağlantı türlerinin ayrıntıları anlatılmaz.",
-    transition:
-      "Hız ile mekanik bekleme arasındaki farkı son bir soruyla kontrol edelim.",
+  "flash-page-block": {
+    prompt: "Geçersiz sayfa doğrudan yeniden yazılabilir mi?",
+    answer: "Hayır; daha büyük blok silme kuralı sürer.",
   },
-  s09: {
-    represents:
-      "Soru, HDD aktarım hızının yükselmesinin seek ve dönme gecikmesini ortadan kaldırıp kaldırmadığını sorgular. Enter veya cevap düğmesi gerekçeyi açar; sonraki aşama donanım özelliklerinin zamanlama kararlarına etkisini ikinci sunucuya bağlar. Enter bu sahneden ayrılmaz.",
-    learningGoal:
-      "Aktarım süresi ile mekanik beklemeyi ayırarak HDD zamanlamasına gerekçeli bir geçiş yapmak.",
-    walkthrough: [
-      "Cevabı açmadan dinleyiciden aktarım artışının hangi bileşeni değiştirdiğini sorun.",
-      "Enter ile seek ve dönmenin sürdüğünü gösterin.",
-      "Son aşamada aynı isteklerin farklı sırayla servis edilmesinin kafa hareketini etkileyebileceğini söyleyin; sağ okla ikinci kişiye geçin.",
-    ],
-    keyPoints: [
-      "Aktarımın hızlanması seek ve dönmeyi sıfırlamaz.",
-      "HDD’de fiziksel konum servis sırasının önemini artırır.",
-      "Kaynak: resmî slaytlar 7 ve 17; SSD’nin mekanik farkı slayt 9.",
-    ],
-    limits:
-      "Soru aygıttan karşılanan HDD okuması içindir. Önbellekten karşılanan istekler her seferinde fiziksel hareket gerektirmez; bütün iş yükleri için bir hız iddiası yoktur.",
-    question: {
-      prompt: "Aktarım hızını artırmak HDD’de tüm beklemeyi kaldırır mı?",
-      answer: "Hayır. Seek ve dönme gecikmesi sürer.",
-    },
-    transition: "İkinci kişi: Aynı bekleyen istekleri hangi sırayla işleyelim?",
+  "flash-endurance": {
+    prompt: "5 DWPD, her hücrenin günde 5 kez silinmesi midir?",
+    answer: "Hayır; kapasiteye göre günlük yazma hacmi derecelendirmesidir.",
+  },
+  "ram-disk": {
+    prompt: "Dosya sistemi RAM diski kalıcı yapar mı?",
+    answer: "Hayır; yazılım arayüzü fiziksel uçuculuğu değiştirmez.",
+  },
+  "magnetic-tape": {
+    prompt: "Kayıt konumunu bulmak ve ardından aktarmak aynı iş midir?",
+    answer: "Hayır; konum bulma ve ardışık aktarım ayrı işlerdir.",
+  },
+  "logical-blocks": {
+    prompt: "LBA her diskte aynı fiziksel koordinatı garanti eder mi?",
+    answer: "Hayır; aygıt eşlemesi ve fiziksel istisnalar vardır.",
+  },
+  "storage-data-path": {
+    prompt: "Komut ve verinin DRAM’e aktarılması aynı ok mudur?",
+    answer: "Hayır; controller komut yolu ile DMA veri aktarımı ayrıdır.",
   },
 };
+const transitions: Record<string, string> = {
+  "hdd-anatomy": "Hedef konumu iz, sektör ve silindir olarak adlandıralım.",
+  "hdd-geometry": "Bu konuma ulaşmanın süresini parçalara ayıralım.",
+  "hdd-access-cost":
+    "Yalnız veri miktarı veya hız değişirse hangi terim değişir?",
+  "hdd-request-size":
+    "Şimdi mekanik beklemeyi taşımayan aygıta geçelim; tam rotadaki tarih ve ölçüt ekleri isteğe bağlıdır.",
+  "hdd-history": "Ölçek kadar kullandığımız performans ölçüsü de önemli.",
+  "hdd-performance-metrics":
+    "NVM mekanik gecikmeyi kaldırsa da bağlantı ve yazılım yolu sürer.",
+  "nvm-device": "Hareket yok, fakat yazma ve silmenin fiziksel kuralları var.",
+  "flash-page-block":
+    "Kalıcı flash ile RAM diskin uçuculuğunu ayıralım; DWPD eki dayanıklılık ölçüsünü açar.",
+  "flash-endurance":
+    "Kalıcı ortamın sınırlarını gördük; uçucu depolamayı ayıralım.",
+  "ram-disk": "Başka bir kalıcı ortamın, teybin erişim şekli farklıdır.",
+  "magnetic-tape":
+    "Ortamlar farklı; OS disk aygıtını ortak bir adres görünümüyle kullanır.",
+  "logical-blocks":
+    "Bu adresli komut aygıta nasıl gider; veri RAM’e nasıl gelir?",
+  "storage-data-path":
+    "OS aygıtı mantıksal bloklarla adresliyor. Aygıt HDD ise istek sırası fiziksel hareketi değiştiriyor. Şimdi aynı kuyruğu farklı sıralarla karşılamak için sözü ikinci sunucuya bırakıyorum.",
+};
+export const introNotes: Record<string, SceneNotes> = Object.fromEntries(
+  curriculum.map((scene) => [
+    scene.id,
+    {
+      represents: `${scene.model} Görünüm, ${scene.stages.join(" → ")} sırasını izler. Her aşama seçildiğinde ilgili fiziksel veya mantıksal durum yeniden kurulur.`,
+      learningGoal: scene.takeaway,
+      walkthrough: scene.stages.map(
+        (name, index) =>
+          `${index + 1}. aşama — ${name}: ${hardwareCaptions[scene.id][index]}`,
+      ),
+      keyPoints: [
+        scene.takeaway,
+        scene.model,
+        `Kaynak: Operating System Concepts, Tenth Edition, ${scene.sections.join(" / ")}; resmî slaytlar ${scene.slides.join(", ")}.`,
+      ],
+      limits:
+        scene.id === "hdd-access-cost"
+          ? "4 KB / 1 Gb/s gösterimindeki birim ve yuvarlama belirsizliği açık KiB ve ondalık MB/s ile çözülür. 9,30 ms bu birim yorumunun hesabıdır; kaynakta görünen9,301 birebir kesin sonuç diye aktarılmaz. Kuyruk dışarıdadır."
+          : `${scene.model} Animasyon gerçek aygıt hızı değildir; küçük şekiller gerçek geometri veya ürün özelliği değildir. Tam kitap metni yerel depoda bulunmaz.`,
+      question: questions[scene.id],
+      transition: transitions[scene.id],
+    },
+  ]),
+);

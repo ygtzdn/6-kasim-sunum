@@ -1,235 +1,472 @@
 import type { SceneNotes } from "../../presentation/types";
 
+/** Speaker preparation follows docs/bolum-planlari/04-baglanti-raid-kapanis.md. */
 export const attachmentRaidNotes: Record<string, SceneNotes> = {
-  s26: {
+  "host-attached": {
     represents:
-      "Bu sahne aynı depolama isteğinin üç farklı bağlantı düzeninde hangi bileşenlerden geçtiğini temsil eder. DAS, host’a doğrudan bağlı bir aygıttır; NAS ağ üzerinden dosya hizmeti verir; SAN örneği host’a ağ üzerinden blok hacmi sunar. Düğümler gerçek cihaz envanteri değildir: veri erişiminin sorumluluk sınırlarını görünür kılan kavramsal bir topolojidir.",
+      "Depolamaya hangi yoldan ulaşırız? sahnesi şu ilişkiyi görselleştirir: Host-attached erişim yerel I/O yolunu anlatır; aygıt arayüzü ve fiziksel bağlantı isimleri, dosya/blok hizmeti sınıflamasıyla aynı eksen değildir. Sıra: Bağlantı sorusu → Host portu ve aygıt → Bus ile birden çok aygıt → FC fabric örneği → Bağlantı yolu ve hizmet arayüzü. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
     learningGoal:
-      "Bağlantının fiziksel olarak yerel veya uzak olmasıyla, istemciye sunulan dosya veya blok soyutlamasının farklı sorular olduğunu ayırt etmek.",
+      "Bağlantı yolu ile istemciye sunulan dosya, blok veya API arayüzü ayrı eksenlerdir.",
     walkthrough: [
-      "DAS seçiliyken İsteği izle ve Adım düğmelerini kullanın. Host üzerindeki dosya sistemi dosya isteğini mantıksal blok isteğine dönüştürür; istek yerel I/O bağlantısından aygıta ulaşır. Son düğümde yalnızca blok aygıtını görüyoruz; dosya adlarını aygıtın kendisinin yönettiği sonucunu çıkarmayın.",
-      "NAS’a geçin. İstemci /sunum.pdf gibi bir dosya üzerinde işlem ister. İstek NFS/SMB gibi bir dosya protokolüyle ağa çıkar; dosya sunucusunun dosya sistemi bunu kendi aygıtlarına ait blok isteklerine dönüştürür. Burada istemcinin uzak veriye ilişkin temel arayüzü blok adresi değil, dosya/dizin işlemidir.",
-      "SAN’a geçin. Ağ bulunmasına rağmen istemci host’a bir blok hacmi sunulur. Host bu hacmin üzerinde dosya sistemi kurabilir. Fibre Channel ve iSCSI, bu bağlamdaki protokol örnekleridir; bütün SAN’lar için tek bir fiziksel kablo veya tek bir protokol varsaymayın.",
-      "Her sekmede aynı Adım kontrolüyle paketi ilerletin. Görseldeki adım sayısı ve animasyon temposu yalnızca güzergâhı anlatır. Fazla düğüm çizilmiş olması, o sistemin ölçülmüş olarak daha yavaş olduğu anlamına gelmez. Sıfırla, seçili topolojiyi koruyup isteği başa alır.",
+      "Başlangıçta Bağlantı sorusu aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "3. sunucunun hazırlama/swap hikâyesinden teslim alın; “Aygıt hazır, peki host ona hangi yoldan ulaşıyor?” deyin. Port ve veri yolunu işaretleyin. FC'yi daima tek yerel disk kablosu veya daima NAS protokolü gibi sınıflamayın. Yeni güncel ürün hızı/varsayılanı eklemeyin.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: Host portu ve aygıt → Bus ile birden çok aygıt → FC fabric örneği → Bağlantı yolu ve hizmet arayüzü.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
     ],
     keyPoints: [
-      "DAS: doğrudan bağlantı; bu örnekte blok aygıtı ve host üzerinde dosya sistemi.",
-      "NAS: ağ üzerinden dosya/dizin hizmeti; aygıtı yöneten dosya sistemi sunucudadır.",
-      "SAN: bu sunumda ağ üzerinden blok erişimi; hacmi kullanan dosya sistemi host tarafındadır.",
-      "Host’un yerel dosya sistemleri, NAS istemci önbellekleri ve sunucu içi RAID gibi ayrıntılar olabilir; şema gösterilen veri yoluna odaklanır.",
+      "Host-attached erişim yerel I/O yolunu anlatır; aygıt arayüzü ve fiziksel bağlantı isimleri, dosya/blok hizmeti sınıflamasıyla aynı eksen değildir.",
+      "Hayır; bağlantı yolu ile dosya/blok/API arayüzü ayrı sorulardır.",
+      "Yerel port, bus ve fabric kavramsal çizimlerdir; aygıt/protokol hızı ölçülmez ve üç evrensel, birbirini dışlayan ürün sınıfı oluşturulmaz.",
     ],
     limits:
-      "Eğitim modeli gerçek bağlantı kurmaz, ağ isteği göndermez veya gecikme/bant genişliği ölçmez. Birden çok host’un aynı SAN hacmini görmesi eşzamanlı dosya sistemi tutarlılığı sağlamaz; küme dosya sistemi veya uygulama düzeyinde koordinasyon gerekir. Kaynak çerçevesi: Operating System Concepts 10. baskı §11.7; SNIA NAS ve SAN eğitim sayfaları.",
+      "Yerel port, bus ve fabric kavramsal çizimlerdir; aygıt/protokol hızı ölçülmez ve üç evrensel, birbirini dışlayan ürün sınıfı oluşturulmaz. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
     question: {
-      prompt: "NAS ve SAN’ın ikisi de ağdaysa farkları nedir?",
+      prompt: "“Bağlantıda ağ varsa dosya hizmeti mi vardır?”",
       answer:
-        "Bu örneklerde NAS dosya hizmeti, SAN blok hacmi sunar. Dosya sisteminin sorumluluğunun hangi uçta bulunduğuna bakın.",
+        "Hayır; bağlantı yolu ile dosya/blok/API arayüzü ayrı sorulardır.",
     },
     transition:
-      "Güzergâhı gördük; şimdi dosya sisteminin hangi düğümde kaldığını özellikle işaretleyelim.",
+      "“Şimdi uzak dosya sistemi hizmetini, aynı IP ağı üzerinden blok erişimiyle ayıralım.”",
   },
-  s27: {
+  nas: {
     represents:
-      "Turuncu çerçeve, örnekte depolanan dosyaların yapısını yöneten dosya sisteminin yerini gösterir. DAS ve SAN’da host; NAS’ta dosya sunucusu vurgulanır. Üstteki Dosya veya Blok etiketi istemci host’a sunulan soyutlamadır. Alt katmanda her düzenin kendi aygıt erişimi bulunabilir.",
+      "Ağda dosya mı, blok mu? sahnesi şu ilişkiyi görselleştirir: NAS uzak dosya sistemi hizmeti verir; slayttaki iSCSI karşı örneği ağ üzerinden blok aygıtına erişmenin de mümkün olduğunu gösterir. Sıra: Dosya yolu isteği → NFS ve CIFS → IP üzerinde uzak çağrı → Sunucuda dosya sistemi → iSCSI ile blok karşı örneği → Dosya ve blok sorumluluğu. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
     learningGoal:
-      "Bir dosya isteğinin nerede blok isteğine çevrildiğini ve paylaşılan blok hacmiyle paylaşılan klasörün aynı hizmet olmadığını açıklamak.",
+      "NAS uzak dosya sistemi hizmeti verir; aynı IP ağı üzerindeki iSCSI ise SCSI/blok erişimi taşıyabilir.",
     walkthrough: [
-      "NAS sekmesini açın ve turuncu Dosya sistemi etiketini bulun. İstemci dosya yolunu gönderir; sunucu ad çözümleme, dizin ve dosya sistemi metaverisi gibi işleri kendi depolama düzeni üzerinde yürütür. İsteği adımlayarak dosya protokolünün sunucuda sonlandığını gösterin.",
-      "SAN’a geçin. Turuncu etiket host’a taşınır. Host’un gördüğü şey bir blok hacmidir; dosya sistemi aynı host’un içinde bu hacmi kullanır. Ağ, blokların taşınmasını sağlar; tek başına dosya sahipliği veya kilitleme politikası oluşturmaz.",
-      "DAS’ı seçin ve SAN’la ortak noktayı sorun: örnekte her ikisi de host’a blok soyutlaması sunar. Fark, aygıta erişim yolunun yerel bağlantıdan mı yoksa depolama ağından mı geçtiğidir.",
-      "İki host’un aynı blokları bağımsız dosya sistemleriyle yönetmesinin çakışabileceğini açıklayın. Ekrandaki “Ortak hacim ≠ ortak dosya sistemi tutarlılığı” uyarısı tam olarak bu sınırı belirtir. Paylaşım için uygun koordinasyon katmanı ayrıca tasarlanmalıdır.",
+      "Başlangıçta Dosya yolu isteği aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Dosya adının sunucudaki dosya sisteminde çözüldüğü aşamaya kadar ilerleyin. Sonra fiziksel ağı aynı bırakıp istemci arayüzünü LBA/blok hacmine dönüştürün. NAS protokol listesine iSCSI eklemeyin; karşı örnek olarak ayırın. NFS/CIFS adları kaynağın dönem bağlamıdır.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: NFS ve CIFS → IP üzerinde uzak çağrı → Sunucuda dosya sistemi → iSCSI ile blok karşı örneği → Dosya ve blok sorumluluğu.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
     ],
     keyPoints: [
-      "Ağ erişimi, dosya erişimiyle eş anlamlı değildir.",
-      "NAS istemcisi uzaktaki dosya hizmetini kullanır; istemcide hiç dosya sistemi kodu bulunmadığı iddia edilmez.",
-      "SAN, dosya sisteminin host tarafında olmasına engel değildir; blok erişimi ortak dosya sistemi kilitlemesini kendiliğinden çözmez.",
-      "Protokol ile fiziksel ağ ortamını ayrı kavramlar olarak tutun. Aynı ağ teknolojisi farklı üst katman erişim semantiklerini taşıyabilir.",
+      "NAS uzak dosya sistemi hizmeti verir; slayttaki iSCSI karşı örneği ağ üzerinden blok aygıtına erişmenin de mümkün olduğunu gösterir.",
+      "Hayır; SCSI/blok işlemlerini IP üzerinden taşır.",
+      "Tipik istemci/sunucu sorumluluklarının özgün şemasıdır. NFS/CIFS kaynak bağlamıdır; iSCSI NAS dosya protokolü olarak etiketlenmez.",
     ],
     limits:
-      "Şema tipik kullanım düzenlerini gösterir; tüm depolama ürünlerinin iç mimarisini sınıflandırmaz. Önbellek tutarlılığı, cluster fencing ve dosya protokollerinin ayrıntıları modellenmez. Paketin hareketi performans kıyaslaması değildir. Kaynak: OSC 10 §11.7 ve SNIA dosya/blok erişim tanımları.",
+      "Tipik istemci/sunucu sorumluluklarının özgün şemasıdır. NFS/CIFS kaynak bağlamıdır; iSCSI NAS dosya protokolü olarak etiketlenmez. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
     question: {
-      prompt: "Paylaşılan klasör mü, host’a sunulan blok hacmi mi?",
-      answer:
-        "Paylaşılan klasör için NAS dosya yolunu; host’un kendi dosya sistemiyle kullanacağı blok hacmi için bu SAN yolunu gösterin. İki örnek farklı sorumluluk sınırları kurar.",
+      prompt: "“iSCSI aynı IP ağındaysa NAS dosya protokolü müdür?”",
+      answer: "Hayır; SCSI/blok işlemlerini IP üzerinden taşır.",
     },
     transition:
-      "Aynı ayrım uzak veri merkezindeki depolama için de geçerlidir.",
+      "“Uzak veri merkezi için kitap başka bir arayüzü, hizmet API'sini öne çıkarıyor.”",
   },
-  s28: {
+  "cloud-storage": {
     represents:
-      "Uygulama–ağ–uzak depolama çizgisi, bulut depolamasının bir konum ve hizmet sunumu bağlamı olduğunu temsil eder. Nesne sekmesi HTTP API ve kimlikle erişimi; Dosya sekmesi dosya protokolünü; Blok sekmesi host’a sunulan hacmi gösterir. Bu örnekler aynı ürünün teknik özellik listesi değildir.",
+      "Uzak depolamaya API ile erişim sahnesi şu ilişkiyi görselleştirir: Kitabın bulut örneği WAN/Internet üzerinden API kullanan programı, gecikme ve başarısızlık gerekçesiyle anlatır. Sıra: Uygulama işlemi → WAN ve Internet yolu → Hizmet API arayüzü → Uzak hizmet ve yanıt → Gecikme ve başarısızlık. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
     learningGoal:
-      "“Uzak” veya “bulutta” bilgisinden tek başına dosya/blok/nesne semantiği çıkarılamayacağını söylemek ve iş yükünü erişim biçimiyle eşleştirmek.",
+      "Kitabın bulut örneğinde program uzak veri merkezine API üzerinden ulaşır; gecikme ve başarısızlık tasarımın parçasıdır.",
     walkthrough: [
-      "Nesne seçiliyken İstek düğmesine basın. Paket bir HTTP API isteğini temsil eder; uygulama nesne kimliğiyle veri ve metaveriye erişir. Görselde sunulan kimlik, disk sektör adresi veya geleneksel dosya yolu değildir.",
-      "Dosya’ya geçin. Aynı uzaklık fikri bu kez bir dosya paylaşımı hizmeti sunar. Dosya/dizin işlemlerine ihtiyaç duyan bir uygulama için bu arayüzün anlamını anlatın. Ardından Blok’u açıp host’un bir hacim üzerinde kendi dosya sistemini çalıştırabileceğini hatırlatın.",
-      "“Ağ = dosya?” sorusunda dinleyiciden seçim alın. Evet cevabından sonra SAN → blok karşı örneğini gösterin; Hayır seçimi blok erişiminin de ağdan sağlanabildiğini açıklar. Cevap yalnızca yerel olarak tutulur; sınıf çapında veri toplanmaz.",
-      "Bir storage array’in tek diske indirgenemeyeceğini sözlü olarak ekleyin: host bağlantıları, bir veya daha çok denetleyici ve çok sayıda aygıt içerebilir. Snapshot, thin provisioning ve replication olası ürün özellikleridir; bunların hiçbiri RAID kavramının otomatik sonucu değildir.",
+      "Başlangıçta Uygulama işlemi aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Fiziksel API cihazı çizmekten kaçının; API'yi hizmet sınırı olarak gösterin. NAS ile kitaptaki karşılaştırmayı anlatın; bütün güncel bulut ürünlerinin yalnız nesne depolama sunduğunu söylemeyin. Slayttaki ürün adları gerekli değil; verilirse tarihsel örnek etiketi taşımalı.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: WAN ve Internet yolu → Hizmet API arayüzü → Uzak hizmet ve yanıt → Gecikme ve başarısızlık.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
     ],
     keyPoints: [
-      "Bulut depolamanın tamamı yalnızca nesne depolama değildir; dosya ve blok hizmetleri de ayrı erişim örnekleridir.",
-      "Nesne API’si kimlik ve metaveriyle çalışır; geleneksel yerel blok aygıtının doğrudan yerine geçtiği varsayılmaz.",
-      "Bir bağlantı düzeninin uygunluğunu iş yükü, erişim semantiği, yönetim ve hata modeliyle birlikte değerlendirin.",
-      "Snapshot zaman içindeki bir görünüm, thin provisioning mantıksal alan tahsisi, replication başka bir yerde kopya tutma fikridir; RAID’in fiziksel disk yedekliliğiyle aynı iş değildir.",
+      "Kitabın bulut örneği WAN/Internet üzerinden API kullanan programı, gecikme ve başarısızlık gerekçesiyle anlatır.",
+      "Gecikme ve başarısızlık olasılığı program tasarımına dahildir.",
+      "Yerel istek şemasıdır; gerçek API çağrısı veya güncel bulut ürünleri sınıflandırması yapılmaz. API fiziksel bir aygıt değildir.",
     ],
     limits:
-      "İstek düğmesi yalnızca istemci içi animasyon oluşturur; HTTP veya bulut servisi çağrısı yoktur. Gecikme, fiyat veya güvenilirlik karşılaştırması yapılmaz. Kaynak çerçevesi: OSC 10 §11.7; SNIA ağ depolama eğitim materyalleri.",
+      "Yerel istek şemasıdır; gerçek API çağrısı veya güncel bulut ürünleri sınıflandırması yapılmaz. API fiziksel bir aygıt değildir. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
     question: {
-      prompt: "Ağ üzerinden erişim, mutlaka dosya paylaşımı anlamına mı gelir?",
-      answer:
-        "Hayır. SAN örneği ağ üzerinden blok erişimini; nesne örneği ise kimlik temelli API erişimini gösterir.",
+      prompt: "“Uzak istekte yalnız aktarım hızı yeterli mi?”",
+      answer: "Gecikme ve başarısızlık olasılığı program tasarımına dahildir.",
     },
     transition:
-      "Bağlantının ötesinde, bir hacmin arkasındaki diskleri nasıl bir araya getirdiğimize bakalım.",
+      "“Bu hizmetin veya host'un gördüğü hacmin arkasında bir depolama dizisi bulunabilir.”",
   },
-  s29: {
+  "storage-arrays": {
     represents:
-      "Host, denetleyici ve disk sütunları bir depolama dizisinin katmanlarını gösterir. Her sütun eşit kapasiteli bir fiziksel diski; A etiketli hücreler veri parçalarını; P ve Q etiketleri koruma bilgisini temsil eder. Başlangıç örneği RAID 5, dört disk, disk başına 4 TB ve toplam 16 TB fiziksel alandır. Bunun 12 TB’si mantıksal veri kapasitesidir.",
+      "Bir depolama dizisinin içi sahnesi şu ilişkiyi görselleştirir: Storage array host portları, denetleyiciler, bellek/yazılım ve aygıtları birleştirir; RAID bunun sağladığı özelliklerden biridir. Sıra: Tek aygıttan diziye → Host portları ve denetleyici → Bellek, yazılım ve diskler → Paylaşım ve hizmetler → Dizi özelliği ile RAID seviyesi. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
     learningGoal:
-      "Birden fazla diskin kapasite, veri dağıtımı ve yedeklilik için farklı biçimlerde birleştirilebildiğini, bu amaçların otomatik olarak birlikte gerçekleşmediğini görmek.",
+      "Storage array host bağlantılarını, denetleyiciyi ve aygıtları birleştirir; RAID ve snapshot gibi hizmetler aynı kavram değildir.",
     walkthrough: [
-      "Kapasite odağında 12 TB / 16 TB örneğini okuyun: dört diskin bir disk kapasitesi kadar toplam alanı parite için ayrılır. Bu, belirli bir fiziksel diskin yalnızca parite tutacağı anlamına gelmez; RAID 5’te sarı P hücreleri satırlar boyunca farklı disklere dağılır.",
-      "Dağıtım seçimini açın. A okları, farklı veri parçalarının birden çok aygıta dağılabildiğini gösterir. Bunlar bir gerçek performans deneyi değildir. İş yükü ve denetleyici tasarımına bağlı olası paralelliği anlatır; ekrandaki disk sayısından kesin hız çarpanı üretmeyin.",
-      "Koruma’yı seçin ve bir disk sütununa basarak tam disk arızası ekleyin. Erişim var / koruma azaldı durumunu gösterin. Mantıksal kapasitenin 12 TB kalmasıyla, korumanın azalmasının farklı değişkenler olduğunu özellikle belirtin.",
-      "RAID 0’a geçerek kapasitenin artıp yedekliliğin kaybolduğunu gösterin. Sonra RAID 5’e dönün. Seviye, disk sayısı veya kapasite değişimi yeni bir örnek başlatır; eski arızalar ve rebuild ilerlemesi temizlenir. Uygun olmayan disk sayısı otomatik ayarlanır ve ekranda bildirilir.",
+      "Başlangıçta Tek aygıttan diziye aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Görselde üç-beş temsilî disk yeterli; tüm kapasiteyi çizdiğinizi iddia etmeyin. Kaynaktaki NAS'ın iletişim ağı yükü karşılaştırmasını yalnız gösterilen doğrudan bağlı dizi örneğinin bağlamında anlatın; “diziler ağ kullanmaz” demeyin. Hizmet adlarını kısa görev kartlarında tanıtın; snapshot/replication ayrıntısı sonraki sahneye bırakılır.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: Host portları ve denetleyici → Bellek, yazılım ve diskler → Paylaşım ve hizmetler → Dizi özelliği ile RAID seviyesi.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
     ],
     keyPoints: [
-      "Şerit, aynı mantıksal veri dizisinin birden çok diske dağıtılan parçalarını bir araya getirir; ekrandaki üç satır bütün disk kapasitesini çizmez.",
-      "RAID donanım denetleyicisinde veya işletim sistemi yazılımında uygulanabilir. Çizimdeki denetleyici, soyut yönetim katmanını da temsil eder.",
-      "Bir storage array’de denetleyici ve host bağlantıları da arıza alanına dahildir; yalnızca disk yedekliliği bunları korumaz.",
-      "Snapshot, thin provisioning ve replication gibi dizi özellikleri RAID seviyesinden ayrı değerlendirilir.",
+      "Storage array host portları, denetleyiciler, bellek/yazılım ve aygıtları birleştirir; RAID bunun sağladığı özelliklerden biridir.",
+      "Hayır; farklı görevlerdir.",
+      "Diskler ve denetleyici temsildir. Kitabın doğrudan dizi/NAS ağ yükü karşılaştırması bütün diziler ağsızdır biçiminde genellenmez.",
     ],
     limits:
-      "Bu eğitim modeli yalnızca eşit boyutlu diskleri ve tam disk arızalarını kapsar. TB ondalıktır; metaveri, ayrılmış alan ve dosya sistemi giderleri düşülmez. Gerçek aygıta erişmez, kapasite tahsis etmez, performans ölçmez. Disk arızası seçimleri bir senaryo düzenleyicisidir; arızayı geri almak gerçek bir diski onardığımız anlamına gelmez. Kaynak: OSC 10 §11.8; Linux Kernel RAID ve dm-raid belgeleri.",
-    transition:
-      "İki temel yapı taşıyla başlayalım: veriyi bölmek ve veriyi kopyalamak.",
-  },
-  s30: {
-    represents:
-      "RAID 0 seçildiğinde her A bloğu farklı bir disk/şerit konumundadır; iki diskli RAID 1 seçildiğinde aynı A etiketli ve aynı bit desenli bloklar iki diskte de bulunur. Disk sütununa basmak o diskteki bütün hücreleri kayıp olarak işaretler. Kopya hücrelerin eşit etiketleri, bunların farklı dosyalar değil aynı mantıksal verinin kopyaları olduğunu anlatır.",
-    learningGoal:
-      "Striping’in yedeklilik sağlamadığını, mirroring’in ikinci fiziksel kopya karşılığında kullanılabilir kapasiteden vazgeçtiğini davranışla göstermek.",
-    walkthrough: [
-      "RAID 0 · şerit düğmesine basın. N eşit diskin kullanılabilir kapasitesi N×S olur. Bir diski arızalı seçin: veri kümesinin bir kısmı eksilir ve model bütün veri kümesi için kurtarılamaz durumuna geçer. Diskleri çoğaltmak bu seviyeye yedeklilik eklemez.",
-      "RAID 1 · ayna düğmesine basın. Model yalnızca iki diskli ayna kullanır; önceki disk sayısı farklıysa ikiye ayarlanır ve bildirim gösterilir. Her satırdaki iki A etiketinin ve bitlerinin aynı olduğunu gösterin. Kullanılabilir kapasite tek disk kapasitesi S’dir.",
-      "Bir ayna diskini kaybedin. Sağlam kopya bulunduğu için erişim sürer; durum koruma azaldı olur. İkinciyi de kaybederek sağlam kopya kalmadığında erişimin kaybolduğunu gösterin. Arızaları sıfırlamak ayarları korur.",
-      "RAID 1 okuma işlemlerinin bazı uygulamalarda farklı kopyalar arasında dağıtılabileceğini sözlü olarak söyleyin. Buradan her iş yükünde iki kat hız, yazmaların bedava olması veya salt disk sayısına bağlı sabit performans sonucu çıkarılamaz.",
-    ],
-    keyPoints: [
-      "RAID 0: N×S kullanılabilir alan, bu modelde herhangi bir disk kaybında eksik veri kümesi.",
-      "RAID 1: bu projede tam iki disk, S kullanılabilir alan ve en az bir sağlam kopya bulunduğu sürece erişim.",
-      "Kapasite düzeni ile arıza anındaki erişilebilirlik ayrıdır; arıza sırasında kapasite etiketini yeniden boyutlandırmıyoruz.",
-      "Sahneler aynı RAID modelini paylaşır. Bu sahneye başka bir seviyeden gelindiğinde yukarıdaki RAID etiketi mevcut durumu gösterir; örneği değiştirmek için 0 veya 1 seçin.",
-    ],
-    limits:
-      "Yazma sıralaması, önbellek, gerçek disk gecikmesi ve eşzamanlı okuma dağıtımı hesaplanmaz. İki diskli RAID 1 örneği, çok kopyalı bütün aynalama düzenlerinin simülatörü değildir. Gerçek veri bu tarayıcı modelinde tutulmaz. Kaynak: OSC 10 §11.8 ve Linux Kernel dm-raid seviye tanımları.",
+      "Diskler ve denetleyici temsildir. Kitabın doğrudan dizi/NAS ağ yükü karşılaştırması bütün diziler ağsızdır biçiminde genellenmez. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
     question: {
-      prompt: "Veriyi disklere bölmek neden tek başına koruma sağlamaz?",
-      answer:
-        "Bir parça kaybolduğunda onu üretecek bağımsız bilgi yoksa kalan parçalar eksik verinin yerine geçmez. Mirroring ek kopya, parity ek koruma bilgisi sağlar.",
-    },
-    transition: "Tam kopya yerine hesaplanmış koruma bilgisi tutabilir miyiz?",
-  },
-  s31: {
-    represents:
-      "RAID 4’te P hücreleri son fiziksel disk sütununa ayrılır. RAID 5’te P satıra göre farklı disklere döner. RAID 6’da P ve Q ayrı sütunlarda dönerek iki bağımsız koruma bileşenini temsil eder. A1 kaybolsun eylemi dört diskli RAID 5 örneğinde ilk satırın ikinci veri diskini kaybedip gerçekten XOR hesabıyla geri üretilebilir bloğu gösterir.",
-    learningGoal:
-      "Ayrılmış pariteyi dağıtılmış pariteden ayırmak; tek kayıp bloğu XOR ile hesaplamak; RAID 6’nın ikinci koruma bilgisinin aynı XOR’un kopyası olmadığını anlamak.",
-    walkthrough: [
-      "RAID 4’ü açın. Son sütunda tüm satırlarda P görünür: bu ayrılmış parite diskidir. RAID 5’i açın ve sarı hücrelerin satırlara göre yer değiştirdiğini gösterin. Her satırın paritesi farklı diskte olabilir; toplam koruma kapasitesi yine bir disk kapasitesidir.",
-      "A1 kaybolsun’a basın. Model açıkça RAID 5, dört disk ayarını seçer ve D1’i arızalı işaretler. İlk satırdaki veriler 1100, 1010, 0110; P ise bunların XOR’u olan 0000’dır. Eksik A1 = P XOR 1100 XOR 0110 = 1010 olarak, sağlam hücrelerden hesaplanır. Örnek veri bitleri gerçek dosya içerikleri değildir.",
-      "Sıfırlayıp parite sütununu kaybedin. XOR alanı bu kez eksik P’yi sağlam veri bloklarından üretir. Veri kaybı ve parite kaybı farklı hücre rolleri olarak görünür. İki disk kaybı seçilirse tek koruma denklemi yeterli olmadığı için arayüz hesapla kurtarma iddiasında bulunmaz.",
-      "RAID 6’ya geçin. P ve Q’nun ayrı renk ve etiketlerini gösterin. Bu model iki tam disk arızasını kural olarak tolere eder; Q’nun sonlu alan cebirini çalıştırmaz. XOR düğmesi açıldığında Q hesabının kapsam dışında olduğu açıkça belirtilir. Q, P’nin ikinci kopyası değildir.",
-    ],
-    keyPoints: [
-      "RAID 4 ve 5: N≥3, kullanılabilir kapasite (N−1)×S, en fazla bir tam disk kaybı.",
-      "RAID 6: N≥4, kullanılabilir kapasite (N−2)×S, en fazla iki tam disk kaybı; bağımsız P ve Q koruması.",
-      "XOR sonucu hücrelerin saklanan bitlerinden hesaplanır; sonuç bir animasyon etiketi olarak uydurulmaz.",
-      "RAID 4’te ayrılmış parite diski yazma işlerinin yoğunlaşabileceği bir noktadır. RAID 5 pariteyi dağıtır; bu dağılım bütün yazma maliyetlerini ortadan kaldırmaz.",
-    ],
-    limits:
-      "XOR örneği dört bitlik bloklar ve tek şerit içindir. RAID 6 Q kodlaması, sonlu alan işlemleri ve çift kayıp veri çözümü uygulanmaz; kapasite ve hata toleransı ayrı açık kurallarla gösterilir. Şemadaki dönen yerleşim öğretim amaçlıdır; bir denetleyicinin birebir on-disk formatı değildir. Write hole, URE ve denetleyici önbelleği ana hesapta yoktur. Kaynak: OSC 10 §11.8; Linux Kernel dm-raid; H. Peter Anvin, The Mathematics of RAID-6.",
-    transition:
-      "Kopyaların nerede bulunduğu, kaç disk kaybettiğimiz kadar önemlidir.",
-  },
-  s32: {
-    represents:
-      "Bu sahne disk arızası düzenini doğrudan düzenlemeye izin veren ortak RAID modelidir. RAID 10 seçildiğinde mavi çerçeve başlıkları (D0,D1), (D2,D3) gibi ayna çiftlerini gösterir. Her A bloğu yalnızca kendi çiftinde kopyalıdır; çiftler arasında farklı veri parçaları şeritlenir. Bu nedenle arıza sayısının yanında arızaların hangi çiftte bulunduğu da durumu belirler.",
-    learningGoal:
-      "RAID 10 kurtarılabilirliğini toplam kayıp disk sayısıyla değil, her ayna çiftinde sağlam kopya kalıp kalmadığıyla değerlendirmek.",
-    walkthrough: [
-      "D0 + D2 ön ayarına basın. Dört diskli RAID 10 modeli seçilir; her iki ayna çiftinden birer disk kaybedilir. D1, ilk çiftin verisini; D3, ikinci çiftin verisini korur. Durum Erişim var / koruma azaldı olur. Kullanılabilir kapasite hâlâ 8 TB’dir.",
-      "D0 + D1 ön ayarına basın. Aynı iki arıza sayısına rağmen ilk çiftin iki kopyası da yoktur. İkinci çiftin sağlam olması ilk çifte ait farklı veri parçalarını üretmez. Durum Modelde kurtarılamaz olarak değişir.",
-      "Bir disk sütununa tıklayıp arızayı ekleyin veya senaryo düzenlemesi olarak geri alın. Altı veya sekiz disk seçip her çiftte sağlam en az bir disk kalma koşulunu izleyin. Her çiftin iki diski birlikte kaybedildiğinde dizi eksik kalır.",
-      "İsterseniz aynı arıza desenlerini RAID 5 ve RAID 6’da karşılaştırın. RAID 5 tek, RAID 6 en fazla iki tam disk kaybını tolere eder. RAID 10 için ortak “en fazla iki” sayacı kullanılmaz; çiftlerin yerleşimi incelenir.",
-    ],
-    keyPoints: [
-      "RAID 10: önce aynalama, ardından ayna çiftleri arasında striping; bu modelde N≥4 ve çift.",
-      "Kapasite (N/2)×S’dir. İki diskin kaybı bazı düzenlerde tolere edilir, bazı düzenlerde edilmez.",
-      "“Kurtarılamaz”, bu modelin kalan disklerden bütün veri kümesini yeniden oluşturamadığı anlamındadır; tüm hücrelerdeki her bitin yok olduğunu iddia etmez.",
-      "Seviye değişikliği arızaları ve rebuild durumunu temizler; disk sayısı gerekirse geçerli en yakın sayıya ayarlanır.",
-    ],
-    limits:
-      "Yalnızca belirtilen sabit ayna çiftleri ve tam disk kaybı modellenir. Linux MD gibi sistemlerde farklı RAID 10 kopya yerleşimleri bulunabilir; burada bütün varyantların sonucu temsil edilmez. Seçimi geri almak fiziksel disk onarımı değildir. Kaynak: OSC 10 §11.8; Linux Kernel RAID ve dm-raid belgeleri.",
-    question: {
-      prompt: "Dört diskli RAID 10 her iki disk arızasını da tolere eder mi?",
-      answer:
-        "Hayır. D0+D2 gibi farklı çiftlerden birer kayıp tolere edilir; D0+D1 gibi aynı çiftin iki kaybı o çiftin bütün kopyalarını yok eder.",
+      prompt:
+        "“Snapshot veya replication varsa RAID seviyesi belirlenmiş olur mu?”",
+      answer: "Hayır; farklı görevlerdir.",
     },
     transition:
-      "Erişim sürebiliyor olsa bile korumanın geri gelmesi için yeniden kurma işi yapılmalıdır.",
+      "“Birçok host ve birçok dizi arasında bu bağlantıyı nasıl düzenleriz?”",
   },
-  s33: {
+  san: {
     represents:
-      "Arızalı ama kurtarılabilir bir dizide boş yedek disklerin takılıp kalan kopya veya koruma bilgisinden doldurulması temsil edilir. Boş yedek hücreleri ∅ ile görünür; her Şerit adımı bir temsili satırı doldurur. İlerleme üç şeritlik eğitim adımıdır, gerçek geçen süre değildir. Kapasiteler düğmesi aynı disk boyutuyla seviye başına nominal alan karşılaştırmasını açar.",
+      "Birçok host, birçok dizi sahnesi şu ilişkiyi görselleştirir: SAN çok host ve diziyi depolama ağı üzerinden esnek biçimde bağlar; belirli hacimler belirli host'lara sunulur. Sıra: Hostlar ve diziler → Switch ve fabric → Depolama yolu → LUN ve hacimler → LUN masking ile görünürlük → Ayrı ağlar ve arayüz ayrımı. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
     learningGoal:
-      "Kapasite, erişilebilirlik ve koruma düzeyini ayrı okumak; yeniden kurmanın kalan aygıtlardan okuma ve yedek aygıta yazma işi gerektirdiğini açıklamak.",
+      "SAN çok host ve diziyi bağlar; belirli hacimlerin hostlara görünürlüğü dosya sistemi koordinasyonundan ayrı bir karardır.",
     walkthrough: [
-      "Hiç arıza yoksa bir disk sütununa basın. RAID 5 için tek kayıp örneğini tercih edin. Kapasite 12 TB’den 8 TB’ye düşmez: mantıksal yerleşim aynı kalır; tek kayıp sonrası koruma azalmıştır. Kurtarılamayan durumda da nominal kapasite etiketi ile erişim durumu ayrı gösterilir.",
-      "Yedek tak · yeniden kur düğmesine basın. Arızalı disk konumuna boş yedek geldiği bildirilir; hücreler ∅ olur. Henüz yeniden kurulmamış satırların dolu kopyaları varmış gibi gösterilmediğine dikkat çekin.",
-      "Şerit 1/3, 2/3 ve 3/3 eylemlerini ilerletin. Ayna düzeyinde kalan kopya, tek pariteli seviyede kalan veri ve parite, RAID 6 kuralında iki bağımsız koruma bilgisinin varlığı yeniden üretilebilirliği belirler. Üçüncü adımda değiştirilmiş diskler sağlam olur ve koruma geri gelir. Bu adımlar disk kapasitesinin tamamını gerçek bitlerle yeniden yazmaz; şematik yerleşim durumunu doldurur.",
-      "Sıfırlayın, RAID 5’te iki disk kaybedin ve rebuild düğmesinin kullanılamadığını gösterin. Yeterli bilgi kalmamışsa yedek takmak kayıp veriyi kendiliğinden geri getirmez. Rebuild sırasında yeni arıza seçimi bu modelde kapalıdır; gerçek sistemlerde ek arızanın riski devam eder.",
-      "Kapasiteler’i açın. N ve S’ye göre RAID 0 N×S; RAID 4/5 (N−1)×S; RAID 6 (N−2)×S; RAID 10 (N/2)×S alan sunar. RAID 1 satırı bu projenin yalnızca iki diskli modelini kullanır; satırdaki Disk×TB sütununu okuyarak farklı fiziksel disk sayısını gizlemeyin.",
+      "Başlangıçta Hostlar ve diziler aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "LUN masking'de A host'unun A hacmini, B host'unun B hacmini gördüğünü gerçekten değişen çizgilerle gösterin. Görünürlüğü genel kimlik doğrulama veya her üründe aynı güvenlik garantisi gibi sunmayın. FC/InfiniBand kaynak örnekleridir; ağ teknolojisiyle dosya sistemi koordinasyonu karıştırılmaz.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: Switch ve fabric → Depolama yolu → LUN ve hacimler → LUN masking ile görünürlük → Ayrı ağlar ve arayüz ayrımı.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
     ],
     keyPoints: [
-      "Rebuild, kullanılabilir kalan bilgiyle mümkündür; yalnızca animasyon oynatmak kurtarılamayan durumu düzeltmez.",
-      "Hot spare hazır bekleyen yedek aygıttır; bu örnekte yedek eylem anında takılır. Sağlıklı dizideki kullanılabilir kapasiteye eklenmez.",
-      "MTTF bir arıza süresi istatistiği, MTTR onarım süresi ölçüsü, veri kaybına kadar süre ise farklı bir sonuç ölçüsüdür. Bunlar birbirinin yerine kullanılmaz.",
-      "Uzun onarım, azaltılmış koruma penceresini uzatır. Gerçek rebuild süresi yük, aygıtlar ve sistem politikalarına bağlıdır; bu ekrandan dakika/saat tahmini üretilmez.",
-      "Denetleyici veya güç kaybı, tutarsız parite/write hole, latent sektör hataları ve okunamayan sektörler gerçek sistemlerde ayrıca önemlidir. RAID bunların hepsini tek başına çözmez.",
+      "SAN çok host ve diziyi depolama ağı üzerinden esnek biçimde bağlar; belirli hacimler belirli host'lara sunulur.",
+      "Hayır; blok görünürlüğü tek başına ortak dosya sistemi koordinasyonu değildir.",
+      "LUN görünürlüğü çizimde değişir; gerçek ağ, yetkilendirme veya küme dosya sistemi kurulmaz. Kaynaktaki FC/InfiniBand ve iSCSI/FCoE bağlamı korunur.",
     ],
     limits:
-      "Kapasiteler ondalık TB ve eşit disk varsayımıyla nominaldir; metaveri/dosya sistemi gideri yoktur. Rebuild her adımda bir şematik satır ilerler, gerçek veri akışı ve RAID 6 Q cebiri hesaplanmaz. Yeni disk arızası rebuild boyunca engellenir; yük, URE, güç kesintisi ve onarım süresi simüle edilmez. Kaynak: OSC 10 §11.8; Linux Kernel RAID arrays ve Partial Parity Log belgeleri.",
-    transition:
-      "Disk kaybını tolere etmek, her türlü veri kaybını önlemekle aynı şey değildir.",
-  },
-  s34: {
-    represents:
-      "Bu kısa köprü üç ayrı fikri açar: 1+0/0+1 sekmesi birleştirme sırasını; Bütünlük sekmesi checksum ile veri doğrulama ve havuz üstünde dosya sistemi ilişkisini; Nesne sekmesi kimlik/metaveri/veri ayrımını gösterir. Başlıktaki eşitsizlik, disk yedekliliğinin bağımsız ve geri dönülebilir bir yedekleme kopyasının yerini tutmadığını hatırlatır.",
-    learningGoal:
-      "RAID seçiminin kapasite, hata yapısı ve yönetim ödünleşimi olduğunu; veri bütünlüğü ve yedekleme gereksinimlerinin ayrı değerlendirilmesi gerektiğini açıklamak.",
-    walkthrough: [
-      "1+0 / 0+1 sekmesinde solda her iki disk önce ayna çifti olur, sonra çiftler arasında şeritlenir. Sağda önce iki ayrı striped küme oluşturulur, ardından bu kümeler aynalanır. Çerçevelerin dış görünümü benzer olsa da korunan birim farklıdır: solda çift, sağda striped alt dizi.",
-      "0+1’de bir disk kaybı bir striped alt diziyi eksik bırakır; diğer alt dizi sağlam kopya olarak kalır. Kalan alt dizideki başka bir disk kaybı bütünlüğü bozar. 1+0’da ise farklı ayna çiftlerinden birer kayıp tolere edilebilir. Q08 düğmesine basıp RAID 10’un her iki kaybı tolere etmediğini açıklayın. RAID 2/3, tarihsel farklı bit/byte dağıtımı ve koruma yaklaşımları olarak anılabilir; bu sunumun çalışan seviyeleri 0/1/4/5/6/10’dur.",
-      "Bütünlük sekmesine geçin. Checksum, okunan içeriğin beklenen içerikle uyuşmasını kontrol eder; hangi diskin tamamen arızalı olduğu bilgisiyle aynı şey değildir. ZFS gibi havuz temelli bir tasarım, aygıt alanını bir havuzda yönetip veri kümeleri/dosya sistemi katmanına sunabilir. Checksum ile hatayı tespit etmek ve uygun yedek bilgiyle onarmak ayrı adımlardır; yedek bilgi yoksa tespit tek başına veriyi geri oluşturmaz.",
-      "Nesne sekmesini açın. id:42 bir nesne kimliğidir; nesnenin verisi ve metaverisi depolama hizmeti tarafından yönetilir. Kopyalama veya erasure coding gibi korumalar hizmetin kendi tasarımına aittir. Altı simge, altı garantili kopya veya zorunlu yerleşim sayısı olarak okunmamalıdır.",
-      "Yanlışlıkla silme, uygulamanın bozuk içerik yazması, fidye yazılımı veya bütün dizinin kaybı örneklerini söyleyin. Disk yedekliliği bu olayları tek başına geri almaz. Bağımsız, sürüm veya geri dönüş noktası bulunan ve geri yüklenmesi denenmiş yedekleme stratejisi ayrıca gerekir.",
-    ],
-    keyPoints: [
-      "RAID 1+0 ve 0+1 aynı kapasiteye sahip olabilse de arıza desenleri aynı değildir.",
-      "RAID, bütün bozulmaları yakalayan evrensel bir uçtan uca bütünlük mekanizması değildir. Checksum hatayı saptayabilir; onarım ek doğru bilgi gerektirir.",
-      "Havuz, fiziksel alanın yönetim katmanıdır; volume ve dosya sistemiyle birebir aynı nesne olarak anlatılmaz.",
-      "Nesne depolamada uygulama nesne kimliğiyle çalışır. İç kopyalama, fiziksel disk yerleşimi ve RAID uygulaması hizmete göre değişir.",
-      "Yedeklilik mevcut hizmeti sürdürebilir; yedekleme farklı bir zamana veya bağımsız kopyaya geri dönmeyi amaçlar.",
-    ],
-    limits:
-      "1+0/0+1, checksum/havuz ve nesne görselleri kavramsal açıklamadır; çalışan checksum onarımı, ZFS, nesne servisi veya 0+1 arıza simülatörü yoktur. Şemadan performans, dayanıklılık veya gerçek ürün güvencesi çıkarılmaz. Kaynak çerçevesi: OSC 10 §11.8; Linux Kernel RAID belgeleri. Ayrıntılı ek kaynaklar modülün sources.ts dosyasındadır.",
+      "LUN görünürlüğü çizimde değişir; gerçek ağ, yetkilendirme veya küme dosya sistemi kurulmaz. Kaynaktaki FC/InfiniBand ve iSCSI/FCoE bağlamı korunur. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
     question: {
-      prompt: "Dört diskli RAID 10 her iki disk arızasını da tolere eder mi?",
+      prompt:
+        "“Bir hacmi birden çok host'a göstermek dosya sistemi tutarlılığını çözer mi?”",
       answer:
-        "Hayır. Aynı ayna çiftindeki iki kayıp o çiftteki veriyi yok eder; farklı çiftlerden birer disk kaybında en az birer kopya kalabilir.",
+        "Hayır; blok görünürlüğü tek başına ortak dosya sistemi koordinasyonu değildir.",
     },
     transition:
-      "Şimdi tek bir isteği bütün bu katmanlardan geçirerek bölümün ortak hikâyesini tamamlayabiliriz.",
+      "“Hacme ulaşmayı çözdük; bu hacmin arkasında disk kaybına nasıl dayanabiliriz?”",
+  },
+  "raid-intro": {
+    represents:
+      "Yedeklilik ve onarım penceresi sahnesi şu ilişkiyi görselleştirir: Yedeklilik ve onarım birlikte değerlendirilir; arızadan sonraki onarım penceresi ek kayıba maruz kalınan dönemdir. Sıra: Kapasite, paralellik ve güvenilirlik → Bağımsız sağlam kopya → Disk arızası ve MTTF → Onarım penceresi ve MTTR → Veri kaybı ve varsayımlar. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Yedeklilik ve onarım birlikte değerlendirilir; onarım tamamlanana kadar ek arızaya maruz kalınan pencere önemlidir.",
+    walkthrough: [
+      "Başlangıçta Kapasite, paralellik ve güvenilirlik aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "“Ortalama”nın tek diske bitiş tarihi vermediğini söyleyin. Bağımsız arızalı ayna örneğinin teorik olduğunu açıkça belirtin. NVRAM'ın kaynakta yazma performansı desteği olarak yer aldığını notlarda anın; yeni kalıcılık garantisi üretmeyin. Metin çıkarımındaki bozuk sayı/formülden hesap türetmeyin.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: Bağımsız sağlam kopya → Disk arızası ve MTTF → Onarım penceresi ve MTTR → Veri kaybı ve varsayımlar.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "Yedeklilik ve onarım birlikte değerlendirilir; arızadan sonraki onarım penceresi ek kayıba maruz kalınan dönemdir.",
+      "Hayır; onarım tamamlanana kadar ek arıza korumayı tüketebilir.",
+      "MTTF/MTTR ilişkisi kavramsaldır. Kaynak metin çıkarımında bozuk görünen ömür sayısı/formülü kullanılmaz; bağımsız arıza varsayımı garantiye dönüştürülmez.",
+    ],
+    limits:
+      "MTTF/MTTR ilişkisi kavramsaldır. Kaynak metin çıkarımında bozuk görünen ömür sayısı/formülü kullanılmaz; bağımsız arıza varsayımı garantiye dönüştürülmez. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt:
+        "“Bir diski kaybettikten sonra hâlâ veri okunabiliyorsa risk aynı mı?”",
+      answer: "Hayır; onarım tamamlanana kadar ek arıza korumayı tüketebilir.",
+    },
+    transition: "“Önce iki yapı taşını görelim: dağıtmak ve kopyalamak.”",
+  },
+  "raid-striping": {
+    represents:
+      "Veriyi dağıtmak mı, kopyalamak mı? sahnesi şu ilişkiyi görselleştirir: RAID0 dağıtır, RAID1 kopyalar; kapasite ve arıza koşulu farklıdır. Sıra: RAID 0 parçaları → RAID 0 tek disk kaybı → RAID 1 aynı kopyalar → RAID 1 bir sağlam kopya → RAID 1 iki kopya kaybı → Kapasite ve koruma karşılığı. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Şeritleme tek başına koruma sağlamaz; aynalama sağlam kopya karşılığında fiziksel alan kullanır.",
+    walkthrough: [
+      "Başlangıçta RAID 0 parçaları aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Önce farklı A kimliklerini, sonra aynı A kimliklerini ve bitleri gösterin. Dört 4 TB RAID0 ile iki 4 TB RAID1 farklı fiziksel toplam içerir; her kart kendi paydasını taşır. Kurtarılamayan örnekte sayı “kurulu kapasite, erişilemez” diye etiketlenir.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: RAID 0 tek disk kaybı → RAID 1 aynı kopyalar → RAID 1 bir sağlam kopya → RAID 1 iki kopya kaybı → Kapasite ve koruma karşılığı.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "RAID0 dağıtır, RAID1 kopyalar; kapasite ve arıza koşulu farklıdır.",
+      "Eksik parçayı üretecek bağımsız kopya/koruma bilgisi yoktur.",
+      "Dört diskli RAID0 ve iki diskli RAID1 özgün eş kapasiteli örneklerdir. Nominal kapasite ile erişilebilirlik ayrı gösterilir; performans çarpanı üretilmez.",
+    ],
+    limits:
+      "Dört diskli RAID0 ve iki diskli RAID1 özgün eş kapasiteli örneklerdir. Nominal kapasite ile erişilebilirlik ayrı gösterilir; performans çarpanı üretilmez. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt: "“Veriyi dört diske bölmek neden koruma değildir?”",
+      answer: "Eksik parçayı üretecek bağımsız kopya/koruma bilgisi yoktur.",
+    },
+    transition:
+      "“Tam kopyanın alan maliyetini azaltmak için koruma bilgisi hesaplayabiliriz.”",
+  },
+  "raid-parity": {
+    represents:
+      "Koruma bilgisini nereye koyarız? sahnesi şu ilişkiyi görselleştirir: RAID4 ayrılmış P, RAID5 dağıtılmış P, RAID6 bağımsız P/Q kullanır; ikinci koruma bilgisi ilk paritenin kopyası değildir. Sıra: Veri ve P ilişkisi → RAID 4 ayrılmış parite → RAID 5 dağıtılmış parite → Tek kayıp ve yeterli bilgi → RAID 6 bağımsız P ve Q → Parite seviyelerini karşılaştır. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "RAID4/5 tek P korumasını farklı yerleştirir; RAID6 ikinci bağımsız korumayla iki tam disk kaybını karşılayabilir.",
+    walkthrough: [
+      "Başlangıçta Veri ve P ilişkisi aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Her şeritte hangi disk rolünün değiştiğini gösterin; tek “parite diski” genellemesini RAID5'e taşımayın. Q cebirini çalıştırmayan diyagram bunu açıkça söyler. Core modunda tek bilinmeyenin nasıl geri bulunabileceğini sözel anlatıp ayrıntılı XOR uzantısını atlayabilirsiniz.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: RAID 4 ayrılmış parite → RAID 5 dağıtılmış parite → Tek kayıp ve yeterli bilgi → RAID 6 bağımsız P ve Q → Parite seviyelerini karşılaştır.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "RAID4 ayrılmış P, RAID5 dağıtılmış P, RAID6 bağımsız P/Q kullanır; ikinci koruma bilgisi ilk paritenin kopyası değildir.",
+      "Hayır; aynı denklem ikinci bilinmeyeni belirlemez.",
+      "Eş boyutlu disk/şerit gösterimi özgündür. RAID6 Q cebiri semboliktir; aynı XOR bilgisinin ikinci kopyası iki bağımsız denklem diye sunulmaz.",
+    ],
+    limits:
+      "Eş boyutlu disk/şerit gösterimi özgündür. RAID6 Q cebiri semboliktir; aynı XOR bilgisinin ikinci kopyası iki bağımsız denklem diye sunulmaz. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt: "“İki P kopyası RAID6'nın iki bağımsız korumasıyla aynı mıdır?”",
+      answer: "Hayır; aynı denklem ikinci bilinmeyeni belirlemez.",
+    },
+    transition:
+      "Full: “Bir kayıp bloğu küçük bir bit örneğiyle hesaplayalım.” Core: “Koruma grubunun sınırları da sonucu değiştirir.”",
+  },
+  "raid-xor": {
+    represents:
+      "Kayıp bloğu sağlam bilgilerden üret sahnesi şu ilişkiyi görselleştirir: Bir tek kayıp blok, sağlam veri ve P'den XOR ile yeniden üretilebilir; aynı denklem iki bilinmeyeni çözmez. Sıra: Üç veri bloğu → P paritesini hesapla → A1 kayıp: önce tahmin et → Sağlam hücrelerden A1 üret → İkinci bilinmeyenin sınırı. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Tek kayıp blok sağlam veri ve P üzerinden yeniden hesaplanabilir; aynı denklem iki bilinmeyeni çözmez.",
+    walkthrough: [
+      "Başlangıçta Üç veri bloğu aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Bit dizileri ve adımlar kitabın hazır sayısal örneği değil, parite kavramını açıklayan özgün modeldir. Sonuç saklıyken dinleyiciden bekleyin; sonuç farklı aşamada açılır. Geriye dönüş sonucu kapatır ve tek/çift kayıp durumunu gerçekten geri kurar.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: P paritesini hesapla → A1 kayıp: önce tahmin et → Sağlam hücrelerden A1 üret → İkinci bilinmeyenin sınırı.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "Bir tek kayıp blok, sağlam veri ve P'den XOR ile yeniden üretilebilir; aynı denklem iki bilinmeyeni çözmez.",
+      "Bağımsız ikinci koruma bilgisi olmadan iki bilinmeyen çözülemez.",
+      "1100,1010,0110 ve 0000 bitleri özgün eğitim örneğidir, kitabın hazır sayısal örneği değildir. XOR sonucu gerçekten sağlam hücrelerden hesaplanır.",
+    ],
+    limits:
+      "1100,1010,0110 ve 0000 bitleri özgün eğitim örneğidir, kitabın hazır sayısal örneği değildir. XOR sonucu gerçekten sağlam hücrelerden hesaplanır. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt:
+        "“İki eksik blokta aynı XOR işlemini iki kez çalıştırmak yeterli mi?”",
+      answer:
+        "Bağımsız ikinci koruma bilgisi olmadan iki bilinmeyen çözülemez.",
+    },
+    transition:
+      "“Kaynak figüründeki seviyeler aynı koruma bilgisini farklı düzenlerde yerleştirir.”",
+  },
+  "raid-levels": {
+    represents:
+      "Koruma bilgisini iki boyutta yerleştirmek sahnesi şu ilişkiyi görselleştirir: Slayt40 yalnız 0/1/4/5/6 etiketlerinden ibaret değildir; çok boyutlu RAID6 figürü de yer alır. Sıra: Bilinen RAID seviye haritası → P ve Q yerleşimi → İki boyutlu aygıt düzeni → Satır ve sütun koruma rolleri. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Resmî slayt40 çok boyutlu RAID6 yerleşimini de gösterir; yalnız seviye adından evrensel hata garantisi çıkarılmaz.",
+    walkthrough: [
+      "Başlangıçta Bilinen RAID seviye haritası aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Yeni GF cebiri, keyfî disk sayısı için kapasite formülü veya arıza toleransı garantisi üretmeyin. Bu, koruma bilgisinin iki boyutlu yerleşimini tanıtan dar bir kaynak figürü açıklamasıdır. RAID2/3'ü kanıtlanmamış kapsam doldurmak için eklemeyin.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: P ve Q yerleşimi → İki boyutlu aygıt düzeni → Satır ve sütun koruma rolleri.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "Slayt40 yalnız 0/1/4/5/6 etiketlerinden ibaret değildir; çok boyutlu RAID6 figürü de yer alır.",
+      "Yerleşim ve hata varsayımı ayrıca tanımlanmalıdır.",
+      "Kaynak figürünü açıklayan dar bir yerleşim şemasıdır; GF cebiri, keyfî boyutlarda kapasite veya arıza garantisi hesaplanmaz. Kaynakta doğrulanmayan RAID2/3 eklenmez.",
+    ],
+    limits:
+      "Kaynak figürünü açıklayan dar bir yerleşim şemasıdır; GF cebiri, keyfî boyutlarda kapasite veya arıza garantisi hesaplanmaz. Kaynakta doğrulanmayan RAID2/3 eklenmez. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt:
+        "“Bir figürde daha fazla P/Q görmekten tek bir evrensel arıza garantisi çıkar mı?”",
+      answer: "Yerleşim ve hata varsayımı ayrıca tanımlanmalıdır.",
+    },
+    transition:
+      "“Şeritleme ile aynalamayı hangi sırada birleştirdiğimiz de grup sınırlarını değiştirir.”",
+  },
+  "raid-nested": {
+    represents:
+      "Önce ayna mı, önce şerit mi? sahnesi şu ilişkiyi görselleştirir: Aynalama ve şeritlemenin birleştirme sırası, bir arızanın hangi grubu kullanılamaz yaptığına etki eder. Sıra: Aynı diskler, iki gruplama → 0+1: şerit gruplarını aynala → 0+1: bir disk ve grup kaybı → 1+0: aynaları şeritle → 1+0: bir ayna kopyası kayıp → D0 ve D1 sonuçları → D0 ve D2 sonuçları. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Şeritleme ve aynalamanın sırası, bir disk kaybının hangi koruma grubunu etkilediğini değiştirir.",
+    walkthrough: [
+      "Başlangıçta Aynı diskler, iki gruplama aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Küçültülmüş dört diskli örnek özgün modeldir; slayt41'in sekiz diskli şeklinin birebir kopyası değildir. Her çizimde eş veri kimlikleri görünmelidir. 0+1'de şerit grupları [D0,D1] ve [D2,D3]; 1+0'da ayna çiftleri [D0,D1] ve [D2,D3] olarak tanımlanır, dolayısıyla veri yerleşimleri farklıdır. Bunu yalnız renkli kutu değişimiyle geçmeyin.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: 0+1: şerit gruplarını aynala → 0+1: bir disk ve grup kaybı → 1+0: aynaları şeritle → 1+0: bir ayna kopyası kayıp → D0 ve D1 sonuçları → D0 ve D2 sonuçları.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "Aynalama ve şeritlemenin birleştirme sırası, bir arızanın hangi grubu kullanılamaz yaptığına etki eder.",
+      "Bu açık dört diskli modelde 0+1'in ikinci sağlam şerit kopyası kalır; 1+0'ın ilk ayna çiftinin iki kopyası kaybolur. D0+D2'de sonuçlar tersine döner.",
+      "Slayt41 kavramının özgün dört diskli indirgemesidir. 0+1 şerit grupları ve 1+0 ayna çiftleri açıkça çizilir; aynı fiziksel kayıp seçiminde farklı sonuç gerçekten hesaplanır.",
+    ],
+    limits:
+      "Slayt41 kavramının özgün dört diskli indirgemesidir. 0+1 şerit grupları ve 1+0 ayna çiftleri açıkça çizilir; aynı fiziksel kayıp seçiminde farklı sonuç gerçekten hesaplanır. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt: "“D0+D1 kaybı iki düzende aynı mı?”",
+      answer:
+        "Bu açık dört diskli modelde 0+1'in ikinci sağlam şerit kopyası kalır; 1+0'ın ilk ayna çiftinin iki kopyası kaybolur. D0+D2'de sonuçlar tersine döner.",
+    },
+    transition:
+      "“Kalan bilgi yeterliyse korumayı geri getirmek için yeniden kurma yapılabilir.”",
+  },
+  "raid-rebuild": {
+    represents:
+      "Boş yedek nasıl sağlam kopya olur? sahnesi şu ilişkiyi görselleştirir: Hot spare veya yeni disk takılması korumayı hemen geri getirmez; eksik içerik yeterli sağlam bilgiden yeniden üretilir. Sıra: Sağlıklı dizi ve boş hot spare → D0 arızası → Yedek devrede, içerik boş → Birinci şerit yeniden kuruldu → İkinci şerit yeniden kuruldu → Son şerit ve korumanın dönüşü → Onarım maliyeti ve sınırı. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Yedek disk devreye girse bile eksik içerik tamamlanana kadar tam koruma geri gelmez; rebuild yeterli sağlam bilgi gerektirir.",
+    walkthrough: [
+      "Başlangıçta Sağlıklı dizi ve boş hot spare aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Yedek disk arızalı X değil “Yedek” olarak görünür. Bitmemiş hücreler ∅, tamamlanan hücreler gerçek veri/parite etiketi taşır. İlk şerit bittiğinde bütün diski sağlam ilan etmeyin. Zaman çizgisi üç şeridi gerçek saniye gibi sunmaz. İkinci disk kaybında bilgi yetersizse model rebuild'i engellemelidir.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: D0 arızası → Yedek devrede, içerik boş → Birinci şerit yeniden kuruldu → İkinci şerit yeniden kuruldu → Son şerit ve korumanın dönüşü → Onarım maliyeti ve sınırı.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "Hot spare veya yeni disk takılması korumayı hemen geri getirmez; eksik içerik yeterli sağlam bilgiden yeniden üretilir.",
+      "Hayır; veri yeniden kurulana kadar koruma penceresi açıktır. Otomatik yedekleme devri beklemeyi/MTTR'yi azaltabilir.",
+      "Üç temsili şerit özgün durum modelidir; gerçek süre/bant genişliği tahmini değildir. Backspace kısmi şerit durumunu ve eksik hücreleri geri kurar.",
+    ],
+    limits:
+      "Üç temsili şerit özgün durum modelidir; gerçek süre/bant genişliği tahmini değildir. Backspace kısmi şerit durumunu ve eksik hücreleri geri kurar. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt: "“Boş yedek takılınca koruma tamam mı?”",
+      answer:
+        "Hayır; veri yeniden kurulana kadar koruma penceresi açıktır. Otomatik yedekleme devri beklemeyi/MTTR'yi azaltabilir.",
+    },
+    transition:
+      "“Arızayı onarmak dışında, değişikliklerden geri dönme ve farklı siteye kopyalama ihtiyaçları var.”",
+  },
+  "raid-features": {
+    represents:
+      "Snapshot, replication ve hot spare sahnesi şu ilişkiyi görselleştirir: Üç özellik farklı olaya yanıt verir: zamandaki görünüm, siteler arası yazı kopyası ve boş aygıtın arıza sonrası devreye girmesi. Sıra: Üç ayrı ihtiyaç → Snapshot: zamandaki görünüm → Replication: iki site → Senkron ve asenkron yazı akışı → Hot spare ve onarım penceresi → Özelliklerin görevlerini ayır. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Snapshot geçmiş görünümü, replication siteler arası yazı kopyasını, hot spare arızalı aygıtın yerine geçmeyi hedefler.",
+    walkthrough: [
+      "Başlangıçta Üç ayrı ihtiyaç aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Snapshot'ın yalnız geçmiş görünüm olduğunu, dizi tamamen kaybolursa kendiliğinden bağımsız bir kopya vaat etmediğini anlatın. Senkron/asenkron için okların onay sırasını gerçekten değiştirin; doğrulanmamış RPO/RTO sayıları eklemeyin. Önceki hot spare örneğini tek kısa geri referansla bağlayın; rebuild'i yeniden baştan tekrarlamayın.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: Snapshot: zamandaki görünüm → Replication: iki site → Senkron ve asenkron yazı akışı → Hot spare ve onarım penceresi → Özelliklerin görevlerini ayır.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "Üç özellik farklı olaya yanıt verir: zamandaki görünüm, siteler arası yazı kopyası ve boş aygıtın arıza sonrası devreye girmesi.",
+      "Bu tek özelliğin tanımından böyle bir garanti çıkmaz; ayrı site/kopya ve hata kapsamı değerlendirilir.",
+      "Özgün zaman/yazı akışı şemasıdır; gerçek snapshot veya uzak kopya oluşturulmaz. Senkron/asenkron ayrımı onay sırasıyla gösterilir; RPO/RTO veya bağımsız yedek garantisi üretilmez.",
+    ],
+    limits:
+      "Özgün zaman/yazı akışı şemasıdır; gerçek snapshot veya uzak kopya oluşturulmaz. Senkron/asenkron ayrımı onay sırasıyla gösterilir; RPO/RTO veya bağımsız yedek garantisi üretilmez. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt:
+        "“Aynı dizide snapshot varsa dizi kaybından bağımsız korunmuş muyuz?”",
+      answer:
+        "Bu tek özelliğin tanımından böyle bir garanti çıkmaz; ayrı site/kopya ve hata kapsamı değerlendirilir.",
+    },
+    transition:
+      "“Peki diskler çalışırken veri sessizce bozulursa bunu kim fark eder?”",
+  },
+  "raid-integrity": {
+    represents:
+      "Disk çalışırken veri bozulabilir sahnesi şu ilişkiyi görselleştirir: RAID'in disk arızası koruması veri bozulmasının genel tespit/düzeltme sistemi değildir; kaynakta ZFS veriyi ve metadata'yı checksum ile denetler. Sıra: Sağlam disk, değişmiş içerik → Veri ve metadata checksum → Pointer ile kontrol bilgisi → İçerik ve kimlik uyuşmazlığı → Tespit ve düzeltme sınırı. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "RAID disk arızasına odaklanır; kaynakta ZFS veri ve metadata bütünlüğünü checksum ile de denetler.",
+    walkthrough: [
+      "Başlangıçta Sağlam disk, değişmiş içerik aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "C₁/C₂ yalnız temsili ad olursa bunu belirtin; gerçek hash üretiliyormuş gibi davranmayın. Yanlış nesne ile değişmiş içerik olasılıklarını pointer bağlamına bağlayın. “Checksum varsa her hata kesin yakalanır” veya “tek checksum kayıp veriyi üretir” demeyin.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: Veri ve metadata checksum → Pointer ile kontrol bilgisi → İçerik ve kimlik uyuşmazlığı → Tespit ve düzeltme sınırı.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "RAID'in disk arızası koruması veri bozulmasının genel tespit/düzeltme sistemi değildir; kaynakta ZFS veriyi ve metadata'yı checksum ile denetler.",
+      "Hayır; tespit farklıdır, düzeltmek için yeterli sağlam bilgi gerekir.",
+      "Checksum ve pointer ilişkisi kavramsal gösterilir. C1/C2 adları kullanılırsa temsili olduğu belirtilir; tek checksumdan doğru veri üretildiği veya her hata yakalandığı iddia edilmez.",
+    ],
+    limits:
+      "Checksum ve pointer ilişkisi kavramsal gösterilir. C1/C2 adları kullanılırsa temsili olduğu belirtilir; tek checksumdan doğru veri üretildiği veya her hata yakalandığı iddia edilmez. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt:
+        "“Bir kontrol değeri uyuşmazlığı tek başına doğru veriyi geri verir mi?”",
+      answer:
+        "Hayır; tespit farklıdır, düzeltmek için yeterli sağlam bilgi gerekir.",
+    },
+    transition:
+      "“Aynı kaynak, dosya sistemlerine alanı disk sınırlarından farklı sunan havuz yaklaşımına geçiyor.”",
+  },
+  "storage-pools": {
+    represents:
+      "Sabit sınırlar mı, ortak alan mı? sahnesi şu ilişkiyi görselleştirir: Havuz yaklaşımında dosya sistemleri ortak alanı kullanıp bırakabilir; geleneksel sabit volume/partition sınırlarıyla aynı yönetim modeli değildir. Sıra: Geleneksel bölüm ve volume sınırları → Bir dosya sistemi dolarken boş alan → Diskleri ortak havuza ayır → Havuzdan alan kullan → Alan bırak ve farkı özetle. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Havuz yaklaşımında dosya sistemleri ortak alanı kullanıp bırakabilir; yönetim sınırları değişir, fiziksel kapasite sınırlı kalır.",
+    walkthrough: [
+      "Başlangıçta Geleneksel bölüm ve volume sınırları aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "Sayılar kullanılacaksa bunlar özgün küçük sabit örnekler olmalı; alan toplamı her aşamada korunmalıdır. Slayt43–44'teki ZFS bağlamını koruyun; her OS veya her dosya sisteminde aynı özellik bulunduğunu söylemeyin. Bu gerçek yeniden bölümleme aracı değildir.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: Bir dosya sistemi dolarken boş alan → Diskleri ortak havuza ayır → Havuzdan alan kullan → Alan bırak ve farkı özetle.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "Havuz yaklaşımında dosya sistemleri ortak alanı kullanıp bırakabilir; geleneksel sabit volume/partition sınırlarıyla aynı yönetim modeli değildir.",
+      "Hayır; yönetim sınırları değişir, toplam fiziksel alan sınırlı kalır.",
+      "Küçük alan sayıları özgün örnek olabilir; toplam kapasite korunur. Slayt43–44 ZFS bağlamıdır; tüm dosya sistemleri için güncel bir özellik genellemesi değildir.",
+    ],
+    limits:
+      "Küçük alan sayıları özgün örnek olabilir; toplam kapasite korunur. Slayt43–44 ZFS bağlamıdır; tüm dosya sistemleri için güncel bir özellik genellemesi değildir. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt: "“Havuz tüm fiziksel kapasiteyi sınırsız mı yapar?”",
+      answer:
+        "Hayır; yönetim sınırları değişir, toplam fiziksel alan sınırlı kalır.",
+    },
+    transition:
+      "“Çok büyük ölçekte dosya/dizin arayüzü yerine nesne kimlikleriyle çalışan başka bir yaklaşım var.”",
+  },
+  "object-storage": {
+    represents:
+      "Nesneyi kimliğiyle bulmak sahnesi şu ilişkiyi görselleştirir: Nesne erişimi ID üzerinden yürür; yerleştirme ve koruma yazılımı birden çok sistemde kopyaları yönetebilir ve ölçeği yatay büyütebilir. Sıra: Havuzda veri nesnesi → Oluştur ve ID al → ID ile eriş → ID ile sil → Ayrı yerleştirme örneğinde N kopya → Yeni sistemle yatay büyüme. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Program nesne kimliğiyle erişir; yerleştirme, koruma ve birden çok sistemde kopyaları depolama yönetim yazılımı düzenleyebilir.",
+    walkthrough: [
+      "Başlangıçta Havuzda veri nesnesi aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "ID silinince önceki ID ile erişim durumunu gerçekten değiştirin; sonraki kopya/ölçekleme aşaması yeni, açıkça etiketli bir yerleştirme örneğine geçsin. Böylece silinmiş nesneyi nedensiz geri getirmiş olmazsınız. Kaynak HDFS/Ceph örnek adları verirse bunlar slayttaki bağlam olarak kalır; güncel ürün mimarisine dair yeni iddia eklemeyin. “Dizinle gezinme yok” ifadesini kaynaktaki dar nesne havuzu arayüzüne bağlayın; tüm modern servis arayüzleri için mutlak genelleme yapmayın.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: Oluştur ve ID al → ID ile eriş → ID ile sil → Ayrı yerleştirme örneğinde N kopya → Yeni sistemle yatay büyüme.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "Nesne erişimi ID üzerinden yürür; yerleştirme ve koruma yazılımı birden çok sistemde kopyaları yönetebilir ve ölçeği yatay büyütebilir.",
+      "Bu örnekte program ID kullanır; yerleştirme ve kopya korumasını depolama yönetim yazılımı belirler.",
+      "Oluştur/eriş/sil ve kopya yerleştirme özgün sonlu örneklerdir. Silinmiş nesne sonraki aşamada nedensiz geri gelmez; yerleştirme için yeni örnek açıkça başlatılır. Güncel HDFS/Ceph mimarisi iddiası eklenmez.",
+    ],
+    limits:
+      "Oluştur/eriş/sil ve kopya yerleştirme özgün sonlu örneklerdir. Silinmiş nesne sonraki aşamada nedensiz geri gelmez; yerleştirme için yeni örnek açıkça başlatılır. Güncel HDFS/Ceph mimarisi iddiası eklenmez. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt: "“Nesnenin fiziksel yerini uygulama seçmek zorunda mı?”",
+      answer:
+        "Bu örnekte program ID kullanır; yerleştirme ve kopya korumasını depolama yönetim yazılımı belirler.",
+    },
+    transition:
+      "“Artık bir isteğin maliyetini, bağlandığı hizmeti ve korunduğu hata modelini birlikte anlatabiliriz.”",
+  },
+  "io-journey": {
+    represents:
+      "Bütün bölüm, tek istek sahnesi şu ilişkiyi görselleştirir: Aygıt, zamanlama, yönetim, bağlantı ve koruma aynı depolama sistemi içindeki ayrı sorumluluklardır. Sıra: Bütün sistem görünümü → Uygulama isteği → OS kuyruğu → Erişim arayüzü ve bağlantı → Varsa dizi ve RAID → HDD veya NVM aygıt maliyeti → ECC ve veri bütünlüğü. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "Aygıt, kuyruk, yönetim, bağlantı ve koruma aynı depolama sistemindeki farklı sorumluluklardır.",
+    walkthrough: [
+      "Başlangıçta Bütün sistem görünümü aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "4. sunucu “Son iki sahnede bütün ekibi tek istek etrafında birleştirelim” diyerek kapanışı açar. 1. sunucu aygıt için, 2. kuyruk için, 3. doğruluk/alan için birer kısa gerekçe ekleyebilir; ancak fiziksel klavye tek kişide kalır. Bu katkılar zaman bütçesine dahildir, zorunlu yeni sahne değildir.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: Uygulama isteği → OS kuyruğu → Erişim arayüzü ve bağlantı → Varsa dizi ve RAID → HDD veya NVM aygıt maliyeti → ECC ve veri bütünlüğü.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "Aygıt, zamanlama, yönetim, bağlantı ve koruma aynı depolama sistemi içindeki ayrı sorumluluklardır.",
+      "Hayır; ayrı bir depolama kullanım amacı. RAID de her sistemde zorunlu değildir.",
+      "Bölümün özgün bütünleştirme yoludur; tek zorunlu mimari veya gerçek I/O zaman çizelgesi değildir. RAID her sistemde, swap her dosya okumasında zorunlu aşama değildir.",
+    ],
+    limits:
+      "Bölümün özgün bütünleştirme yoludur; tek zorunlu mimari veya gerçek I/O zaman çizelgesi değildir. RAID her sistemde, swap her dosya okumasında zorunlu aşama değildir. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt: "“Swap her dosya okumasının bir adımı mı?”",
+      answer:
+        "Hayır; ayrı bir depolama kullanım amacı. RAID de her sistemde zorunlu değildir.",
+    },
+    transition:
+      "Şimdi PDF'den seçilen alıştırmalarda bu maliyetleri ve koruma kararlarını uygulayalım; ardından son tasarım değerlendirmesine döneceğiz.",
+  },
+  "storage-wrap-up": {
+    represents:
+      "Doğru tasarım için dört soru sahnesi şu ilişkiyi görselleştirir: İş yükü, gecikme, hata modeli ve geri dönüş ihtiyacı birlikte tanımlanır; tek bir hız veya kapasite sayısı tasarımı belirlemez. Sıra: Tasarım sorusu → İş yükünü tanımla → Gecikme bileşenlerini ayır → Hata kapsamını belirt → Bağımsız geri dönüş kopyası → Birlikte değerlendir ve sorular. Mavi ana veri/sorumluluğu, turuncu sorun veya sınırı vurgular; sahneye özel etiketler renklerin anlamını açıklar.",
+    learningGoal:
+      "İş yükü, gecikme, hata modeli ve geri dönüş ihtiyacı birlikte tanımlanır; tek hız veya kapasite sayısı tasarımı belirlemez.",
+    walkthrough: [
+      "Başlangıçta Tasarım sorusu aşamasını gösterin; sonucu açıklamadan sahnenin sorusunu sorun.",
+      "4. sunucu dört soruyu sırayla açar. Soru gelirse semantic menüden ilgili konuya dönülür; görünür sıra numarası değişse de hedef ID sabittir. Kaynak paneli kitap/baskı ve slayt numarasını gösterir. Açılış ve kapanış “Ortak” görünmeli; son sunucunun bölüm süresiyle karıştırılmamalıdır.",
+      "Enter ile şu gerçek görsel durumları sırayla açın: İş yükünü tanımla → Gecikme bileşenlerini ayır → Hata kapsamını belirt → Bağımsız geri dönüş kopyası → Birlikte değerlendir ve sorular.",
+      "Backspace ile bir önceki aşamaya dönüp görseli ve sonucu karşılaştırın. Sekmeler ve sıfırlama aynı ortak aşamayı seçer; sahnede otomatik ilerleme yoktur.",
+    ],
+    keyPoints: [
+      "İş yükü, gecikme, hata modeli ve geri dönüş ihtiyacı birlikte tanımlanır; tek bir hız veya kapasite sayısı tasarımı belirlemez.",
+      "İş yükü, gecikme hedefi, hata varsayımı, bütünlük ve geri dönüş gereksinimi olmadan belirsizdir.",
+      "Özgün kapanış ve gerekçeli değerlendirme kartlarıdır; notlandırma, ürün önerisi veya üretim sistemi yapılandırması üretilmez. Soru geldiğinde semantic konuya dönülür.",
+    ],
+    limits:
+      "Özgün kapanış ve gerekçeli değerlendirme kartlarıdır; notlandırma, ürün önerisi veya üretim sistemi yapılandırması üretilmez. Soru geldiğinde semantic konuya dönülür. Bütün durumlar sunum aşamasından yeniden oluşturulur; gerçek donanıma veya dış servise erişilmez, animasyon süresi ölçüm değildir.",
+    question: {
+      prompt: "“Hızlı ve yedekli demek yeterli mi?”",
+      answer:
+        "İş yükü, gecikme hedefi, hata varsayımı, bütünlük ve geri dönüş gereksinimi olmadan belirsizdir.",
+    },
+    transition:
+      "Enter artık sahne değiştirmez veya başa dönmez. Soru-cevap, menü ve kaynak erişimi kullanılır.",
   },
 };

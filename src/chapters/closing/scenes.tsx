@@ -1,166 +1,210 @@
-import { useState } from "react";
-import { motion } from "motion/react";
-import { ArrowRight, Check, RotateCcw } from "lucide-react";
-import type { SceneDefinition } from "../../presentation/types";
-import { Stage, Choice } from "../../components/presentation/ScenePrimitives";
+import {
+  ArrowRight,
+  Check,
+  Laptop,
+  ListOrdered,
+  Network,
+  Layers3,
+  HardDrive,
+  ShieldCheck,
+} from "lucide-react";
+import type { SceneContext, SceneDefinition } from "../../presentation/types";
+import { Stage } from "../../components/presentation/ScenePrimitives";
+import { StageCaption } from "../../presentation/PresentationMotion";
+import {
+  FlowDiagram,
+  type DiagramNode,
+  type DiagramEdge,
+} from "../../components/diagrams/FlowDiagram";
+import { StoryControls } from "../chapter-11-7-8/StoryControls";
+import { closingStoryData } from "../chapter-11-7-8/storyData";
+import { attachmentRaidNotes } from "../chapter-11-7-8/notes";
+import { exerciseScenes } from "./ExerciseScenes";
 
-function Journey() {
-  const [step, setStep] = useState(0);
-  const labels = [
-    "Uygulama",
-    "OS kuyruğu",
-    "Bağlantı",
-    "RAID",
-    "Aygıt",
-    "Kontrol",
+const JOURNEY = [
+  {
+    label: "Uygulama",
+    detail: "Bir dosyanın verisi istenir; uygulama fiziksel sektör seçmez.",
+  },
+  {
+    label: "OS kuyruğu",
+    detail:
+      "İşletim sistemi I/O isteklerini sıraya koyar. HDD’de servis sırası kafa hareketini etkileyebilir.",
+  },
+  {
+    label: "Bağlantı",
+    detail:
+      "İstek yerel bağlantıdan veya ağdan geçer. NAS dosya hizmeti, SAN örneği blok hacmi sunar.",
+  },
+  {
+    label: "RAID (varsa)",
+    detail:
+      "Çok diskli bir hacim varsa mantıksal blokların dağıtımı ve koruma düzeni devreye girer. RAID zorunlu değildir.",
+  },
+  {
+    label: "Aygıt",
+    detail:
+      "HDD’de seek ve dönme; flash’ta sayfa yazma, blok silme ve denetleyici yönetimi farklı maliyetler doğurur.",
+  },
+  {
+    label: "Bütünlük",
+    detail:
+      "ECC ve checksum veri hatalarına, RAID belirli disk arızalarına yanıt verir. Hepsi aynı güvenceyi sağlamaz.",
+  },
+];
+const WRAP_UP = [
+  {
+    label: "İş yükü",
+    detail:
+      "Rastgele mi sıralı mı? Okuma mı yazma mı? İstek boyutu nedir? Aygıt ve politika bu bağlamda değerlendirilir.",
+  },
+  {
+    label: "Gecikme",
+    detail:
+      "Kuyruk, seek, dönme ve aktarımın katkıları ayrıdır. Bir bileşeni azaltmak diğerlerini ortadan kaldırmaz.",
+  },
+  {
+    label: "Hata modeli",
+    detail:
+      "Bit bozulması, tam disk kaybı ve bütün dizinin kaybı farklı hatalardır. Korumanın hangi hatayı kapsadığını belirtin.",
+  },
+  {
+    label: "Yedekleme",
+    detail:
+      "RAID, yanlış silme veya bütün dizinin kaybı için bağımsız bir geri dönüş kopyasının yerine geçmez.",
+  },
+];
+
+function Journey(context: SceneContext) {
+  const { stage, enabled } = context;
+  const icons = [Laptop, ListOrdered, Network, Layers3, HardDrive, ShieldCheck];
+  const details = [
+    "Dosya isteği",
+    "I/O sırası",
+    "Yerel / ağ",
+    "İsteğe bağlı",
+    "HDD / flash",
+    "ECC / checksum",
   ];
+  const nodes: DiagramNode[] = JOURNEY.map((step, index) => ({
+    id: `journey-${index}`,
+    label: step.label,
+    detail: details[index],
+    icon: icons[index],
+    badge: String(index + 1).padStart(2, "0"),
+    position: {
+      x: (index < 3 ? index : 5 - index) * 330,
+      y: index < 3 ? 0 : 220,
+    },
+    tone:
+      stage === index + 1 ? "active" : stage > index + 1 ? "complete" : "muted",
+  }));
+  const edges: DiagramEdge[] = nodes.slice(1).map((node, index) => ({
+    id: `journey-link-${index}`,
+    source: nodes[index].id,
+    target: node.id,
+    active: stage >= index + 2,
+    muted: stage < index + 2,
+    animated: stage === index + 2 && stage < 6,
+    sourceSide: index === 2 ? "bottom" : index >= 3 ? "left" : "right",
+    targetSide: index === 2 ? "top" : index >= 3 ? "right" : "left",
+  }));
   return (
     <Stage
       title="Tek istek. Bütün sistem."
       controls={
-        <div className="flex items-center gap-3">
-          <button
-            className="primary-button"
-            onClick={() => setStep((s) => (s + 1) % labels.length)}
-          >
-            Adım <ArrowRight size={18} />
-          </button>
-          <button
-            className="icon-button"
-            aria-label="Yolculuğu sıfırla"
-            onClick={() => setStep(0)}
-          >
-            <RotateCcw size={20} />
-          </button>
-        </div>
+        <StoryControls
+          {...context}
+          choices={JOURNEY.map((step, index) => ({
+            label: step.label,
+            stage: index + 1,
+          }))}
+        />
       }
     >
-      <div className="grid w-full max-w-[1100px] grid-cols-3 gap-5 md:grid-cols-6">
-        {labels.map((label, i) => (
-          <button
-            onClick={() => setStep(i)}
-            aria-pressed={step === i}
-            className="flex min-w-0 flex-col items-center gap-4"
-            key={label}
-          >
-            <motion.span
-              animate={{
-                scale: step === i ? 1.1 : 1,
-                backgroundColor: step === i ? "#2247eb" : "#fff",
-                color: step === i ? "#fff" : "#111827",
-              }}
-              className="flex aspect-square w-full max-w-28 items-center justify-center rounded-full border-2 border-ink font-display text-3xl"
-            >
-              {String(i + 1).padStart(2, "0")}
-            </motion.span>
-            <strong className="text-xs font-semibold md:text-base">
-              {label}
-            </strong>
-          </button>
-        ))}
+      <div className="flex h-full min-h-0 w-full max-w-6xl flex-col items-center justify-center gap-6 md:gap-10">
+        <FlowDiagram
+          id="whole-io-journey"
+          label="Kavramsal istek yolu: uygulama, OS kuyruğu, bağlantı, varsa RAID, aygıt ve bütünlük"
+          nodes={nodes}
+          edges={edges}
+          enabled={enabled}
+          className="diagram-expanded"
+        />
+        <StageCaption className="max-w-4xl shrink-0 text-center text-base font-semibold leading-relaxed md:text-xl">
+          {stage === 0
+            ? "Dört bölümün kararlarını tek bir dosya okuma isteğinde birleştirelim."
+            : JOURNEY[stage - 1].detail}
+        </StageCaption>
+        {stage === 6 && (
+          <span className="rounded-xl bg-blue/10 px-4 py-2 text-center text-xs font-semibold md:text-sm">
+            Bu kavramsal yol örnektir; swap sıradan dosya okumasının zorunlu
+            aşaması değildir.
+          </span>
+        )}
       </div>
     </Stage>
   );
 }
-function WrapUp() {
-  const [selected, setSelected] = useState<string[]>([]);
-  const labels = ["İş yükü", "Gecikme", "Hata modeli", "Yedekleme"];
+
+function WrapUp(context: SceneContext) {
+  const { stage, setStage, openMenu } = context;
   return (
     <Stage
-      title="Doğru tasarım?"
-      controls={
-        <span className="text-sm font-semibold text-slate-600">
-          Birlikte düşün.
-        </span>
+      title={
+        stage === 0
+          ? "Doğru tasarım için hangi sorular?"
+          : stage === 5
+            ? "Kararları birlikte değerlendir."
+            : WRAP_UP[stage - 1].label
       }
+      controls={<StoryControls {...context} />}
     >
-      <div className="grid w-full max-w-[850px] grid-cols-2 gap-4 md:gap-7">
-        {labels.map((label) => (
-          <Choice
-            active={selected.includes(label)}
-            onClick={() =>
-              setSelected((s) =>
-                s.includes(label)
-                  ? s.filter((v) => v !== label)
-                  : [...s, label],
-              )
-            }
-            key={label}
-          >
-            <span className="flex min-h-20 items-center justify-center gap-3 font-display text-xl md:min-h-32 md:text-3xl">
+      <div className="flex h-full min-h-0 w-full max-w-4xl flex-col items-center justify-center gap-5 md:gap-8">
+        <div className="grid w-full grid-cols-2 gap-3 md:gap-6">
+          {WRAP_UP.map(({ label }, index) => (
+            <button
+              key={label}
+              onClick={() => setStage(index + 1)}
+              aria-pressed={stage >= index + 1}
+              className={`state-cell flex min-h-20 items-center justify-center gap-3 rounded-2xl border-2 p-4 font-display text-lg font-semibold md:min-h-32 md:text-3xl ${stage >= index + 1 ? "border-blue bg-blue text-white" : "border-ink bg-white"}`}
+            >
               {label}
-              {selected.includes(label) && <Check size={24} />}
-            </span>
-          </Choice>
-        ))}
+              {stage >= index + 1 && <Check size={23} />}
+            </button>
+          ))}
+        </div>
+        <StageCaption className="max-w-3xl text-center text-sm font-semibold leading-relaxed md:text-xl">
+          {stage === 0
+            ? "En hızlı aygıt veya en yüksek kapasite tek başına bir depolama tasarımını tanımlamaz."
+            : stage === 5
+              ? "İş yükü, gecikme, hata modeli ve geri dönüş ihtiyacı birlikte tanımlanır. Bir model yalnız açıkladığı varsayımlar içinde sonuç üretir."
+              : WRAP_UP[stage - 1].detail}
+        </StageCaption>
+        {stage === 5 && (
+          <button className="choice" onClick={openMenu}>
+            Sorular için ilgili sahneye dön <ArrowRight size={17} />
+          </button>
+        )}
       </div>
     </Stage>
   );
 }
+
+const summaryScenes: SceneDefinition[] = closingStoryData.map((topic) => ({
+  ...topic,
+  shortTitle: topic.id === "io-journey" ? "Tek istek" : "Tasarım ve sorular",
+  notes: attachmentRaidNotes[topic.id],
+  render: (context) =>
+    topic.id === "io-journey" ? (
+      <Journey {...context} />
+    ) : (
+      <WrapUp {...context} />
+    ),
+}));
+
 export const closingScenes: SceneDefinition[] = [
-  {
-    id: "s35",
-    title: "Tek isteğin bütün yolculuğu",
-    shortTitle: "Bütün sistem",
-    chapter: "Ortak kapanış",
-    presenterId: 4,
-    render: () => <Journey />,
-    notes: {
-      represents:
-        "Altı düğüm bir dosya okuma isteğinin kavramsal yolunu birleştirir: uygulama, OS kuyruğu, bağlantı, varsa çok diskli hacim, fiziksel aygıt ve veri bütünlüğü kontrolü. Mavi düğüm üzerinde konuşulan sorumluluktur; çizim evrensel bir OS işlem sırası veya bütün sistemlerin aynı mimariye sahip olduğu iddiası değildir.",
-      learningGoal:
-        "Dört sunucunun anlattığı parçaları aynı I/O isteği çevresinde ilişkilendirmek.",
-      walkthrough: [
-        "Adım ile uygulamadan başlayın; uygulamanın fiziksel sektör seçmediğini anımsatın.",
-        "OS kuyruğunda bekleyen istekleri zamanlama ve arayüz katmanlarıyla bağlayın.",
-        "Bağlantıyı DAS/NAS/SAN ayrımıyla yorumlayın; NAS yolunda sunucu tarafındaki dosya sistemi rolünü söyleyin.",
-        "RAID’in isteğe bağlı bir yapı olduğunu vurgulayın; tek diskte de veri erişimi yapılabilir.",
-        "Aygıtta HDD ile flash maliyetlerinin neden farklı olduğunu yeniden sorun.",
-        "Kontrol aşamasında ECC/checksum ve RAID korumasının farklı hata türlerine cevap verdiğini özetleyin.",
-      ],
-      keyPoints: [
-        "Soyutlama katmanları fiziksel ayrıntıları saklar; maliyetleri yok etmez.",
-        "Swap sıradan dosya okumasının zorunlu bir adımı değildir; başka bir depolama kullanım amacıdır.",
-        "Güvenilirlik yalnızca disk sayısından; hız yalnızca aktarım hızından çıkarılamaz.",
-      ],
-      limits:
-        "Adımlar dikkat yönlendirmek içindir; gerçek duvar saati süresi veya tek zorunlu mimari verilmez. Önbellek ve paralellik bir gerçek sistemde birden çok aşamayı farklılaştırabilir.",
-      transition:
-        "Şimdi bütün tasarım kararlarını hangi ölçütlerle birlikte değerlendirmemiz gerektiğini düşünelim.",
-    },
-  },
-  {
-    id: "s36",
-    title: "Tasarım kararları ve soru-cevap",
-    shortTitle: "Kapanış ve sorular",
-    chapter: "Ortak kapanış",
-    presenterId: 4,
-    render: () => <WrapUp />,
-    notes: {
-      represents:
-        "Dört seçilebilir alan, depolama tasarımında birlikte sorulması gereken dört soruyu temsil eder. Birini seçmek diğerini geçersiz kılmaz; bir tasarımı yalnızca en yüksek hız veya en yüksek kapasiteyle değerlendirmemeyi amaçlar. Bu bir tek doğru seçenekli sınav değildir.",
-      learningGoal:
-        "İş yükü, gecikme, hata modeli ve yedekleme gereksinimlerini aynı tasarım değerlendirmesinde kullanmak.",
-      walkthrough: [
-        "İş yükünü seçin: rastgele/sıralı, okuma/yazma ve istek boyutunu somutlaştırın.",
-        "Gecikmeyi seçin: seek, dönme, kuyruk ve aktarımın hangi durumda öne çıktığını sorun.",
-        "Hata modelini seçin: bit bozulması, tam disk kaybı, denetleyici veya tüm dizinin kaybı aynı şey değildir.",
-        "Yedeklemeyi seçin: yanlış silme ve dizinin kaybına karşı RAID dışında kopya ve kurtarma ihtiyacını konuşun.",
-        "Soru geldiğinde küçük menüden ilgili sunucunun sahnesine geri dönün; kaynaklar sekmesindeki resmî kitap materyalini gösterin.",
-      ],
-      keyPoints: [
-        "Doğru aygıt ve politika iş yüküyle birlikte seçilir.",
-        "RAID bir yedekleme stratejisinin yerine geçmez.",
-        "Bir modelin başarıyla gösterdiği hata durumları, açıklanmamış bütün hatalarda koruma garantisi değildir.",
-        "Sunum örnekleri gerçek aygıt ölçümü değil öğretim modelleridir.",
-      ],
-      limits:
-        "Seçimler notlandırma veya tasarım tavsiye motoru üretmez. Ürün önerisi, maliyet tahmini veya üretim sisteminde uygulanacak komut sunulmaz.",
-      question: {
-        prompt: "Hızlı ve yedekli demek tasarımı tanımlamak için yeterli mi?",
-        answer:
-          "Hayır; iş yükü, gecikme hedefi, hata varsayımı, veri bütünlüğü ve yedekleme/kurtarma ihtiyacı birlikte belirlenmelidir.",
-      },
-    },
-  },
+  summaryScenes[0],
+  ...exerciseScenes,
+  summaryScenes[1],
 ];

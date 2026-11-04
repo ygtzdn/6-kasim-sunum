@@ -1,225 +1,238 @@
 import type { SceneNotes } from "../../presentation/types";
 
 export const managementNotes: Record<string, SceneNotes> = {
-  s18: {
+  "error-detection": {
     represents:
-      "Ekrandaki yedi kutu, ortamdan okunmuş yedi veri bitini temsil eder. Mavi P kutusu veri ilk yazılırken hesaplanıp saklanan çift parite bitidir ve deney boyunca 0 olarak sabit kalır. Soldan sağa bit numaraları 1–7’dir. Turuncu işaret, okunan bitin başlangıçtaki 1011001 sözcüğünden farklı olduğunu gösteren eğitim aracıdır; gerçek parite denetleyicisi bu işaretleri veya özgün veriyi bilmez. Alttaki Σ1, veri ve saklanan parite birlikte değerlendirildiğinde görülen toplam 1 sayısıdır.",
+      "Yedi kutu özgün 1011001 verisini, mavi P kutusu ilk yazmada saklanan sabit çift parite bitini temsil eder. Turuncu çarpılar özgün veriyi bilen öğretim katmanıdır; gerçek denetleyici bu işaretleri bilmez. Son aşamada bit örneğinden parite, checksum ve CRC yöntemlerinin kavramsal karşılaştırmasına geçilir.",
     learningGoal:
-      "Ek denetim bilgisinin bir bozulmayı nasıl görünür kıldığını anlamak; pariteyi hata tespit yöntemi olarak tanımlamak ve kontrolün geçmesini verinin doğruluğuyla eşitlememek.",
+      "Bir bozulmanın denetim bilgisiyle görünür olabildiğini ve bir kontrolün geçmesinin kesin veri doğruluğu olmadığını açıklamak.",
     walkthrough: [
-      "Başlangıç verisini okutun: 1011001 içinde dört adet 1 vardır. Saklanan parite 0 eklenince toplam çift kaldığından kontrol hata saptamaz.",
-      "“1 bit hata” düğmesini seçin. Soldan üçüncü bit 1’den 0’a döner; veri 1001001 ve toplam 1 sayısı 3 olur. Aynı P=0 kullanıldığı için kontrol hata saptar.",
-      "Dinleyiciye başka bir veri kutusuna dokundurun. Her tıklama yalnızca seçilen veri bitini değiştirir; P yeniden hesaplanmaz. Turuncu işaretlerin neden bir tespit algoritması değil, öğretim yardımı olduğunu açıklayın.",
-      "Sıfırlayın ve “2 bit hata”yı seçmeden önce sonucu tahmin ettirin. Sonraki sahnede kontrolün sınırını bu örnekle açacağınızı söyleyin.",
+      "Başlangıçta dört adet 1 ve P=0 birlikte çifttir. Saklanan P değeri deney boyunca değişmeyecek; okunan bozuk veriden yeniden üretilmeyecek.",
+      "Enter ile 1001001 tek bit hatasına geçin: toplam 1 sayısı üç olur ve kontrol hata saptar. Dinleyiciye hangi bitin bozuk olduğunun bu tek kontrolden çıkıp çıkmadığını sorun.",
+      "Sonraki aşama yeni iki bit hata örneğidir: 0111001 için dört adet 1 vardır. Veri değişmiştir ama parite kontrolü hata bulmaz. Bu, hatasızlık kanıtı değildir.",
+      "Son aşamada parite, checksum ve CRC kartlarını gösterin. Bunların denetim bilgisini farklı yöntemlerle ürettiğini, kapsamanın yönteme bağlı olduğunu söyleyin. Backspace aynı bit dizilerini ve hesapları geri getirir.",
     ],
     keyPoints: [
-      "Çift paritede veri ve parite birlikte çift sayıda 1 içermelidir; sonuç bütün bitlerin XOR’u ile de bulunabilir.",
-      "Tek parite, tek sayıda bit değişimini yakalar; hatalı bitin konumunu söylemez ve bit düzeltmez.",
-      "Hata sonrası pariteyi yeniden üretmek burada hatayı saklardı. Saklanan denetim bilgisi ile yeni okuma karşılaştırılır.",
-      "“Bu parite kontrolü hata saptamadı” ifadesi bilinçlidir: bir kontrolün geçmesi veri kesin doğrudur anlamına gelmez.",
+      "Tek parite tek sayıda bit değişimini saptar; değişen konumu söylemez ve düzeltmez.",
+      "Hata sonrası P yeniden hesaplanırsa saklanan denetim bilgisiyle karşılaştırma fikri kaybolur.",
+      "Checksum ve CRC için burada gerçek algoritma seçilmediğinden hesap sonucu veya tüm hataları yakalama garantisi üretilmez.",
     ],
     limits:
-      "Bu, tek sözcükteki basit çift parite modelidir; gerçek HDD veya SSD ECC düzenini temsil etmez. CRC ve checksum da denetim bilgisi taşır fakat hata kapsaması kullanılan algoritmaya bağlıdır. Arayüzde özgün bitlerle karşılaştırma yalnızca değişen kutuları göstermek için kullanılır; kontrol sonucu sadece saklanan pariteye göre hesaplanır.",
+      "OSC 10 §11.4 / slayt 27 kavramlarına dayanan özgün örnek. CRC kriptografik bütünlük garantisi olarak sunulmaz. Bit işaretleri öğretim yardımıdır; kontrol sonucu yalnız veri ve saklanan P ile hesaplanır.",
     question: {
-      prompt: "Parite başarısızsa hangi bitin bozuk olduğunu biliyor muyuz?",
+      prompt: "Parite hatayı bulunca bozuk bitin yerini biliyor muyuz?",
       answer:
-        "Hayır. Tek kontrol sonucu bozulmayı gösterebilir, konum ve doğru özgün değer hakkında yeterli bilgi sağlamaz.",
+        "Hayır. Tek kontrol sonucu bozulmayı gösterebilir; hangi bitin bozuk olduğunu ve doğru değerini belirlemez.",
     },
     transition:
-      "Bir hata görünür oldu. İki hata birbirini parite açısından gizlerse ne olur?",
+      "Uygun ek kodlama, yalnız hata bildirmekten fazlasını yapabilir mi?",
   },
-  s19: {
+  "error-correction": {
     represents:
-      "İki satır, hata tespiti ile hata düzeltmesi arasındaki farkı karşılaştırır. Üst satır yedi veri biti ve bir sabit parite bitidir. Alt satır, dört veri bitini dört denetim bitiyle kodlayan genişletilmiş Hamming(8,4), yani SECDED örneğidir. Mavi P kutuları denetim bitleridir. Bunlar aynı boyutta kullanıcı verisi taşıyan iki ürünün performans karşılaştırması değildir; ayrı küçük kod sözcükleriyle koruma yeteneğinin farkı gösterilir.",
+      "Üst satır pariteyi, alt satır özgün küçük ECC kod örneğini gösterir. Bunlar aynı miktarda kullanıcı verisi taşıyan iki ürünün performans karşılaştırması değildir. Denetim öncesi ve sonrası ayrı aşamalardır; bit düzeltmesi gerçekten saf kod motorundan hesaplanır.",
     learningGoal:
-      "Ek kontrol bilgisinin uygun kodla bir bitin konumunu belirleyip düzeltmeye imkân verdiğini, buna rağmen bir kodun düzeltme kapasitesinin sınırlı olduğunu ayırt etmek.",
+      "Hata tespiti ile sınırlı hata düzeltmesini ayırmak; bir örneğin kapasitesini bütün aygıtlara genellememek.",
     walkthrough: [
-      "Başlangıçtaki “2 bit” örneğinde önce tahmin alın, ardından “Kontrol et”i seçin. Parite satırındaki veri 0111001’dir; özgün veriden farklı olmasına rağmen toplam dört adet 1 vardır. Parite hatayı kaçırır.",
-      "Aynı seçimde SECDED satırı iki ayrı kod biti değişimi için hatayı tespit eder, ancak “düzeltilemez” sonucunu verir. Bozuk kutular yerinde kalır; arayüz veri kurtardığı izlenimi yaratmaz.",
-      "“1 bit”i seçin ve tekrar kontrol edin. Parite yalnızca tespit eder. SECDED, hesaplanan sendrom ve toplam pariteyle tek hatalı konumu belirler; değişen kutu özgün değere döner.",
-      "“Hatayı geri getir” eylemiyle denetim öncesi okuma durumunu gösterin. Denetim bitlerinin sayısını ve geri dönüşün sadece bir hata durumunda yapıldığını vurgulayın.",
+      "İlk aşamada sağlam veri ve ek kodu gösterin. Buradaki ana konu algoritma adı veya bit konumları değil, ek bilginin neye yettiğidir.",
+      "İkinci aşama tek hatalı okumadır. Tahmin alın; üçüncü aşamada parite yalnız hata bildirirken örnek ECC motoru bozuk biti hesaplayıp düzeltir.",
+      "Dördüncü aşamada başlangıç kodunun yeni iki hatalı okuması açılır. Beşinci aşamada parite hata kaçırır; bu ECC örneği hatayı saptar ama düzeltemez. Bozuk bitler yerinde kalır.",
+      "Backspace kontrol öncesi okumayı geri getirir; düzeltilmiş bit yeniden bozuk olur ve sonuç etiketi gizlenir. Gizli cevap veya düzeltme durumu saklanmaz.",
     ],
     keyPoints: [
-      "SECDED, Single Error Correction / Double Error Detection anlamındadır: bir bit düzeltme, iki bit tespiti.",
-      "Bu kodda 1, 2 ve 4. konumlar Hamming denetim bitleri; 8. konum toplam paritedir. Veri 3, 5, 6 ve 7. konumlardadır.",
-      "Tek parite iki değişimi kaçırabilir. Bir hatayı tespit edebilmek onu düzeltebilmekle aynı değildir.",
-      "ECC genel bir aile adıdır. Bu örneğin kapasitesi tüm ECC yöntemleri veya modern disk kodları için evrensel bir sınır değildir.",
+      "ECC, uygun kodlama ile bazı hataları tespit edip düzeltebilir.",
+      "Ekrandaki bir bit düzeltme ve iki bit tespiti yalnız bu kod örneğinin kapasitesidir.",
+      "Bir hatanın tespit edilmesi, onun mutlaka düzeltilebilir olduğu anlamına gelmez.",
     ],
     limits:
-      "Etkileşim yalnızca bir veya iki bit hatası üretir. Genişletilmiş Hamming için üç ve daha fazla bozulmada güvenilir sınıflandırma ya da doğru düzeltme sözü verilmez. Basit Hamming(7,4) ile genişletilmiş SECDED karıştırılmamalıdır. Gerçek disklerde kullanılan kodlar ve denetim birimleri bu küçük modelden farklıdır. Teknik doğrulama: University of Michigan EECS373 “Hamming code for single error correction, double error detection” ve STMicroelectronics AN5342 ECC overview.",
+      "OSC 10 §11.4 / slayt 27 genel ECC kavramını destekler; örnek kodun inşası kitap öğretimi olarak sunulmaz. Gerçek hesap genişletilmiş Hamming/SECDED motorudur; konumlar ve sendrom ders akışına alınmaz. Model yalnız 0/1/2 bit hata sınırındadır; daha fazlası için sınıflandırma güvencesi yoktur.",
     question: {
-      prompt: "ECC yazan her sistem iki bozuk biti düzeltebilir mi?",
+      prompt: "ECC kullanan bütün aygıtlar aynı sayıda biti düzeltebilir mi?",
       answer:
-        "Hayır. Bu SECDED kodu iki bit hatasını tespit eder fakat düzeltemez; kapasite kodun yapısına ve hata modeline bağlıdır.",
+        "Hayır. Kodun yapısı ve tasarlandığı hata modeli belirler; bu örneğin sınırı evrensel değildir.",
     },
     transition:
-      "Verinin doğru okunmasını denetledik. Şimdi aygıtın dosya saklayabilir hale nasıl getirildiğine bakalım.",
+      "Doğruluğu denetledik. Aygıtı dosya saklayabilir hale getirmek için hangi katmanlar hazırlanır?",
   },
-  s20: {
+  "device-preparation": {
     represents:
-      "Dış çerçeve fiziksel olarak hazır bir örnek depolama aygıtını gösterir. İlk gri hücreler kullanılabilir sektörlerin kavramsal temsilidir. Bölümleme sonrası yüzde 60 ve yüzde 40 oranındaki alanlar iki mantıksal bölümü temsil eder; bunlar iki fiziksel disk değildir. Klasör ve FS işareti seçilen bölümde dosya sistemi metaverisinin oluşturulduğunu, onay işareti ise dosya erişimi için bağlandığını gösterir. Küçük dosya simgeleri ancak bu aşamalardan sonra görünür.",
+      "Dış çerçeve fiziksel ortamdır. Ham alandan sektör düzenine, yüzde 60/40 iki mantıksal bölüme ve yalnız Bölüm 1 üzerindeki dosya sistemi, bağlama ve dosya erişimine geçilir. İkinci bölüm hazırlanmamış karşı örnek olarak kalır. Alt sıra tamamlanan hazırlık katmanlarını gösterir.",
     learningGoal:
-      "Fabrika veya donanım düzeyindeki fiziksel hazırlığı, bölüm oluşturmayı, dosya sistemi oluşturmayı ve bağlamayı ayrı sorumluluklar olarak açıklamak.",
+      "Fiziksel biçimlendirme, bölümleme, dosya sistemi oluşturma ve bağlamayı birbirinden ayırmak.",
     walkthrough: [
-      "“Fiziksel hazırlık tamam” durumuyla başlayın. Burada kullanıcı düşük seviyeli bir format komutu çalıştırmaz; donanımın sağlayacağı blok adresleme temeli hazır kabul edilir.",
-      "“Bölüm oluştur”u seçin: yüzde 60 / yüzde 40 ayrımı oluşur. Dosya sistemi simgesi henüz yoktur; alan ayırmak dosya yapısını oluşturmaz.",
-      "İstediğiniz bölümü tıklayıp “Dosya sistemi oluştur”u seçin. Yalnızca seçili bölge değişir. Ardından “Bağla” ile dosya erişimi için kullanıma açın.",
-      "“Dosya kaydet” bir örnek simge ekler. Diğer bölümü seçin; onun ayrı dosya sistemi ve bağlama durumuna sahip olduğunu gösterin.",
-      "Geri okla son işlem durumlarına dönün veya sıfırlayın. Bu, gerçek formatlama için geri alma garantisi değildir; yalnızca görsel model geçmişidir.",
+      "Ham ortamla başlayın. Enter ile denetleyicinin okuyup yazabildiği sektör ızgarasını açın; başlık, veri ve ECC ayrımını önceki sahneye bağlayın.",
+      "Bölümleme aşaması alanı iki mantıksal bölüme ayırır. Dosya sistemi henüz yoktur; iki bölüm iki fiziksel disk değildir.",
+      "Dosya sistemi aşamasında Bölüm 1 metaverisi görünür. Sonraki aşama onu OS ad alanına bağlar; bağlantı oku erişilebilirliği gösterir.",
+      "Son aşamada yalnız bağlı dosya sistemine sunum.pdf örneği eklenir. Backspace ile dosya, bağlama, metaveri ve bölüm ayrımını ters sırada kaldırın; bunun gerçek biçimlendirmeyi geri almak olmadığını söyleyin.",
     ],
     keyPoints: [
-      "Fiziksel hazırlık, bölümleme ve dosya sistemi oluşturma aynı işlem değildir.",
-      "Dosya sistemi, seçilen bölgenin dizinler ve tahsis metaverisi gibi mantıksal yapılarını düzenler.",
-      "Bu senaryoda dosya erişimi için dosya sisteminin oluşturulması ve bağlanması gerekir; düğme sırası bunu uygular.",
-      "Yüzde 60/40 ve iki bölüm eğitsel örnektir; bölüm sayısı, dosya sistemi seçimi veya ideal yerleşim önerisi değildir.",
+      "Alan ayırmak dosya sistemi oluşturmak değildir.",
+      "Fiziksel sektör yapısı ve dosya sistemi metaverisi farklı katmanlardır.",
+      "Dosya erişiminde örnek FS hazırlanıp bağlanır; raw kullanım gibi farklı yollar sonraki tam rota uzantısında ayrı ele alınır.",
     ],
     limits:
-      "Eğitim modeli gerçek diskte işlem yapmaz, terminal komutu çalıştırmaz ve dosya sistemi izni istemez. Bölümleme her ortamda zorunlu değildir: raw blok aygıtı kullanımı ve bölümsüz bir aygıtta dosya sistemi oluşturma mümkündür. Aygıtın fiziksel hazırlığını son kullanıcı biçimlendirmesiyle eşitlemeyin. Boot ve bozuk blok yönetimi bu sıranın zorunlu formatlama adımları değildir; sonraki iki sahnede ayrı işlevlerdir.",
+      "OSC 10 §11.5 / slayt 28–29. Oran, sektör sayısı ve dosya özgün öğretim örneğidir. Gerçek format komutu çalıştırılmaz; fiziksel biçim son kullanıcının her kurulumda yaptığı işlem diye sunulmaz. 512 bayt evrensel güncel sektör boyutu değildir. Boot ve remap bu zincirin zorunlu devam adımları değildir.",
     question: {
-      prompt: "Bölüm oluşturduğumuz anda normal bir dosya kaydedebilir miyiz?",
+      prompt: "Bölüm oluşturunca dosya sistemi de oluşmuş olur mu?",
       answer:
-        "Bu örnekte hayır. Bölüm yalnızca alan ayırır; dosya sistemi yapıları ve kullanım için bağlama ayrıca gerekir.",
+        "Hayır. Bölüm alanı ayırır; dosya/dizin ve tahsis yapıları ayrıca oluşturulur.",
     },
     transition:
-      "Hazırlanan aygıttan işletim sisteminin ilk yükleyicisine nasıl ulaşılır?",
+      "Kısa rotada kernel daha çalışmadan bu depolamaya kimin ulaştığını soracağız. Tam rotada önce dosya yolu ile raw blok yolunu ayıracağız.",
   },
-  s21: {
+  "storage-access-modes": {
     represents:
-      "Kutular disk hazırlama işlemlerini değil, denetimin açılış sırasında hangi bileşene geçtiğini gösterir. UEFI / GPT görünümünde firmware, EFI System Partition içindeki .efi yükleyiciyi bulup çalıştırır; yükleyici kernel’i RAM’e getirir. BIOS / MBR görünümünde BIOS’un seçtiği aygıttaki ilk açılış kodundan sonraki bootloader aşamalarına geçiş gösterilir. Oklar yürütme ve yükleme akışının yönüdür. Mavi kutu, anlatımda o anda odaklanılan bileşendir.",
+      "Mantıksal blok ızgarası önce bağımsızdır; sonraki aşamada örnek dörtlü cluster çerçeveleri açılır. Normal dosya yolunda uygulama dosya sistemini kullanır. Raw örnekte veritabanının kendi blok yönetimi görünür; OS I/O ve sürücüler iki yolda da vardır.",
     learningGoal:
-      "Firmware → bootloader → kernel zincirini anlamak ve tarihsel BIOS/MBR örneğiyle yaygın UEFI/GPT/ESP yolunu birbirine karıştırmamak.",
+      "Dosya sistemi gruplaması ile aygıt bloklarını, normal dosya hizmeti ile uygulamanın raw blok yönetimini ayırmak.",
     walkthrough: [
-      "UEFI / GPT görünümünde “Başlat”ı seçin: firmware vurgulanır. Firmware’in normal bir kullanıcı uygulaması olmadığını ve kernel’den önce çalıştığını belirtin.",
-      "“İlerle” ile ESP’ye geçin. Bu, GPT üzerinde özel türü olan bir bölümde yer alan EFI yükleyici dosyasıdır. Ekrandaki bootloader.efi örnek addır; gerçek dosya yolu platforma göre değişir.",
-      "Sonraki adımda kernel RAM’de vurgulanır. Yükleyici diskteki kernel görüntüsünü bulup başlatmak için gerekli ortamı hazırlar.",
-      "BIOS / MBR sekmesini seçin ve zinciri yeniden adımlayın. İlk MBR kodu ile sonraki yükleyici aşamalarının ayrı kutularda gösterildiğini anlatın; bütün yükleyicinin MBR’ın küçük kod alanında bulunması gerektiği sonucuna varmayın.",
+      "İlk aşamada aygıtın mantıksal bloklarını gösterin. Bunlar dosya adı veya dizin değildir.",
+      "Cluster aşamasında dört örnek blok bir çerçevede gruplanır. Grup boyutu gerçek bir dosya sistemi standardı değildir; kaynakta geçen gruplama fikrini somutlaştırır.",
+      "Normal yol uygulama→dosya sistemi→OS I/O→blok aygıtıdır. Dosya sistemi dosya işlemlerini kendi blok düzenine çevirir.",
+      "Raw aşamada veritabanı kendi blok düzenini üstlenir. OS I/O ve sürücü kutusunun kaybolmadığını özellikle gösterin. Backspace aynı iki sorumluluk sınırını tekrar açar.",
     ],
     keyPoints: [
-      "Firmware, bootloader ve kernel farklı rollerdir; kernel kendiliğinden diskten çalışmaya başlamaz.",
-      "ESP, EFI System Partition anlamındadır; burada .efi yükleyici dosyasının bulunduğu bölgeyi temsil eder.",
-      "BIOS/MBR ve UEFI/GPT burada karşılaştırılan iki yaygın bağlamdır; tek zorunlu evrensel yol değildir.",
-      "Boot kodu, disk hazırlama sihirbazının bir sonraki biçimlendirme adımı değil, açılışın ayrı sorumluluğudur.",
+      "Aygıt blokları ile dosya/dizin soyutlaması aynı düzey değildir.",
+      "Raw blok erişimi dosya ve dizin hizmetlerini otomatik sağlamaz.",
+      "Raw, bütün işletim sistemi sürücülerinin atlanması anlamına gelmez.",
     ],
     limits:
-      "UEFI mutlaka GPT gerektirir veya tüm sistemler yalnızca bu çizilen yollardan açılır iddiası yoktur. UEFI başka bölüm tabloları, ağ açılışı ve doğrudan bir EFI uygulaması olarak kernel gibi seçenekleri de destekleyebilir. Secure Boot, boot girdileri, initramfs ve çok aşamalı yükleyici ayrıntıları kapsam dışıdır. Kaynak: UEFI Specification, Boot Manager ve GPT Disk Layout bölümleri.",
-    question: {
-      prompt: "UEFI görünümündeki ESP doğrudan kernel’in kendisi midir?",
-      answer:
-        "Hayır. Bu örnekte ESP yükleyici dosyasının bulunduğu bölümdür; yükleyici daha sonra kernel’i RAM’e yükler.",
-    },
-    transition:
-      "Açılışta da normal I/O’da da OS mantıksal bloklarla çalışır. Fiziksel bir sektör bozulursa bu adres neden değişmeyebilir?",
-  },
-  s22: {
-    represents:
-      "Üst sıra OS’nin gördüğü mantıksal blok adreslerini, alt sıra aygıt içindeki örnek fiziksel sektörleri gösterir. Başlangıçta LBA 5, P45’e eşlenir. Turuncu çarpı bu fiziksel sektörün arızalı olduğunu belirtir. Yeniden eşleme sonrasında aynı LBA 5, ayrı yedek alan P90’a yönelir. Mavi ok ve LBA 5 → P90 kartı değişen eşlemeyi gösterirken diğer mantıksal adresler yerinde kalır.",
-    learningGoal:
-      "Mantıksal blok kimliği ile ortam üzerindeki fiziksel yerin aynı şey olmadığını ve aygıtın yedek sektörlere yeniden eşleme yaparak blok arayüzünü koruyabildiğini açıklamak.",
-    walkthrough: [
-      "Başlangıçta LBA 5 → P45 kartını okutun. Üstteki 5’in dosya adı veya gerçek plaka koordinatı değil, OS’nin kullandığı blok adresi olduğunu söyleyin.",
-      "“Sektör hatası ekle”yi seçin. P45 turuncu çarpıyla işaretlenir; mantıksal adres 5 kaybolmaz.",
-      "“Yedek alana eşle”yi seçin. Ok yedek P90’a yönelir ve eşleme kartı güncellenir. LBA 5 ve diğer mantıksal blokların numaraları değişmemiştir.",
-      "Aynı adrese sonraki bir isteğin aygıt tarafından yeni konuma yönlendirilebildiğini açıklayın. Ardından çizimin eski veriyi sihirli biçimde kurtardığını iddia etmediğini özellikle belirtin.",
-    ],
-    keyPoints: [
-      "Yeniden eşleme, bir mantıksal adresin başka fiziksel konuma yönlendirilmesidir.",
-      "Aygıtın veya denetleyicinin tuttuğu eşleme bilgisi OS’den bu ayrıntıyı gizleyebilir.",
-      "Yedek sektör alanı sınırlıdır; her arıza sonsuza kadar saklanamaz.",
-      "Bozuk bir sektörün eski içeriği okunamıyorsa adresi yeniden eşlemek tek başına kayıp veriyi geri getirmez.",
-    ],
-    limits:
-      "P40–P47 ve P90 fiziksel geometri hesabı değil, basit kimliklerdir. Arızanın algılanma zamanı, okuma kurtarma, ECC, yeniden yazma ve üreticiye özgü remap politikası simüle edilmez. Model yalnızca eşleme değişimini gösterir; veri kurtarma garantisi vermez. SSD FTL’nin sürekli adres çevirisiyle bu tek HDD benzeri arıza örneği aynı ayrıntı düzeyinde ele alınmaz.",
+      "OSC 10 §11.5 / slayt 28–30; yalnız tam rotanın uzantısı. Güncel Linux O_DIRECT semantiği veya gerçek blok aygıtı erişim komutu anlatılmaz. Dosya API çağrılarının her durumda bütün cluster taşıdığı iddia edilmez.",
     question: {
       prompt:
-        "P45 değiştiğinde uygulamanın kullandığı LBA da değişmek zorunda mı?",
+        "Raw blok erişimi dosya ve dizin hizmetlerini otomatik sağlar mı?",
       answer:
-        "Hayır. Bu örnekte aygıt LBA 5’i P90’a yeniden eşler; üst katmanın mantıksal adresi korunur.",
+        "Hayır. Bu düzeni uygulama veya uygun başka bir katman sağlamalıdır.",
     },
     transition:
-      "Diskte yalnızca dosya verisi tutulmaz. RAM’den çıkarılan bazı sayfalar da ayrılmış swap alanında saklanır.",
+      "Dosya sistemiyle blokları ayırdık. Açılış kodu kernel görüntüsünü depolamadan RAM'e nasıl getirir?",
   },
-  s23: {
+  "boot-sequence": {
     represents:
-      "Üstte üç RAM frame’i, altta dört swap slot’u vardır. Harfler sayfa kimlikleridir; çerçeve ve slot numaraları ise farklı depolama konumlarıdır. A kirli anonim sayfa, B özgün dosyadan tekrar okunabilen temiz dosya sayfası, C hem RAM’de hem geçerli swap kopyası bulunan temiz anonim sayfa, D ise yalnızca swap’ta bulunan sayfadır. Aynı C harfinin iki yerde görünmesi iki bağımsız sayfa değil, aynı içeriğin iki konumdaki geçerli kopyalarıdır.",
+      "Firmware, boot block, yükleyici ve RAM'deki kernel dört ayrı roldür. İlk soru aşamasında hiçbir kutu etkin değildir. Üçüncü rol etkinleştiğinde depolamadaki kernel görüntüsünün RAM'e yükleme yolu açılır; son aşamada RAM'deki kod çalışır.",
     learningGoal:
-      "Sayfa, frame ve slot kavramlarını ayırmak; swap’ın bazı RAM sayfaları için arka depolama sağladığını ve sayfanın türüyle kirli durumunun I/O kararını etkilediğini kavramak.",
+      "Kernel henüz çalışmıyorken firmware'in başladığını ve yükleyici kodunun kernel'i RAM'e getirdiğini açıklamak.",
     walkthrough: [
-      "Başlangıçta C’yi izleyin: sağ kart F2 ve S0 konumlarını aynı sayfa kimliğine bağlar. Bu modelde swap kopyasının RAM’e okunduktan sonra saklanabildiğini anlatın.",
-      "A’ya dokunun: kirli anonim sayfanın güncel içeriği için swap konumu henüz yoktur. A tahliye edilirse verisini korumak için uygun yere yazılması gerekir.",
-      "B’yi seçin: dosya destekli ve temiz olduğu için özgün dosyadan tekrar okunabilir; tahliye edilmesi mutlaka swap yazması anlamına gelmez.",
-      "D’yi seçin: RAM’de bir frame’i yoktur, S1’de geçerli kopyası vardır. D’ye erişimde page-in için RAM’de alan gerekir.",
-      "“Swap dosyası” ve “Ayrı bölüm” arasında geçin. Slot soyutlaması korunurken alanın bir dosya veya bölüm içinde sağlanabileceğini belirtin.",
+      "İlk soruda durun: kernel RAM'de değilse ilk komutu kim başlatır? Enter ile ROM/firmware kutusunu etkinleştirin.",
+      "Boot block aşamasında denetimin seçilen açılış aygıtındaki koda geçişini gösterin. Boot block sonraki yükleyiciye veya boot volume'a ulaşabilir.",
+      "Yükleyici aşamasında kernel görüntüsünden RAM'e yükleme yolu açılır. Bütün yükleyicinin ilk küçük boot block'a sığması gerekmediğini belirtin.",
+      "Son aşamada denetim RAM'deki kernel'e geçer. Tam anlatımda resmî slayt 30'un Windows örneğinde MBR'nin boot code ve partition table içerdiğini, boot partition'a uzanan belirli bir düzen gösterdiğini bir cümleyle anın.",
     ],
     keyPoints: [
-      "Frame fiziksel RAM konumu, slot swap alanı konumudur; aynı numaralar aynı yer anlamına gelmez.",
-      "Anonim sayfalar bir normal dosya içeriğinin doğrudan temiz kopyası değildir. Kirli veri tahliye sırasında korunmalıdır.",
-      "Temiz dosya destekli bir sayfanın tekrar okunabilir kaynağı vardır; her tahliye diske yazma gerektirmez.",
-      "Swap kapasitesi RAM hızını veya CPU yürütme kapasitesini artırmaz; ek arka depolama ve I/O maliyeti getirir.",
+      "Firmware, yükleyici ve kernel farklı rollerdir.",
+      "Kernel depolamadaki görüntüden RAM'e getirilir; kendiliğinden disk üzerinde yürütülmeye başlamaz.",
+      "Windows/MBR şekli kitaptaki belirli örnektir; bütün platformlara zorunlu düzen yapılmaz.",
     ],
     limits:
-      "Üç frame ve dört slot çizim boyutudur; gerçek kapasite oranı değildir. Evrensel “swap RAM’in iki katı olmalı” kuralı verilmez. C’nin iki yerde görünmesi bu eğitim modelinin geçerli swap kopyasını tutma tercihidir; tüm OS politikalarının aynı olduğu iddiası yoktur. İşlem bütününü taşımak yerine sayfalar izlenir. Kaynak: Linux Kernel Documentation, Swap Table / Swap Entry ve Swap Cache.",
+      "OSC 10 §11.5 / slayt 29–30. Slayt 30'un yerel resmî figüründe MBR, boot code, partition table ve boot partition etiketleri doğrudan doğrulandı; figür projeye kopyalanmadı. UEFI/GPT/ESP, Secure Boot ve initramfs kapsamı genişletmez.",
     question: {
-      prompt:
-        "C hem F2’de hem S0’da görünüyorsa iki kez bellek tüketen iki farklı sayfa mıdır?",
+      prompt: "Boot block ile kernel aynı şey mi?",
       answer:
-        "Tek sayfa kimliğinin RAM’deki içeriği ve swap’taki geçerli kopyasıdır. Fiziksel alan iki ortamda ayrılır, fakat mantıksal sayfa kimliği aynıdır.",
+        "Hayır. Açılış kodu kernel'e ulaşan yolun parçasıdır; kernel yüklenecek OS kodudur.",
     },
     transition:
-      "Bu yerleşim üzerinde bir yazma ve iki okuma yaparak frame ile slot’ların nasıl değiştiğini izleyelim.",
+      "Açılışta da normal I/O'da da fiziksel ortam var. Bir sektör kullanılamaz hale gelirse mantıksal adres ne olur?",
   },
-  s24: {
+  "bad-block-remapping": {
     represents:
-      "Ekran önceki sahnedeki aynı sayfaları gerçek durum geçişleriyle izler. Üst RAM, alt swap’tır; A kirli anonim, B temiz dosya destekli, C temiz ve swap kopyalı, D yalnızca swap’ta başlar. Hareketli kutudaki sayfa harfi, “yaz” veya “oku” sözcüğü ve ok yönü I/O’yu birlikte anlatır. Alt sayaçlar yalnızca swap okumalarını ve yazmalarını sayar. Aktarım sürerken ayrılmış slot kilit simgesiyle gösterilir ve RAM frame’i yazma tamamlanana kadar dolu kalır.",
+      "OS'nin LBA 5 adresi başlangıçta fiziksel P45'e eşlenir. Arızada P45 çarpıyla görünür; son aşamada eşleme P90 yedeğine dönerken mantıksal 5 değişmez ve bozuk P45 görünür kalır.",
     learningGoal:
-      "Swap alanı ayırmayı, page-out/page-in hareketini, kirli veri için yazma tamamlanmasını beklemeyi ve temiz dosya tahliyesinde swap yazması gerekmeyebileceğini aynı senaryoda takip etmek.",
+      "Mantıksal adres devamlılığı ile fiziksel konumu ve eski veriyi kurtarmayı ayırmak.",
     walkthrough: [
-      "“A → swap”ı seçin. S2, A için ayrılır; yazma animasyonu sürerken F0’da A hâlâ görünür. Tamamlanınca F0 boşalır ve swap yazma sayacı 1 olur.",
-      "“D’ye eriş”i seçin. D için page fault ve S1’den okuma gösterilir; D boş F0’a gelir. Swap okuması 1 olur; S1 kopyası bu modelde saklanır.",
-      "Şimdi RAM doludur. “B’yi bırak” ile temiz dosya sayfasını aday olarak tahliye edin: F1 boşalır, swap yazması 1’de kalır. B’nin özgün dosyası geri okuma kaynağıdır.",
-      "“A’ya eriş”i seçin. A, S2’den F1’e okunur; toplam swap okuması 2 olur. Son RAM D, A, C; swap C, D, A ve boş slot S3 şeklindedir.",
-      "“Swap dolu” ön ayarını açın ve A’yı çıkarmayı deneyin. Boş slot olmadığından tahliye tamamlanamaz; A RAM’de kalır, frame boşa çıkarılmaz ve yazma sayacı artmaz. Sıfırla tüm eşlemeleri ve sayaçları geri getirir.",
+      "LBA 5→P45 kartını okuyun. Kimliklerin dosya adı veya gerçek plaka koordinatı olmadığını belirtin.",
+      "İkinci aşamada P45 arızalıdır. Mantıksal adres hâlâ 5; aygıtta erişim sorunu görünür.",
+      "Son aşama sector sparing örneğidir: yedek P90 etkinleşir, aynı LBA korunur. Eski içerik okunamıyorsa yalnız adres değiştirerek geri gelmediğini söyleyin.",
     ],
     keyPoints: [
-      "Kirli A’nın RAM frame’i ancak yazma başarıyla tamamlandıktan sonra serbest bırakılır.",
-      "Page-in için RAM’de bir frame gerekir; D’den sonra A’yı getirmeden önce B tahliye edilir.",
-      "Temiz B’nin tahliyesi swap yazması değildir; finalde 1 yazma ve 2 okuma beklenir.",
-      "Model swap kopyalarını okumadan sonra geçerli ve ayrılmış tutar. RAM doluluğu ile swap slot doluluğu birbirinden bağımsız izlenir.",
+      "Sparing, sorunlu fiziksel alanın yedek konuma yönlendirilmesidir.",
+      "Üst katmanın mantıksal adresi korunabilir.",
+      "Adresin korunması veri kurtarma garantisi değildir.",
     ],
     limits:
-      "Animasyon süresi eğitim temposudur; gerçek gecikme veya hız karşılaştırması değildir. B, sunucu tarafından hazır seçilen adaydır; FIFO/LRU veya bir sayfa değiştirme algoritması çalıştırılmaz. Swap dolunca OOM, sıkıştırma veya gerçek OS müdahalesi taklit edilmez; yalnızca bu modelde tahliyenin başarısız olduğu gösterilir. Önbellek ve slot serbest bırakma politikaları sistemden sisteme değişebilir.",
+      "OSC 10 §11.5 / slayt 30. P45/P90 geometri değil özgün öğretim kimliğidir. Algılama, üretici politikası ve gerçek kurtarma işlemi modellenmez; normal SSD FTL eşlemesiyle aynı ayrıntıda anlatılmaz.",
     question: {
-      prompt: "B çıkarıldığında swap yazma sayacı neden artmadı?",
-      answer:
-        "B temiz dosya destekli sayfadır; gerektiğinde özgün dosyadan tekrar okunabilir. Güncel anonim veriyi korumak için yapılan A yazmasıyla aynı işlem değildir.",
+      prompt: "Yeniden eşleme okunamayan eski veriyi kesin kurtarır mı?",
+      answer: "Hayır. Adres devamlılığı ve veri kurtarma farklı iddialardır.",
     },
     transition:
-      "Doğruluğu, aygıt hazırlığını ve RAM için arka alanı bir arada değerlendirelim.",
+      "Bu aygıt yalnız normal dosyalara değil, RAM'den taşınan içerik için arka alana da yer sağlar.",
   },
-  s25: {
+  "swap-space": {
     represents:
-      "Bu sayfa üç kavramın bağımsız kontrolünü içerir. Q04 tek paritenin kapsamadığı çift hataları, Q05 bölümleme ile dosya sistemi oluşturma ayrımını, Q06 temiz dosya sayfası tahliyesinin swap yazması gerektirmeyebileceğini yoklar. Ekranda aynı anda yalnızca seçili sorunun nesnesi ve iki seçenek vardır. Seçimden sonra kısa neden görünür; sorular arasında geçiş yapılınca önceki yanıtlar saklanır.",
+      "RAM baskısı, taşınan birim, swap dosyası, raw swap bölümü ve birden çok alan beş ayrı görünümde gösterilir. Çizilen aygıt ve frame sayıları kapasite veya performans önerisi değildir.",
     learningGoal:
-      "Dinleyicinin hata tespiti, disk hazırlığı ve swap alanı yönetiminde üç yaygın yanılgıyı doğru gerekçeyle reddedebilmesini sağlamak.",
+      "Swap alanının amacını, süreç/sayfa birimini ve dosya/bölüm yerleşimini birbirinden ayırmak.",
     walkthrough: [
-      "Q04’te “Parite her iki bit hatasını yakalar mı?” sorusunu okutun ve oylama alın. “Hayır” doğru cevaptır: çift sayıda değişim toplam pariteyi koruyabilir. İstenirse menüyle S18’e dönüp somut 0111001 örneğini gösterin.",
-      "Q05’e geçin. “Farklı katmanlar” seçimini yapmadan önce dinleyiciden bölümün neyi hazırladığını söylemesini isteyin. Bölüm alanı ayırır; dosya sistemi dosya ve dizinlerin yapısını düzenler.",
-      "Q06’da “Gerekmez” doğrudur. S24’teki B’nin dosya destekli ve temiz olduğunu hatırlatın; kirli A ile arasındaki fark doğru gerekçedir.",
-      "Üç sorunun gerekçeleri netleşince “Bağlantı & RAID” ile dördüncü sunucuya geçin. Sonraki bölümün aygıta erişim yolu ve çoklu aygıt korumasını ele alacağını söyleyin.",
+      "RAM'in sınırlı alanını gösterin. Yeni içerik için arka alan gerekebilir; swap RAM hızını artırmaz.",
+      "Süreç bütünü ile sayfa taşınmasını ayırın. Sonraki modelde yalnız P sayfası seçilir; süreç değiştirme veya aday seçme algoritması anlatılmaz.",
+      "Dosya aşamasında swap dosyası dosya sistemi içinde çizilir. Raw bölüm aşamasında bu katman yerine ayrılmış alan görünür.",
+      "Son aşamada iki alanın I/O yükünü paylaşma fikrini gösterin. Kitabın dedicated device ve multiple swap bağlamını güncel bütün sistemler için satın alma veya sabit hız önerisi yapmayın.",
     ],
     keyPoints: [
-      "Tespit sonucu, düzeltme kapasitesi ve kesin veri doğruluğu farklı iddialardır.",
-      "Alan ayırmak ile o alanda dosya sistemi metaverisi oluşturmak ayrı işlerdir.",
-      "Tahliye sırasında I/O gereği sayfanın türüne, kirli durumuna ve geçerli arka kopyasına bağlıdır.",
-      "Bir aygıtın doğruluğunu ve alanını yönetmek, aygıtın bağlantı topolojisi veya bir RAID dizisinin hata toleransıyla aynı katman değildir.",
+      "Swapping bütün süreç, paging sayfa bağlamında anlatılabilir; örnek bir sayfayı izler.",
+      "Swap dosyada veya raw bölümde sağlanabilir; yerleşim bir yönetim kararıdır.",
+      "Birden çok alan yük paylaşabilir; ek alan RAM'in erişim hızını yükseltmez.",
     ],
     limits:
-      "Yanıt seçimleri yalnızca bu istemci oturumundaki eğitim durumudur; bir öğrenci notlandırma veya değerlendirme sistemi değildir. Q06’daki “gerekmez” tüm sayfaların yazmasız atılabileceği anlamına gelmez: örnekteki kirli anonim A’nın verisi korunmadan serbest bırakılması yanlıştır.",
+      "OSC 10 §11.6 / slayt 31. Güncel Linux Swap Table/Swap Entry, swap cache veya evrensel RAM×2 kapasite kuralı eklenmez. Slayttaki Linux veri yapısı kitabın tarihsel örneğidir; yeni kernel sürümünün veri yapısı olduğu iddia edilmez.",
     question: {
-      prompt: "Bu üç başlık ortak hangi sorunu çözer?",
+      prompt: "Swap alanı büyüyünce RAM'in erişim hızı artar mı?",
       answer:
-        "Kalıcı verinin doğru okunması, aygıtın uygun mantıksal yapılarla hazırlanması ve bellek sayfalarının arka alanda kaybolmadan yönetilmesi.",
+        "Hayır. Ek arka alan sağlanır; taşıma ve depolama I/O maliyeti sürer.",
     },
     transition:
-      "Bir aygıttaki doğruluğu ve alanı yönettik. Şimdi aygıtı sisteme nasıl bağladığımızı ve birden fazla diskle hangi korumaları kurabildiğimizi görelim.",
+      "Alanı seçtik. P sayfası dışarı giderken ve geri gelirken hangi konumlar değişir?",
+  },
+  "swap-journey": {
+    represents:
+      "Tek P sayfası, RAM frame F0 ve swap slot S0 izlenir. P kimliktir; F0/S0 konumlardır. Ayrılmış ama geçerli olmayan hedef kilitle, tamamlanmış swap kopyası onayla gösterilir. Sayaçlar yalnız açık tamamlanma aşamasında artar.",
+    learningGoal:
+      "Ayırma, I/O başlangıcı ve tamamlanmasını ayırmak; bir sayfanın konumunu ve taşıma maliyetini izlemek.",
+    walkthrough: [
+      "P F0'da, S0 boştur. Hedef ayır aşamasında S0 P için ayrılır ama veri henüz geçerli değildir; F0 dolu kalır.",
+      "Dışarı yaz aşamasında RAM→swap oku açılır. Animasyon bitse bile tamamlanma yoktur; Enter ile Yazma tamam aşaması seçilince F0 boşalır, S0 geçerli olur ve yazma 1 olur.",
+      "Yeniden eriş aşamasında S0→F0 okuması başlar; F0 henüz boştur. Sonraki açık tamamlanmada P F0'a gelir ve okuma 1 olur.",
+      "Bu model geri okuma tamamlandığında S0'ı bırakmayı seçer. Bunun bütün OS'lerin zorunlu politikası olmadığını belirtin. Son aşama aynı P kimliğini ve 1 yazma + 1 okuma yolunu birleştirir.",
+      "Backspace veya aşama listesi aynı modeli başlangıçtan yeniden üretir; konumlar, rezerv, pending ve sayaçlar geçmiş görünümü eksiksiz geri getirir.",
+    ],
+    keyPoints: [
+      "Güncel içeriği korunması gereken P için yazma tamamlanmadan RAM kopyası bırakılmaz.",
+      "Aynı P kimliği iki farklı ortamın konumlarıyla karıştırılmaz.",
+      "Başlama ve tamamlanma ayrı olaylardır; hiçbir zamanlayıcı sahne aşamasını ilerletmez.",
+    ],
+    limits:
+      "OSC 10 §11.6 / slayt 31 kavramına bağlı özgün tek sayfa modelidir. Her sayfanın mutlaka dışarı yazılması genellenmez. S0'ın page-in sonunda serbest bırakılması model tercihidir. LRU/FIFO, temiz dosya tahliyesi, swap cache, gerçek I/O süresi veya gerçek OS politikası simüle edilmez.",
+    question: {
+      prompt: "Yazmanın başlaması RAM frame'ini hemen bırakmaya yeter mi?",
+      answer:
+        "Bu örnekte hayır. Güncel içerik korunmadan aktarım tamamlanmış sayılamaz.",
+    },
+    transition:
+      "Doğruluğu, aygıt hazırlığını ve arka alanı ayrı ayrı yönettik; üç ayrımı birlikte kontrol edelim.",
+  },
+  "management-decisions": {
+    represents:
+      "Üç soru/cevap çifti sırasıyla doğruluk kontrolü, hazırlama katmanları ve aktarım tamamlanmasını yoklar. Cevap aşamasında kısa görsel karşılık ve gerekçe açılır. Son aşama kişi 4'ün bağlantı ve çoklu disk konusuna teslim eder.",
+    learningGoal:
+      "Kontrolün geçmesi, alanın ayrılması ve aktarımın başlamasını üç ayrı tamamlanma iddiasından ayırmak.",
+    walkthrough: [
+      "İlk soruda paritenin geçmesinin kesin veri doğruluğu olup olmadığını sorun. İkinci aşama iki bit örneğinin pariteyi koruyabildiğini gösterir.",
+      "Üçüncü aşamada bölüm oluşturmanın dosya sistemi oluşturmakla aynı olup olmadığını sorun. Dördüncü aşamada alan ile metaveri ayrı görünür.",
+      "Beşinci aşamada yazma başladıktan sonra frame'in hemen boş olup olmadığını sorun. Altıncı aşama P'nin korunmasını ve açık tamamlanmayı hatırlatır.",
+      "Kişi4'e teslim edin: Tek aygıttaki bu kararların dışına çıkıyoruz; depolamaya nasıl bağlanırız ve birden çok aygıtla hangi korumaları kurarız?",
+    ],
+    keyPoints: [
+      "Hata tespiti, düzeltme kapasitesi ve kesin veri doğruluğu farklıdır.",
+      "Bölüm alanı ile dosya sistemi yapısı farklıdır.",
+      "Başlatılan I/O ile tamamlanan I/O farklıdır.",
+    ],
+    limits:
+      "OSC 10 §11.4–11.6 / slayt 27–31 kavramlarını birleştiren özgün soru metinleridir. Bireysel yanıt kaydı veya notlandırma yoktur. Soru/cevap görünürlüğü yalnız ortak aşamaya bağlıdır.",
+    question: {
+      prompt: "Bu üç örneğin ortak uyarısı nedir?",
+      answer:
+        "Bir ara durumdan daha güçlü bir tamamlanma veya garanti iddiası çıkaramayız; hangi bilginin gerçekten hazır olduğunu kontrol etmeliyiz.",
+    },
+    transition:
+      "Depolamaya erişim yolunu ve birden çok diskle kurulan korumayı dördüncü kişiden dinleyeceğiz.",
   },
 };

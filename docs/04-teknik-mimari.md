@@ -1,5 +1,7 @@
 # 04 — Teknik mimari
 
+> **Tarihsel belge:** Bu dosya önceki planı/uygulamayı kaydeder. Güncel kaynak, akış, örnek ve kabul kararları için [14 — Yeni sunum mimarisi](14-kitaba-dayali-yeni-sunum-mimarisi.md), mevcut mimari için [08 — Modüler tam sunum](08-moduler-tam-sunum.md) esas alınır. Aşağıdaki eski örnek toplamları, yapılacaklar ve kaldırılan özellikler güncel uygulama taahhüdü değildir.
+
 > Bu dosya ilk teknik plandır. Uygulama React + TypeScript + Vite + Tailwind'e geçti. Kaynaklar `src/`, derleme çıktısı `dist/` altındadır. Güncel teknoloji, durum ve menü davranışları için [07 — Güncel uygulama](07-guncel-uygulama.md) esas alınır.
 
 ## 1. Temel karar

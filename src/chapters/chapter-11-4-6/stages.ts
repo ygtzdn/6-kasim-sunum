@@ -1,0 +1,62 @@
+/** Finite, reversible teaching stages from the approved OSC10 V3 contract. */
+export const managementStages = {
+  "error-detection": [
+    "Saklanan denetim bilgisi",
+    "Tek bit değişimi",
+    "Çift hata sınırı",
+    "Diğer denetim yöntemleri",
+  ],
+  "error-correction": [
+    "Veri ve ek kod",
+    "Tek bozuk bit",
+    "Tespit ve düzeltme",
+    "İki bozuk bit",
+    "Kodun sınırı",
+  ],
+  "device-preparation": [
+    "Ham ortam",
+    "Fiziksel biçim",
+    "Bölümleme",
+    "Dosya sistemi",
+    "Bağlama",
+    "Dosya erişimi",
+  ],
+  "storage-access-modes": [
+    "Aygıt blokları",
+    "Dosya sistemi gruplaması",
+    "Normal dosya yolu",
+    "Raw erişim",
+  ],
+  "boot-sequence": [
+    "İlk kod sorusu",
+    "ROM / firmware",
+    "Boot block",
+    "Yükleyici",
+    "Kernel RAM'de",
+  ],
+  "bad-block-remapping": ["Geçerli eşleme", "Sektör arızası", "Sector sparing"],
+  "swap-space": [
+    "RAM baskısı",
+    "Taşınan birim",
+    "Swap dosyası",
+    "Raw bölüm",
+    "Birden çok alan",
+  ],
+  "swap-journey": [
+    "RAM'deki P",
+    "Hedef ayır",
+    "Dışarı yaz",
+    "Yazma tamam",
+    "Yeniden eriş",
+    "Okuma tamam",
+    "Maliyet ve kimlik",
+  ],
+  "management-decisions": [
+    "Doğruluk sorusu",
+    "Tespit sınırı",
+    "Hazırlık sorusu",
+    "Katman ayrımı",
+    "Swap sorusu",
+    "Tamamlanma ve teslim",
+  ],
+} as const;

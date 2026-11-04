@@ -1,0 +1,213 @@
+[
+  {
+    "id": "hdd-request-queue",
+    "title": "Aynı kuyruk, aynı başlangıç",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 90
+    },
+    "legacyIds": ["s10"],
+    "stages": [
+      "İsteğin kaynağı ve kuyruk",
+      "Resmî geliş sırası",
+      "Kafa53 ve 0–199 sınırları",
+      "Azalan yön ve hareket ölçüsü"
+    ],
+    "sections": ["11.2"],
+    "slides": [17, 18, 19],
+    "takeaway": "Birden çok bekleyen istek sıralama seçimi doğurur; adil karşılaştırma kuyruk, kafa, sınırlar ve yönü sabit tutar.",
+    "model": "Resmî sekiz istek, kafa53 ve azalan ortak yön kullanılır. Bütün istekler başlangıçta hazırdır; yeni geliş veya gerçek bekleme süresi yoktur."
+  },
+  {
+    "id": "fcfs-path",
+    "title": "FCFS: geliş sırasını koru",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 80,
+      "full": 120
+    },
+    "legacyIds": ["s11"],
+    "stages": [
+      "Başlangıç53",
+      "İstek1:98",
+      "İstek2:183",
+      "İstek3:37",
+      "İstek4:122",
+      "İstek5:14",
+      "İstek6:124",
+      "İstek7:65",
+      "İstek8:67",
+      "Sonuç:640"
+    ],
+    "sections": ["11.2"],
+    "slides": [19, 20],
+    "takeaway": "FCFS geliş sırasını korur; resmî sekiz istek için tamamlanmış yol toplamı 640 silindir hareketidir.",
+    "model": "Saf motor her aşamada kafa, tamamlanan kimlikler ve toplamı yeniden hesaplar. Dikey olay sırası zaman ekseni değildir."
+  },
+  {
+    "id": "scan-path",
+    "title": "SCAN: fiziksel uca git, dön",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 135
+    },
+    "legacyIds": ["s12"],
+    "stages": [
+      "Başlangıç53",
+      "İstek:37",
+      "İstek:14",
+      "Fiziksel uç:0",
+      "İstek:65",
+      "İstek:67",
+      "İstek:98",
+      "İstek:122",
+      "İstek:124",
+      "İstek:183",
+      "Sonuç236 ve LOOK208 ayrımı"
+    ],
+    "sections": ["11.2"],
+    "slides": [21, 22],
+    "takeaway": "Fiziksel0 ucuna giden azalan SCAN yolu236’dır; 14’te dönen LOOK yolu208 verir ve aynı davranış değildir.",
+    "model": "Resmî21.slaytın208 ifadesi açık fiziksel uç kuralıyla uyuşmaz. Tam kitap hatası iddia edilmeden iki yol ve hesap gösterilir."
+  },
+  {
+    "id": "cscan-path",
+    "title": "C-SCAN: dönüşte servis yok",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 135
+    },
+    "legacyIds": ["s13"],
+    "stages": [
+      "Başlangıç53",
+      "İstek:37",
+      "İstek:14",
+      "Fiziksel uç:0",
+      "0→199: servis yok",
+      "İstek:183",
+      "İstek:124",
+      "İstek:122",
+      "İstek:98",
+      "İstek:67",
+      "İstek:65",
+      "Sonuç:386"
+    ],
+    "sections": ["11.2"],
+    "slides": [23, 24],
+    "takeaway": "C-SCAN dönüşte servis vermez, fakat 199 silindirlik fiziksel dönüş azalan örneğin386 toplamına dahildir.",
+    "model": "Ortak azalan yön kullanılır; kaynaktaki artan yönün382 sonucu alternatif olarak notlanır. Geri aşama toplamı ve servis durumunu birlikte geri kurar."
+  },
+  {
+    "id": "scheduling-tradeoffs",
+    "title": "Kısa yol tek ölçüt değil",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 75,
+      "full": 120
+    },
+    "legacyIds": ["s14"],
+    "stages": [
+      "FCFS640",
+      "SCAN236",
+      "C-SCAN386",
+      "Dönüşü ayır:53+199+134",
+      "Hareket ve servis sırası farklı",
+      "Politika: eski bekleyen isteği gözet"
+    ],
+    "sections": ["11.2"],
+    "slides": [17, 18, 19, 20, 21, 22, 23, 24, 25],
+    "takeaway": "Bu sabit kuyrukta kısa yol SCAN’indir; bekleme, adalet ve politika seçimi yalnız toplam mesafeden çıkarılmaz.",
+    "model": "Çubuklar hesaplanan toplamdır, adalet puanı değildir. Deadline/NOOP/CFQ anlatımı kaynağın tarihsel bağlamında tutulur."
+  },
+  {
+    "id": "nvm-scheduling",
+    "title": "Seek yok, kuyruk işi sürer",
+    "chapter": "11.3",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 75,
+      "full": 120
+    },
+    "legacyIds": ["s15"],
+    "stages": [
+      "OS kuyruğu",
+      "Bitişik L10/L11’i birleştir",
+      "Komutları aygıta gönder",
+      "Aygıt içi paralellik",
+      "Host ve denetleyici görevleri"
+    ],
+    "sections": ["11.3", "11.1"],
+    "slides": [11, 15, 26],
+    "takeaway": "NVM’de mekanik seek yoktur; bitişik istek birleştirme, yazılım/kuyruk maliyeti ve denetleyici işleri sürer.",
+    "model": "L10/L11 birleşimi özgün örnektir. NVM ortamı, NVMe arayüzü ve FTL görevi ayrılır; kanal sayısı veya ürün hızı vaat edilmez."
+  },
+  {
+    "id": "flash-write-amplification",
+    "title": "Host yazması neden fiziksel yazma değildir?",
+    "chapter": "11.3",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 120,
+      "full": 180
+    },
+    "legacyIds": ["s16"],
+    "stages": [
+      "Başlangıç eşlemesi",
+      "L0’ı güncelle",
+      "L1’i güncelle",
+      "GC: canlı L2/L3’ü taşı",
+      "B0’ı sil",
+      "L2’yi güncelle:5/3 oranı"
+    ],
+    "sections": ["11.3", "11.1"],
+    "slides": [10, 11, 26],
+    "takeaway": "GC canlı sayfaları kopyalarken host yazması olmadan fiziksel yazmayı artırır; örnek3host/5fiziksel/1silme ile biter.",
+    "model": "Üçblok×dörtsayfa özgün senaryodur. Her aşama başlangıçtan saf tekrar ile kurulur;1,67 bütün SSD’lerin sabit oranı değildir."
+  },
+  {
+    "id": "nvm-management-summary",
+    "title": "Alanı geri kazan, aşınmayı geri alma",
+    "chapter": "11.3",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 105
+    },
+    "legacyIds": ["s17"],
+    "stages": [
+      "Host ve denetleyici görevleri",
+      "Birikmiş silmeler:[8,2,2,1]",
+      "Yeni19döngü:[8,8,8,8]",
+      "B0’da1silme:[9,8,8,8]",
+      "Host’a sunulmayan GC çalışma alanı"
+    ],
+    "sections": ["11.3", "11.1"],
+    "slides": [10, 11, 26],
+    "takeaway": "FTL, GC, wear leveling ve ayrılmış alan farklı görevlerdir; alanı geri kazanmak geçmiş aşınmayı geri almaz.",
+    "model": "Birikmiş sayaçlar ileri aşamalarda azalmaz; yeni19döngü B1+6/B2+6/B3+7 dağıtılır. Gerçek wear-leveling verimliliği veya ömür hesaplanmaz."
+  }
+]

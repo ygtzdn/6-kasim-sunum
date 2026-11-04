@@ -16,6 +16,11 @@ import {
   beginPageIn,
   completeTransfer,
   swapInvariant,
+  deviceAtStage,
+  swapJourneyAtStage,
+  createPageJourney,
+  advancePageJourney,
+  pageJourneyAtStage,
 } from "../src/chapters/chapter-11-4-6/model.mjs";
 
 test("stored even parity detects the specified single-bit error and misses the specified pair", () => {
@@ -224,4 +229,155 @@ test("a second transfer cannot race an in-flight transfer", () => {
   const writing = beginPageOut(createSwapState(), "A");
   assert.throws(() => beginPageOut(writing, "B"), /zaten sürüyor/);
   assert.throws(() => beginPageIn(writing, "D"), /zaten sürüyor/);
+});
+
+test("preparation stages restore exact layer state in either navigation direction", () => {
+  const snapshots = Array.from({ length: 6 }, (_, stage) =>
+    deviceAtStage(stage),
+  );
+  assert.equal(snapshots[1].partitions.length, 0);
+  assert.deepEqual(
+    snapshots[2].partitions.map((part) => [
+      part.filesystem,
+      part.mounted,
+      part.files,
+    ]),
+    [
+      [false, false, 0],
+      [false, false, 0],
+    ],
+  );
+  assert.deepEqual(
+    snapshots[3].partitions.map((part) => [
+      part.filesystem,
+      part.mounted,
+      part.files,
+    ]),
+    [
+      [true, false, 0],
+      [false, false, 0],
+    ],
+  );
+  assert.deepEqual(
+    snapshots[4].partitions.map((part) => [
+      part.filesystem,
+      part.mounted,
+      part.files,
+    ]),
+    [
+      [true, true, 0],
+      [false, false, 0],
+    ],
+  );
+  assert.deepEqual(
+    snapshots[5].partitions.map((part) => [
+      part.filesystem,
+      part.mounted,
+      part.files,
+    ]),
+    [
+      [true, true, 1],
+      [false, false, 0],
+    ],
+  );
+  for (let stage = 5; stage >= 0; stage--)
+    assert.deepEqual(deviceAtStage(stage), snapshots[stage]);
+  assert.deepEqual(deviceAtStage(5), snapshots[5]);
+  assert.throws(() => deviceAtStage(-1), RangeError);
+  assert.throws(() => deviceAtStage(6), RangeError);
+});
+
+test("swap stage commits require explicit advancement and reverse without hidden state", () => {
+  const snapshots = Array.from({ length: 10 }, (_, stage) =>
+    swapJourneyAtStage(stage),
+  );
+  for (const state of snapshots) assert.equal(swapInvariant(state), true);
+  const writing = snapshots[1];
+  assert.equal(writing.pending.kind, "write");
+  assert.equal(writing.frames[0], "A");
+  assert.equal(writing.slots[2], "A");
+  assert.equal(writing.pages.A.swapValid, false);
+  assert.equal(writing.writes, 0);
+  assert.equal(snapshots[2].frames[0], null);
+  assert.equal(snapshots[2].writes, 1);
+  assert.equal(snapshots[3].pending.kind, "read");
+  assert.equal(snapshots[3].frames[0], null);
+  assert.equal(snapshots[3].reads, 0);
+  assert.equal(snapshots[4].frames[0], "D");
+  assert.equal(snapshots[4].reads, 1);
+  assert.equal(snapshots[5].frames[1], null);
+  assert.equal(snapshots[5].writes, 1);
+  assert.equal(snapshots[6].pending.pageId, "A");
+  assert.equal(snapshots[6].reads, 1);
+  assert.deepEqual(snapshots[7].frames, ["D", "A", "C"]);
+  assert.deepEqual([snapshots[7].reads, snapshots[7].writes], [2, 1]);
+  assert.deepEqual(snapshots[8].frames, ["A", "B", "C"]);
+  assert.deepEqual(snapshots[8].slots, ["C", "D", "E", "F"]);
+  assert.equal(snapshots[8].error, null);
+  assert.equal(snapshots[9].error, "full");
+  assert.equal(snapshots[9].pending, null);
+  assert.equal(snapshots[9].frames[0], "A");
+  assert.equal(snapshots[9].writes, 0);
+  for (let stage = 9; stage >= 0; stage--)
+    assert.deepEqual(swapJourneyAtStage(stage), snapshots[stage]);
+  assert.deepEqual(swapJourneyAtStage(7), snapshots[7]);
+  assert.throws(() => swapJourneyAtStage(10), RangeError);
+  assert.throws(() => swapJourneyAtStage(1.5), RangeError);
+});
+
+test("single-page journey separates reservation, pending I/O and explicit completion", () => {
+  const expected = [
+    ["P", null, "free", null, 0, 0],
+    ["P", "P", "reserved", null, 0, 0],
+    ["P", "P", "reserved", "write", 0, 0],
+    [null, "P", "valid", null, 0, 1],
+    [null, "P", "valid", "read", 0, 1],
+    ["P", null, "free", null, 1, 1],
+    ["P", null, "free", null, 1, 1],
+  ];
+  for (let stage = 0; stage < expected.length; stage++) {
+    const state = pageJourneyAtStage(stage);
+    assert.equal(state.stage, stage);
+    assert.deepEqual(
+      [
+        state.ram,
+        state.slot,
+        state.slotStatus,
+        state.pending,
+        state.reads,
+        state.writes,
+      ],
+      expected[stage],
+    );
+  }
+  // A read cannot make RAM resident before the selected completion stage.
+  assert.equal(pageJourneyAtStage(4).ram, null);
+  assert.equal(pageJourneyAtStage(4).reads, 0);
+  // A write cannot release the only current RAM content at reservation/start.
+  assert.equal(pageJourneyAtStage(1).ram, "P");
+  assert.equal(pageJourneyAtStage(2).ram, "P");
+  assert.equal(pageJourneyAtStage(2).writes, 0);
+});
+
+test("single-page replay is immutable, reversible and does not create extra summary I/O", () => {
+  const snapshots = Array.from({ length: 7 }, (_, stage) =>
+    pageJourneyAtStage(stage),
+  );
+  for (const stage of [6, 5, 2, 1, 0, 4, 3, 6])
+    assert.deepEqual(pageJourneyAtStage(stage), snapshots[stage]);
+  const initial = createPageJourney();
+  const initialCopy = structuredClone(initial);
+  advancePageJourney(initial);
+  assert.deepEqual(initial, initialCopy);
+  const before = pageJourneyAtStage(4);
+  const beforeCopy = structuredClone(before);
+  advancePageJourney(before);
+  assert.deepEqual(before, beforeCopy);
+  const summary = snapshots[6];
+  assert.equal(advancePageJourney(summary), summary);
+  assert.deepEqual([summary.reads, summary.writes], [1, 1]);
+  snapshots[2].ram = null;
+  assert.equal(pageJourneyAtStage(2).ram, "P");
+  for (const stage of [-1, 7, NaN, 1.5])
+    assert.throws(() => pageJourneyAtStage(stage), RangeError);
 });

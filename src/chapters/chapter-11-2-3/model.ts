@@ -8,6 +8,7 @@ export interface ScheduleInput {
   head: number;
   queue: number[];
   direction: ScheduleDirection;
+  maximum?: number;
 }
 export interface ScheduleEvent {
   position: number;
@@ -24,18 +25,25 @@ export interface ScheduleResult {
   path: number[];
   total: number;
 }
+export const cylinderMaximum = 199;
 export const defaultSchedule: ScheduleInput = {
-  head: 35,
-  queue: [42, 12, 76, 24, 60],
-  direction: "up",
+  head: 53,
+  queue: [98, 183, 37, 122, 14, 124, 65, 67],
+  direction: "down",
 };
 
 export function parseQueue(text: string): number[] {
   if (!text.trim()) return [];
   const tokens = text.trim().split(/[\s,]+/);
   if (tokens.length > 20) throw new Error("En fazla 20 istek girilebilir.");
-  if (tokens.some((token) => !/^\d+$/.test(token) || Number(token) > 99))
-    throw new Error("Her istek 0–99 arasında bir tam sayı olmalı.");
+  if (
+    tokens.some(
+      (token) => !/^\d+$/.test(token) || Number(token) > cylinderMaximum,
+    )
+  )
+    throw new Error(
+      `Her istek 0–${cylinderMaximum} arasında bir tam sayı olmalı.`,
+    );
   return tokens.map(Number);
 }
 
@@ -43,11 +51,14 @@ export function calculateSchedule(
   algorithm: ScheduleAlgorithm,
   input: ScheduleInput,
 ): ScheduleResult {
-  if (!Number.isInteger(input.head) || input.head < 0 || input.head > 99)
-    throw new Error("Kafa 0–99 arasında bir tam sayı olmalı.");
+  const maximum = input.maximum ?? cylinderMaximum;
+  if (!Number.isInteger(maximum) || maximum < 1)
+    throw new Error("Geçerli bir en büyük silindir numarası girilmeli.");
+  if (!Number.isInteger(input.head) || input.head < 0 || input.head > maximum)
+    throw new Error(`Kafa 0–${maximum} arasında bir tam sayı olmalı.`);
   if (
     input.queue.length > 20 ||
-    input.queue.some((n) => !Number.isInteger(n) || n < 0 || n > 99)
+    input.queue.some((n) => !Number.isInteger(n) || n < 0 || n > maximum)
   )
     throw new Error("Geçersiz istek kuyruğu.");
   if (input.direction !== "up" && input.direction !== "down")
@@ -104,9 +115,9 @@ export function calculateSchedule(
   for (const request of [...here, ...forward])
     visit(request.cylinder, "service", request);
   if (behind.length) {
-    const edge = sign > 0 ? 99 : 0;
+    const edge = sign > 0 ? maximum : 0;
     if (position !== edge) visit(edge, "turn");
-    if (algorithm === "C-SCAN") visit(sign > 0 ? 0 : 99, "wrap");
+    if (algorithm === "C-SCAN") visit(sign > 0 ? 0 : maximum, "wrap");
     for (const request of behind) visit(request.cylinder, "service", request);
   }
   return result;
@@ -161,6 +172,15 @@ export function createFlashState(): FlashState {
 export function flashWriteAmplification(state: FlashState): number | null {
   return state.hostWrites ? state.physicalWrites / state.hostWrites : null;
 }
+
+/** Replays the finite teaching scenario; revisiting a stage never mutates a later state. */
+export function flashStateAtStage(stage: number): FlashState {
+  let state = createFlashState();
+  const target = Math.max(0, Math.min(5, Math.floor(stage)));
+  for (let step = 0; step < target; step++) state = nextFlashStep(state);
+  return state;
+}
+
 export function nextFlashStep(previous: FlashState): FlashState {
   if (previous.step >= 5) return previous;
   const state: FlashState = {

@@ -1,9 +1,15 @@
-import { AnimatePresence, MotionConfig, motion } from "motion/react";
+import { AnimatePresence, MotionConfig } from "motion/react";
+import { useEffect, useRef } from "react";
 import { usePresentation } from "./presentation/usePresentation";
 import SideMenu from "./presentation/SideMenu";
+import { SceneFrame } from "./presentation/PresentationMotion";
 
 export default function App() {
   const presentation = usePresentation();
+  const initialScene = useRef(true);
+  useEffect(() => {
+    initialScene.current = false;
+  }, []);
   const { current, enabled, goTo, openMenu, index, notice } = presentation;
   return (
     <MotionConfig
@@ -14,29 +20,25 @@ export default function App() {
         className={`app ${index === 0 ? "is-home" : "is-presenting"} ${enabled ? "" : "motion-off"}`}
       >
         <main className="presentation-canvas" aria-label="Sunum">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
+          <AnimatePresence
+            mode="sync"
+            initial={false}
+            custom={{ enabled, direction: presentation.direction }}
+          >
+            <SceneFrame
               key={current.id}
-              data-scene-id={current.id}
-              className="scene-frame"
-              initial={enabled ? { opacity: 0, y: 14 } : false}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: enabled ? -8 : 0 }}
-              transition={{ duration: enabled ? 0.2 : 0 }}
-              onAnimationComplete={() =>
-                document
-                  .getElementById("scene-heading")
-                  ?.focus({ preventScroll: true })
-              }
-            >
-              {current.render({
+              scene={current}
+              direction={presentation.direction}
+              menu={presentation.menu}
+              initialScene={initialScene.current}
+              context={{
                 enabled,
                 goTo,
                 openMenu,
                 stage: presentation.stage,
                 setStage: presentation.setStage,
-              })}
-            </motion.div>
+              }}
+            />
           </AnimatePresence>
         </main>
         <SideMenu {...presentation} />

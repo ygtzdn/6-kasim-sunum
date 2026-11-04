@@ -194,8 +194,8 @@ export const ATTACHMENTS = {
   NAS: {
     abstraction: "Dosya",
     filesystem: "Sunucu",
-    protocol: "NFS / SMB",
-    nodes: ["İstemci", "Ağ · NFS / SMB", "Sunucu · dosya sistemi", "Aygıt"],
+    protocol: "NFS / CIFS",
+    nodes: ["İstemci", "Ağ · NFS / CIFS", "Sunucu · dosya sistemi", "Aygıt"],
     steps: [
       "İstemci bir dosya/dizin işlemi ister.",
       "İstek ağ üzerinden dosya protokolüyle taşınır.",
@@ -221,4 +221,106 @@ export function topologyStep(kind, step) {
   if (!path || !Number.isInteger(step) || step < 0 || step >= path.steps.length)
     throw new RangeError("Topoloji adımı bulunamadı.");
   return path.steps[step];
+}
+
+/** Four-disk reduction of the two groupings illustrated in OSC10 slide 41. */
+export function nestedRaid(kind, failed = []) {
+  if (!["0+1", "1+0"].includes(kind))
+    throw new RangeError("İç içe RAID türü bulunamadı.");
+  if (failed.some((disk) => !Number.isInteger(disk) || disk < 0 || disk > 3))
+    throw new RangeError("Disk bulunamadı.");
+  const lost = [...new Set(failed)].sort((a, b) => a - b);
+  const groups = [
+    [0, 1],
+    [2, 3],
+  ];
+  const available =
+    kind === "0+1"
+      ? groups.some((group) => group.every((disk) => !lost.includes(disk)))
+      : groups.every((group) => group.some((disk) => !lost.includes(disk)));
+  const labels =
+    kind === "0+1" ? ["A0", "A1", "A0", "A1"] : ["A0", "A0", "A1", "A1"];
+  return { kind, failed: lost, groups, labels, available };
+}
+
+/** Space quantities are teaching units; all stages conserve the 12-unit physical pool. */
+export function poolStory(stage) {
+  if (!Number.isInteger(stage) || stage < 0 || stage > 4)
+    throw new RangeError("Havuz aşaması bulunamadı.");
+  const [a, b] = [
+    [4, 2],
+    [6, 2],
+    [6, 2],
+    [8, 2],
+    [5, 2],
+  ][stage];
+  const capacity = 12;
+  return {
+    mode: stage < 2 ? "traditional" : "pool",
+    capacity,
+    a,
+    b,
+    free: capacity - a - b,
+    reserved: stage < 2 ? [6, 6] : null,
+    blocked: stage === 1,
+    request: stage === 1 ? 2 : 0,
+  };
+}
+
+/** Two explicitly separate examples: lifecycle of obj:42, then placement of obj:99. */
+export function objectStory(stage) {
+  if (!Number.isInteger(stage) || stage < 0 || stage > 5)
+    throw new RangeError("Nesne aşaması bulunamadı.");
+  const placement = stage >= 4;
+  return {
+    example: placement ? "placement" : "lifecycle",
+    id: stage === 0 ? null : placement ? "obj:99" : "obj:42",
+    data: placement ? "1100" : "1010",
+    exists: stage === 1 || stage === 2 || placement,
+    read: stage === 2,
+    deleted: stage === 3,
+    systems: placement ? (stage === 4 ? 3 : 4) : 0,
+    copies: placement ? (stage === 4 ? [0, 1, 2] : [0, 2, 3]) : [],
+  };
+}
+
+/** Canonical semantic stories; independent of previous scenes and navigation order. */
+export function raidSceneState(id, stage) {
+  const counts = {
+    "raid-striping": 6,
+    "raid-parity": 6,
+    "raid-xor": 5,
+    "raid-rebuild": 7,
+  };
+  if (!Number.isInteger(stage) || stage < 0 || stage >= (counts[id] ?? 0))
+    throw new RangeError("RAID sahnesi/aşaması bulunamadı.");
+  if (id === "raid-striping") {
+    let state = createRaidState(stage < 2 ? 0 : 1, stage < 2 ? 4 : 2, 4);
+    if (stage === 1 || stage === 3 || stage === 4)
+      state = toggleFailure(state, 0);
+    if (stage === 4) state = toggleFailure(state, 1);
+    return state;
+  }
+  if (id === "raid-parity") {
+    let state = createRaidState(stage <= 1 ? 4 : stage === 4 ? 6 : 5, 4, 4);
+    if (stage === 3 || stage === 4) state = toggleFailure(state, 1);
+    if (stage === 4) state = toggleFailure(state, 2);
+    return state;
+  }
+  if (id === "raid-xor") {
+    let state = createRaidState();
+    if (stage >= 2) state = toggleFailure(state, 1);
+    if (stage === 4) state = toggleFailure(state, 2);
+    return state;
+  }
+  let state = createRaidState();
+  if (stage >= 1) state = toggleFailure(state, 0);
+  if (stage >= 2) state = startRebuild(state);
+  for (
+    let stripe = 0;
+    stripe < Math.min(STRIPES, Math.max(0, stage - 2));
+    stripe++
+  )
+    state = advanceRebuild(state);
+  return state;
 }

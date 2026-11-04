@@ -1,5 +1,7 @@
 # 09 — Kitaba bağlı ilk sunucu revizyonu
 
+> **Tarihsel belge:** Bu dosya önceki planı/uygulamayı kaydeder. Güncel kaynak, akış, örnek ve kabul kararları için [14 — Yeni sunum mimarisi](14-kitaba-dayali-yeni-sunum-mimarisi.md), mevcut mimari için [08 — Modüler tam sunum](08-moduler-tam-sunum.md) esas alınır. Aşağıdaki eski örnek toplamları, yapılacaklar ve kaldırılan özellikler güncel uygulama taahhüdü değildir.
+
 3 Kasım 2026. Uygulamadan önce oluşturulan plan.
 
 ## Kaynak ve kapsam

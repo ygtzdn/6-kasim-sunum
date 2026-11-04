@@ -16,6 +16,10 @@ import {
   usableCapacity,
   validDiskCounts,
   xorBlocks,
+  nestedRaid,
+  objectStory,
+  poolStory,
+  raidSceneState,
 } from "../src/chapters/chapter-11-7-8/model.mjs";
 
 test("başlangıç RAID 5 kapasitesi ve koruma durumu", () => {
@@ -292,4 +296,94 @@ test("DAS/NAS/SAN farklı semantik ve dosya sistemi sorumluluğu taşır", () =>
     assert.throws(() => topologyStep(kind, topology.steps.length), RangeError);
   }
   assert.throws(() => topologyStep("unknown", 0), RangeError);
+});
+
+test("0+1 ve 1+0 aynı fiziksel arızalarda farklı grup sınırlarını gerçekten uygular", () => {
+  assert.deepEqual(nestedRaid("0+1").labels, ["A0", "A1", "A0", "A1"]);
+  assert.deepEqual(nestedRaid("1+0").labels, ["A0", "A0", "A1", "A1"]);
+  assert.equal(nestedRaid("0+1", [0, 1]).available, true);
+  assert.equal(nestedRaid("1+0", [0, 1]).available, false);
+  assert.equal(nestedRaid("0+1", [0, 2]).available, false);
+  assert.equal(nestedRaid("1+0", [0, 2]).available, true);
+  for (const kind of ["0+1", "1+0"]) {
+    for (let disk = 0; disk < 4; disk++)
+      assert.equal(nestedRaid(kind, [disk]).available, true);
+    assert.equal(nestedRaid(kind, [0, 1, 2]).available, false);
+    assert.equal(nestedRaid(kind, [0, 1, 2, 3]).available, false);
+    assert.deepEqual(nestedRaid(kind, [2, 0, 2]).failed, [0, 2]);
+  }
+  assert.throws(() => nestedRaid("0+1", [4]), RangeError);
+  assert.throws(() => nestedRaid("unknown"), RangeError);
+});
+
+test("havuz aşamaları toplam alanı korur; sabit sınırda bekleyen istek havuzda karşılanır ve alan bırakılır", () => {
+  const states = Array.from({ length: 5 }, (_, stage) => poolStory(stage));
+  for (const state of states) {
+    assert.equal(state.a + state.b + state.free, 12);
+    assert.ok(state.free >= 0);
+  }
+  assert.equal(states[1].blocked, true);
+  assert.equal(states[1].a, states[1].reserved[0]);
+  assert.ok(
+    states[1].free >= states[1].request,
+    "toplam boş alan vardır ama sabit sınır A'ya vermez",
+  );
+  assert.equal(states[2].mode, "pool");
+  assert.equal(states[3].a - states[2].a, 2);
+  assert.equal(states[3].free, states[2].free - 2);
+  assert.equal(states[4].a, states[3].a - 3);
+  assert.equal(states[4].free, states[3].free + 3);
+  for (let stage = 4; stage >= 0; stage--)
+    assert.deepEqual(poolStory(stage), states[stage]);
+  assert.throws(() => poolStory(5), RangeError);
+});
+
+test("nesne yaşam döngüsünde kimlik oluşturulur, okunur, silinir; yeni yerleştirme örneği ayrı kimlik taşır", () => {
+  assert.equal(objectStory(0).id, null);
+  const created = objectStory(1);
+  assert.equal(created.id, "obj:42");
+  assert.equal(created.exists, true);
+  assert.equal(objectStory(2).read, true);
+  assert.equal(objectStory(2).data, created.data);
+  const deleted = objectStory(3);
+  assert.equal(deleted.id, created.id);
+  assert.equal(deleted.exists, false);
+  assert.equal(deleted.deleted, true);
+  assert.equal(deleted.read, false);
+  const placed = objectStory(4),
+    expanded = objectStory(5);
+  assert.notEqual(placed.id, deleted.id, "silinmiş nesne nedensiz geri gelmez");
+  assert.equal(placed.example, "placement");
+  assert.equal(expanded.systems, placed.systems + 1);
+  assert.equal(expanded.id, placed.id);
+  assert.equal(expanded.copies.length, placed.copies.length);
+  for (const state of [placed, expanded]) {
+    assert.equal(new Set(state.copies).size, 3);
+    assert.ok(state.copies.every((system) => system < state.systems));
+  }
+  assert.deepEqual(objectStory(3), deleted);
+  assert.deepEqual(objectStory(1), created);
+  assert.throws(() => objectStory(6), RangeError);
+});
+
+test("semantic RAID öyküleri ileri/geri aynı arıza, XOR ve rebuild durumunu üretir", () => {
+  for (const [id, count] of Object.entries({
+    "raid-striping": 6,
+    "raid-parity": 6,
+    "raid-xor": 5,
+    "raid-rebuild": 7,
+  })) {
+    const states = Array.from({ length: count }, (_, stage) =>
+      raidSceneState(id, stage),
+    );
+    for (let stage = count - 1; stage >= 0; stage--)
+      assert.deepEqual(raidSceneState(id, stage), states[stage]);
+    assert.throws(() => raidSceneState(id, count), RangeError);
+  }
+  assert.equal(raidSceneState("raid-parity", 1).level, 4);
+  assert.equal(raidSceneState("raid-parity", 2).level, 5);
+  assert.equal(recoverable(raidSceneState("raid-parity", 4)), true);
+  assert.equal(recoverable(raidSceneState("raid-xor", 4)), false);
+  assert.equal(raidSceneState("raid-rebuild", 5).rebuild, 3);
+  assert.equal(raidSceneState("raid-rebuild", 4).rebuilding, true);
 });

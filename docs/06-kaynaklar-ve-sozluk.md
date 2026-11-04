@@ -1,12 +1,14 @@
 # 06 — Kaynaklar ve kavram sözlüğü
 
+**Güncelleme: 5 Kasım 2026.** Sahne bazında güncel kaynak eşlemesi `src/presentation/textbook.ts`, ortak ileri/geri akış sözleşmesi [12 — Tüm sahnelerde ileri/geri akış](12-tum-sahnelerde-ileri-geri-akis.md) içindedir. Önceki kaynak denetimi 10 numaralı planda kayıtlıdır.
+
 ## 1. Kaynak yaklaşımı
 
 Temel eser: **Abraham Silberschatz, Peter B. Galvin, Greg Gagne — Operating System Concepts, Tenth Edition**, Chapter 11.
 
-2 Kasım 2026 tarihindeki araştırmada resmî kitap sitesi, içindekiler ve 11. bölümün resmî PPTX dosyasındaki metinler incelendi. Tam kitap metni proje klasöründe bulunmuyor ve bu aşamada satır/sayfa düzeyinde karşılaştırılmadı. Bu nedenle başlıklar resmî içindekilerle doğrulanmış; ayrıntılı öğretim örnekleri ve etkileşim kuralları özgün proje tasarımı olarak yazılmıştır. Slayt görselleri bu dokümanlara kopyalanmadı.
+2 Kasım araştırması ve 5 Kasım 2026 revizyonunda resmî kitap sitesi, içindekiler ve 11. bölümün resmî PPTX dosyasındaki metinler incelendi. Tam kitap metni proje klasöründe bulunmuyor ve bu aşamada satır/sayfa düzeyinde karşılaştırılmadı. Bu nedenle başlıklar resmî içindekilerle doğrulanmış; ayrıntılı öğretim örnekleri ve etkileşim kuralları özgün proje tasarımı olarak yazılmıştır. Slayt görselleri bu dokümanlara kopyalanmadı.
 
-Resmî PPTX'in metin incelemesi bölüm kapsamını destekler; özgün çizimlerin ileride kitaptaki bir şekille eşdeğer olduğu iddia edilmemeli. Kitabın yasal bir kopyasıyla uygulama öncesi yapılacak sayfa kontrolünde fark bulunursa sahne notları güncellenir; kullanıcının sunucu dağılımı korunur.
+Resmî PPTX’in 47 slaydının metni revizyonda yeniden incelendi. Her sahne bölüm ve slayt numarasına bağlandı. Özgün çizimler ve küçük durum modelleri kitabın şekillerinin eşdeğeri olarak sunulmaz. Tam kitap metniyle ileride yapılacak karşılaştırmada fark bulunursa içerik güncellenir; sunucu dağılımı korunur.
 
 ## 2. Birincil kaynaklar
 
@@ -17,7 +19,7 @@ Resmî PPTX'in metin incelemesi bölüm kapsamını destekler; özgün çizimler
 | osc10-slides-index | [Resmî slayt dizini](https://os-book.com/OS10/slide-dir/index.html) | 11. bölüm slayt bağlantısı ve kullanım notu | İncelendi |
 | osc10-ch11-slides | [Chapter 11 PPTX](https://os-book.com/OS10/slide-dir/PPTX-dir/ch11.pptx) | Kapsam kontrolü; RAM disk, denetleyici, bulut, RAID/uzantılar | İndirilen dosyanın slayt metinleri incelendi; görseller aktarılmadı |
 | osc10-review | [Chapter 11 review questions](https://os-book.com/OS10/review-dir/11-rev.pdf) | Kapsam ve soru derinliği kontrolü | İncelendi; sorular bu projeye kopyalanmadı |
-| osc10-errata | [Resmî düzeltmeler dizini](https://os-book.com/OS10/errata-dir/index.html) | Uygulama öncesi kitap sürümüne uygun düzeltme takibi | Dizin incelendi; iki düzeltme dosyası ayrı ayrı incelenmedi |
+| osc10-errata | [Resmî düzeltmeler dizini](https://os-book.com/OS10/errata-dir/index.html) | Uygulama öncesi kitap sürümüne uygun düzeltme takibi | Dizin, basılı sürüm ve ePub düzeltmeleri incelendi; bu revizyonda algoritmik bir bölüm düzeltmesi bulunmadı |
 
 Resmî kaynakların bazı başlıkları sunum ile kitap arasında küçük ad farkları taşıyabilir: Kitap içindekilerindeki **Mass-Storage Structure** adı ana referanstır; slayt kapağında **Mass-Storage Systems** kullanılması bölümün farklı olduğu anlamına gelmez.
 
@@ -87,7 +89,6 @@ Bu ibare kitap cümlesi değildir; proje için yazılmış atıf metnidir.
 | Wear leveling | Yazma/silme aşınmasını fiziksel alanlara dağıtma yaklaşımı |
 | Over-provisioning | Aygıt yönetimi için kullanıcıya doğrudan sunulmayan ek alan |
 | Write amplification | Host yazmasına karşı gerçekleşen ek fiziksel yazma oranı |
-| TRIM / discard | Mantıksal veriye artık ihtiyaç olmadığını alt katmana bildirme |
 | RAM disk | RAM'i blok aygıtı/dosya sistemi gibi kullanma; kendiliğinden kalıcı değildir |
 | FCFS | İsteklere geliş sırasıyla servis verme |
 | SCAN / C-SCAN | Yönlü tarama / çevrimsel tek yönde servis yaklaşımı |
@@ -122,6 +123,12 @@ Bu ibare kitap cümlesi değildir; proje için yazılmış atıf metnidir.
 | Storage pool | Fiziksel kapasitenin üst yapılar arasında paylaşıldığı depolama havuzu |
 | Object storage | Veriyi nesne kimlikleri ve uygun erişim arayüzleri üzerinden yönetme yaklaşımı |
 
-## 7. Sonraki içerik kontrolü için sorular
+## 7. Kaynakla hesap uyuşmazlığı kaydı
+
+Resmî SCAN slaydı 21 metnindeki 208, projedeki fiziksel-uç kuralıyla aynı yol toplamını vermiyor. 53 başlangıcından 0’a gidip 183’te biten SCAN yolu **236**; 14’te dönen LOOK yolu **208**. Uygulama açık yolu ve doğru toplamını korur; bu fark S12 notunda ve regresyon testinde görünürdür. Tam kitap metni incelenmeden kitabın kendisinde hata olduğu iddia edilmez.
+
+Kitap dışı Linux/SNIA/UEFI/Hamming belgeleri müfredat dayanağı listesinden çıkarıldı. SECDED örneği, slayt 27’nin genel ECC kavramı için özgün ve sınırlı bir gösterim olarak korunur. TRIM yerine slayt 10’daki sınırlı silme ömrü anlatılır.
+
+## 8. Sonraki içerik kontrolü için bilgiler
 
 Sunumun toplam süresi, dört kişinin adları, öğretim elemanının özel derinlik beklentisi, varsa kullanılacak yasal kitap kopyasının sürümü ve yayımlama hedefi henüz verilmedi. Bunlar mevcut dokümantasyonu engellemez. Süre ve görsel kararlar değiştirilebilir; kitap bölümü dağılımı sabittir.

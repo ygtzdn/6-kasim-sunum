@@ -39,6 +39,27 @@ export const presenters = [
 
 export const resources = [
   {
+    kind: "YEREL · EXERCISES",
+    title: "Bölüm 11 alıştırmaları · kullanıcı PDF'i",
+    detail:
+      "Seçilen 11.13, 11.14, 11.16(a), 11.17, 11.21(a) ve 11.25(a,c) soruları kapanışta çözülür.",
+    href: "/references/ch11-exercises.pdf",
+  },
+  {
+    kind: "YEREL · GÖRSEL REHBER",
+    title: "HDD ve SSD: numaralı parça rehberi",
+    detail:
+      "Etiketli gerçek fotoğraflar, parçaların görevleri ve iki aygıtın erişim farkları. Okuma ve yatay yazdırma için.",
+    href: "/references/donanim-gorsel-rehberi.html",
+  },
+  {
+    kind: "YEREL · SUNUM NOTLARI",
+    title: "Yazdırılabilir kaynaklı sunum notları",
+    detail:
+      "Bütün sahneler, aşama listeleri, kaynaklar ve anlatım notları. Yerel dosya; ana/ayrıntılı rota süzülebilir.",
+    href: "/references/sunum-notlari.html",
+  },
+  {
     kind: "KİTAP",
     title: "Operating System Concepts · 10. baskı",
     detail: "Silberschatz, Galvin ve Gagne. Bölüm 11 için temel kaynak.",
@@ -55,6 +76,20 @@ export const resources = [
     title: "Chapter 11 · Resmî ders slaytları",
     detail: "Yazarların eğitim materyali. Kaynağın sitesinde açılır.",
     href: "https://os-book.com/OS10/slide-dir/PPTX-dir/ch11.pptx",
+  },
+  {
+    kind: "KİTAP · SORULAR",
+    title: "Chapter 11 · Resmî tekrar soruları",
+    detail:
+      "Aynı baskının bölüm soruları. Sunumdaki sorular özgün Türkçe öğrenme kontrolleridir.",
+    href: "https://os-book.com/OS10/review-dir/11-rev.pdf",
+  },
+  {
+    kind: "KİTAP · DÜZELTMELER",
+    title: "10. baskı · Resmî düzeltmeler",
+    detail:
+      "Basılı ve ePub sürümleri için yazarların düzeltme dizini; sürüm farkları buradan izlenir.",
+    href: "https://os-book.com/OS10/errata-dir/index.html",
   },
   {
     kind: "FOTOĞRAF",
@@ -83,26 +118,5 @@ export const resources = [
     detail:
       "An-d / AGreuet · Wikimedia Commons · CC BY-SA 3.0. Arka planı kaldırılmış, kırpılmış gerçek RAM fotoğrafı.",
     href: "https://commons.wikimedia.org/wiki/File:Swissbit_2GB_PC2-5300U-555_remix_crop_transparent.png",
-  },
-] as const;
-
-export const additionalResources = [
-  {
-    kind: "TEKNİK KAYNAK",
-    title: "Hamming kodu",
-    detail: "University of Michigan: denetim bitleri ve hata konumu.",
-    href: "https://www.eecs.umich.edu/courses/eecs373.w05/lecture/hamming.html",
-  },
-  {
-    kind: "TEKNİK KAYNAK",
-    title: "UEFI Boot Manager",
-    detail: "UEFI Forum resmî şartnamesi; UEFI açılış bağlamı.",
-    href: "https://uefi.org/specs/UEFI/2.11/03_Boot_Manager.html",
-  },
-  {
-    kind: "TEKNİK KAYNAK",
-    title: "Linux swap table",
-    detail: "Linux çekirdeği dokümantasyonu; gerçek swap yönetimi.",
-    href: "https://docs.kernel.org/mm/swap-table.html",
   },
 ] as const;

@@ -1,10 +1,10 @@
-# Mass Storage — Etkileşimli Sunum
+# Mass Storage — Kitaba bağlı etkileşimli sunum
 
-Operating System Concepts, **10. baskı, Bölüm 11** için yalnızca istemci tarafında çalışan Türkçe sunum.
+**Operating System Concepts, Tenth Edition · Bölüm 11.1–11.8.** Türkçe sunum; 56 sahne, 280 adlandırılmış aşama, dört sunucu. Açık tasarım dili korunarak içerik ve sahne sırası kitap kapsamına göre yeniden kuruldu.
 
-**Mevcut sürüm:** Açılış, **11.1–11.8** ve ortak kapanış dahil **36 sahne** hazır. Dört kişinin bölüm dağılımı korunur.
+Yerel sunum: **[http://localhost:5173/](http://localhost:5173/)**.
 
-## Çalıştırma
+## Başlangıç
 
 Node.js 24 ve pnpm 11.25.0:
 
@@ -13,64 +13,84 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Bu ortamda Node PATH'te değilse `./scripts/dev.sh` kullanılabilir. Yerel sunucu: [http://localhost:5173](http://localhost:5173).
+Node PATH'te yoksa `./scripts/dev.sh` kullanılabilir. Uygulama istemci tarafındadır; hesap, veritabanı, API anahtarı veya çalışma sırasında dış servis gerekmez. Font ve gerçek donanım fotoğrafları yereldir.
 
-```sh
-pnpm build          # TypeScript ve statik üretim paketi
-pnpm test           # 42 hesap/durum ve klavye testi
-pnpm check:content  # 36 sahne; ilk kişinin 38 aşaması ve yerel medya
-```
+## İki anlatım rotası
 
-`dist/` statik olarak sunulur; backend, veritabanı veya çalışma sırasında dış API gerekmez.
+| Rota | Sahne | Aşama | Prova hedefi |
+| --- | ---: | ---: | --- |
+| Ana anlatım | 50 | 256 | 48:20 · yaklaşık 49 dk |
+| Ayrıntılı | 56 | 280 | 84:10 · yaklaşık 85 dk |
 
-## Vercel
-
-`vercel.json`, Vite derlemesini ve `dist/` çıktı klasörünü tanımlar. Kurulum ve derleme pnpm 11.25.0 sürümünü kullanır; Node.js sürümü `package.json` içinde 24.x olarak sabittir. Ortam değişkeni gerekmez.
-
-Proje kökü depo köküdür. Sunum adresleri `/#/sunum/s01` biçiminde hash yönlendirmesi kullandığı için ek sunucu yönlendirme kuralına gerek yoktur. `.vercel/` içindeki yerel hesap/proje bağlantıları Git'e eklenmez.
+Rota menüden seçilir. Ana rota, kitabın bütün 11.1–11.8 başlıklarını korur. Altı ek açıklama ayrıntılı rotada sıraya girer; menüden her zaman doğrudan açılabilir. Bunlar HDD tarihçesi, performans ölçüleri, flash dayanıklılığı/DWPD, raw erişim, XOR ve çok boyutlu paritedir. Süreler plan hedefidir; gerçek konuşma süresi ölçülmüş sayılmaz. Uzun soru-cevap ve tekrar için 90 dakikalık prova önerileri rehberdedir.
 
 ## Sunucu dağılımı
 
-| Sunucu | Bölüm | Sahne |
-| --- | --- | --- |
-| 1. kişi | 11.1 | S03–S09 |
-| 2. kişi | 11.2 ve 11.3 | S10–S17 |
-| 3. kişi | 11.4, 11.5 ve 11.6 | S18–S25 |
-| 4. kişi | 11.7 ve 11.8 | S26–S34 |
+| Blok | Kapsam | Ana / tam süre | Hazırlık |
+| --- | --- | --- | --- |
+| Açılış | Bölümün sorusu ve dört kişinin haritası | 2:00 / 3:00 | Ortak rehber |
+| 1. kişi | 11.1 · HDD, NVM, RAM disk, teyp, blok ve veri yolu | 9:30 / 19:30 | [Sunucu 1](docs/sunucu-1-prova.md) |
+| 2. kişi | 11.2–11.3 · HDD ve NVM zamanlaması | 10:50 / 16:45 | [Sunucu 2](docs/sunucu-2-prova.md) |
+| 3. kişi | 11.4–11.6 · Doğruluk, aygıt, boot ve swap | 9:00 / 16:00 | [Sunucu 3](docs/sunucu-3-prova.md) |
+| 4. kişi | 11.7–11.8 · Bağlantı, RAID, bütünlük, havuz ve nesne | 11:00 / 18:55 | [Sunucu 4](docs/sunucu-4-prova.md) |
+| Kapanış | İsteğin yolculuğu, seçilmiş Exercises ve tasarım ölçütleri | 6:00 / 10:00 | Sunucu 4 ve ekip |
 
-S01–S02 açılış; S35–S36 ortak kapanıştır.
+Her sahnenin Notlar sekmesinde geçerli aşama, kaynak bölümü/slaytı, ana çıkarım, anlatım adımları, soru ve gerekçesi, model sınırı ve geçiş bulunur.
 
-## Tasarım ve etkileşim
+## Klavye ve aşama davranışı
 
-Açık tema, yüksek kontrast, çok az görünür metin ve kaydırmasız sahneler. Küçük yan menüde bütün sayfalar sunucu gruplarıyla seçilebilir. Her sayfanın ayrıntılı anlamı, anlatım sırası, kavramları ve model sınırları **Notlar** sekmesindedir.
+- **Enter:** aynı sahnede ileri; son aşamada kalır.
+- **Backspace:** aynı sahnede geri; ilk aşamada kalır. Diyagram, hesap, eşleme, sayaç ve görünür cevap birlikte geri gelir.
+- **Sol/sağ ok:** seçili rotada önceki/sonraki sahne. **Home/End:** başlangıç/kapanış.
+- **M/N:** menü/notlar. **Space:** açıklayıcı hareketi duraklat/oynat. **F:** tam ekran.
+- Aşama listesinden veya sahne içi sekmelerden doğrudan aşama seçilebilir. Görünür Enter düğmesi geri eklenmedi.
+- Metin/form kontrolleri yerel klavyelerini korur. Odaktaki düğmede Enter/Space o düğmenin eylemini çalıştırır. Menü açıkken sunum tuşları ve hareket durur.
 
-İlk kişinin akışı HDD parçaları → Volatil / Non-Volatil karşılaştırması → okuma maliyeti → SSD fotoğrafları → flash sayfa/blok davranışı → RAM disk, teyp ve mantıksal bloklar şeklindedir. Volatil grupta RAM, Non-Volatil grupta HDD ve SSD bulunur. Gerçek donanım fotoğrafları arka plansız, kırpılmış ve alfa kanallı PNG olarak kullanılır. 3D model, söküm ve çalışma videoları kaldırıldı; yeni donanım animasyonu veya görsel üretilmedi. Kaynak ve lisans bilgileri menüde ve [medya atıflarında](public/media/ATTRIBUTION.md) bulunur.
+Aşamalar otomatik zamanlayıcıyla ilerlemez. Flash, swap ve RAID durumları seçilen aşamadan saf model geçişleriyle yeniden üretilir. Sahneye geri dönmek veya doğrudan aşama seçmek başka bir demonun gizli ilerlemesini devralmaz.
 
-İçerik sınırı yazarların resmî 10. baskı Chapter 11 slaytlarıdır (ilk kişi için 4–16). Tam kitap metni yerel projede bulunmuyor. Konumlandırma gecikmesi (seek + dönme) ile aktarım dahil örnek servis süresi ayrı adlandırılır; örnek hesap denetleyici/kuyruk ek yükünü içermez.
+Adresler konu adını kullanır: `/#/sunum/hdd-anatomy`, `/#/sunum/swap-journey`, `/#/sunum/raid-rebuild`. Eski `s01–s36` bağlantıları ilgili yeni konuya yönlenir. Yenileme aynı sahneyi başlangıç aşamasında açar.
 
-Diğer modüller gerçek hesap/durum modelleri içerir: FCFS/SCAN/C-SCAN, FTL/GC, parite/SECDED, aygıt hazırlığı, boot, remapping, swap, DAS/NAS/SAN, RAID kapasite/arıza/XOR/rebuild.
+## Plan ve sunum hazırlığı
 
-**Enter:** aynı sahnenin sonraki aşaması; son aşamada sahne değişmez. Sol altta Enter düğmesi gösterilmez; aşama sayısı, adı ve başa alma kontrolü kalır. İlk kişinin bütün sahneleri aşamalandırılmıştır; diğer sunucuların açıkça işaretlenmiş adım demolarında da Enter kullanılabilir. **Space:** genel animasyon oynatma/duraklatma. **Sol/sağ ok:** önceki/sonraki sahne; Home/End: ilk/son; M: menü; N: notlar; F: tam ekran. Menü veya giriş alanı kullanılırken sunum tuşları devre dışıdır. Tuşa basılı tutma aşamaları atlamaz. Hareketi azalt tercihi korunur; sekme gizlenince animasyonlar duraklar.
+- [14 — Ayrıntılı mimari ve kesin sahne tablosu](docs/14-kitaba-dayali-yeni-sunum-mimarisi.md)
+- [15 — Ortak prova, kavram yanılgıları ve kurtarma rehberi](docs/15-sunum-prova-ve-kaynak-rehberi.md)
+- [1–2. sunucu kaynaklı bölüm planı](docs/bolum-planlari/01-02-donanim-zamanlama.md)
+- [3. sunucu kaynaklı bölüm planı](docs/bolum-planlari/03-dogruluk-yonetim-swap.md)
+- [4. sunucu kaynaklı bölüm planı](docs/bolum-planlari/04-baglanti-raid-kapanis.md)
+- [Makine okunabilir uygulama öncesi sözleşme](docs/presentation-contract.json)
+- [Yazdırılabilir çevrimdışı notlar](public/references/sunum-notlari.html)
+- [HDD ve SSD görsel parça rehberi](public/references/donanim-gorsel-rehberi.html)
+- [16 — Sonuç ve doğrulama raporu](docs/16-yeni-sunum-sonucu-ve-dogrulama.md)
+- [17 — Kütüphane tabanlı diyagramlar ve akıcı geçiş altyapısı](docs/17-kutuphane-tabanli-diyagram-ve-gecis.md)
+- [18 — Sahneye uygun animasyonlar ve proje incelemesi](docs/18-sahneye-uygun-animasyonlar.md)
+- [19 — Donanım fotoğraflarındaki parça anlatımı](docs/19-donanim-fotograflari-ve-gorsel-rehber.md)
+- [20 — Diyagram boyutları ve kapanış alıştırmaları](docs/20-diyagram-boyutlari-ve-exercises.md)
 
-## Teknoloji ve modüller
+Kapanışta, kullanıcının sağladığı `11.pdf` içinden altı alıştırma bulunur: 11.13, 11.14, 11.16(a), 11.17, 11.21(a), 11.25(a,c). Her sorunun çözümü ayrı aşamada açılır. 1–49. sahneler yerlerini korur; alıştırmalar 50–55, son değerlendirme 56. sahnedir. Kaynak PDF, Kaynaklar menüsünde ve soruların üzerinde açılır.
 
-React, TypeScript, Vite, Tailwind, Motion, Radix Dialog ve Lucide. Fontlar ve fotoğraflar yerel paketlenir. WebGL veya video bağımlılığı yoktur.
+01–13 belgeleri önceki plan ve revizyonların tarihçesini içerir. Temel içerik mimarisi 14 numaralı plan, güncel diyagram/kapanış dizisi 20 numaralı belge ve makine okunabilir sunum sözleşmesidir; önceki 36 sahne / 213 aşama sınırı kaldırılmıştır.
 
-- `src/presentation/`: tipler, registry, navigasyon, yan menü ve not görünümü.
-- `src/chapters/`: sunucu kapsamlarına ayrılmış sahneler, notlar ve model motorları.
-- `src/components/presentation/`: ortak sahne ve seçim bileşenleri.
-- `tests/`: görünümden bağımsız hesap ve durum doğrulamaları.
+## Kaynak doğruluğu
 
-## Dokümantasyon
+İçerik çerçevesi [10. baskı resmî sitesi](https://os-book.com/OS10/index.html), [resmî içindekiler](https://os-book.com/OS10/toc-dir/toc.pdf), [Chapter 11 slaytları](https://os-book.com/OS10/slide-dir/PPTX-dir/ch11.pptx), [tekrar soruları](https://os-book.com/OS10/review-dir/11-rev.pdf) ve düzeltmelerdir. Tam kitap metni depoda bulunmadığından sayfa/satır düzeyinde tam kitap doğrulaması iddia edilmez. Kaynaklar aynı 10. baskıya aittir; kitap dışı güncel Linux/UEFI/ürün belgeleri müfredatın yerine kullanılmaz.
 
-Güncel ilk kişi revizyonu ve uygulama öncesi plan: [09 — Kitaba bağlı revizyon](docs/09-kitaba-bagli-revizyon.md). Diğer sunucuların modüler kapsamı için [08 — Modüler tam sunum](docs/08-moduler-tam-sunum.md).
+HDD kuyruğu kaynak örneğidir: kafa 53, 0–199 aralığı, 98/183/37/122/14/124/65/67. Ortak azalan yönde FCFS 640, SCAN 236, C-SCAN 386. Resmî SCAN slaydındaki 208 ile fiziksel-uç kuralı arasındaki fark açıklanır: 53→0→183=236; 14'te dönen LOOK yolu 208. Kaynak uyuşmazlığı sessizce düzeltilmiş veya kitap metni hatası kesinleşmiş gibi sunulmaz.
 
-- [İlk proje kapsamı](docs/01-proje-kapsami.md)
-- [36 sahnelik içerik planı](docs/02-icerik-ve-sunum-akisi.md)
-- [Simülasyon şartnameleri](docs/03-etkilesimler.md)
-- [İlk teknik plan](docs/04-teknik-mimari.md)
-- [Kabul planı](docs/05-uygulama-ve-kabul.md)
-- [Kaynaklar ve sözlük](docs/06-kaynaklar-ve-sozluk.md)
-- [Açık tema ve Tailwind kararı](docs/07-guncel-uygulama.md)
+Türkçe anlatım, bit/sayfa/disk dizileri ve özgün çizimler eğitim modelleridir. RAID 6 Q ve bazı kavramsal koruma diyagramları semboliktir. Animasyon temposu gerçek aygıt hızı değildir. Fotoğraf atıfları [ATTRIBUTION.md](public/media/ATTRIBUTION.md) içindedir.
 
-Kullanıcının isteğiyle bu geliştirmede tarayıcı doğrulaması, ekran görüntüsü veya tarayıcı otomasyonu kullanılmadı. Derleme, model testleri, Node içerik kontrolü ve canlı HTTP yanıtları kontrol edildi; görsel olarak doğrulandığı iddia edilmez.
+## Geliştirme ve kodla doğrulama
+
+```sh
+pnpm test
+pnpm check:content
+pnpm build:notes    # Bağımsız, gömülü fontlu not HTML'i
+pnpm build          # TypeScript + notlar + statik üretim
+```
+
+`check:content`, sahne/rota metadata'sını uygulama öncesi sözleşmeyle karşılaştırır; bütün aşamaları hareket açık/kapalı ve ileri/ters sırada Node/SSR ile oluşturur. Eski bağlantılar, bölüm/sunucu kapsamı, süreler, kaynaklar, notlar ve yerel medya denetlenir.
+
+React, TypeScript, Vite, Tailwind, Motion, React Flow, Dagre, D3, Radix Dialog ve Lucide kullanılır. Kavramsal grafiklerin otomatik yerleşimi Dagre, kompakt sunum yerleşimleri açık düğüm konumları, bağlantıları React Flow; sayısal yol/ölçekler D3 ile yönetilir. Sahne geçişleri içerik türüne bağlı altı Motion profili kullanır. Aşama değişirken görsel alan korunur; disk kafası, işaretler, grafikler, hücreler ve açıklamalar kendi değişimlerini canlandırır. Sahne ve aşama atomik güncellenir; geçiş sırasında eski sahnenin sıfırlanması ve gecikmiş hash bildiriminin ilerlemeyi silmesi engellenir.
+
+`src/presentation/` ortak kabuk/rota/kaynak; `src/components/diagrams/` kütüphane tabanlı grafikler; `src/chapters/` sahne/not/model; `tests/` hesap ve davranış denetimidir. `dist/` statik üretim çıktısıdır. Bu revizyonda haricî dağıtım yapılmaz.
+
+Kullanıcının isteğiyle uygulama tarayıcı üzerinden test edilmez; tarayıcı otomasyonu ve ekran görüntüsü kullanılmaz. Statik çıktı/model/HTTP kontrolleri gerçek ekran uyumu, odak sırası veya projeksiyon provasının yerine geçmez.

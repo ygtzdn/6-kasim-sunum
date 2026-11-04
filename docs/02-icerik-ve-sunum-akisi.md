@@ -1,4 +1,6 @@
 # 02 — İçerik ve sunum akışı
+
+> **Tarihsel belge:** Bu dosya önceki planı/uygulamayı kaydeder. Güncel kaynak, akış, örnek ve kabul kararları için [14 — Yeni sunum mimarisi](14-kitaba-dayali-yeni-sunum-mimarisi.md), mevcut mimari için [08 — Modüler tam sunum](08-moduler-tam-sunum.md) esas alınır. Aşağıdaki eski örnek toplamları, yapılacaklar ve kaldırılan özellikler güncel uygulama taahhüdü değildir.
 > 3 Kasım 2026: S01–S09 için güncel akış [09 — Kitaba bağlı revizyon](09-kitaba-bagli-revizyon.md) ve `src/chapters/chapter-11-1/` altındadır. Bu dosyanın ilk kişi sahne tablosu önceki tasarımı kaydeder.
 
 ## 1. Anlatım ilkesi

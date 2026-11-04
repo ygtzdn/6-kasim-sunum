@@ -24,6 +24,12 @@ Node PATH'te yoksa `./scripts/dev.sh` kullanılabilir. Uygulama istemci tarafın
 
 Rota menüden seçilir. Ana rota, kitabın bütün 11.1–11.8 başlıklarını korur. Altı ek açıklama ayrıntılı rotada sıraya girer; menüden her zaman doğrudan açılabilir. Bunlar HDD tarihçesi, performans ölçüleri, flash dayanıklılığı/DWPD, raw erişim, XOR ve çok boyutlu paritedir. Süreler plan hedefidir; gerçek konuşma süresi ölçülmüş sayılmaz. Uzun soru-cevap ve tekrar için 90 dakikalık prova önerileri rehberdedir.
 
+## Vercel
+
+`vercel.json`, Vite derlemesini ve `dist/` çıktı klasörünü tanımlar. Kurulum ve derleme pnpm 11.25.0 sürümünü kullanır; Node.js sürümü `package.json` içinde 24.x olarak sabittir. Ortam değişkeni gerekmez.
+
+Proje kökü depo köküdür. Sunum adresleri `/#/sunum/s01` biçiminde hash yönlendirmesi kullandığı için ek sunucu yönlendirme kuralına gerek yoktur. `.vercel/` içindeki yerel hesap/proje bağlantıları Git'e eklenmez.
+
 ## Sunucu dağılımı
 
 | Blok | Kapsam | Ana / tam süre | Hazırlık |

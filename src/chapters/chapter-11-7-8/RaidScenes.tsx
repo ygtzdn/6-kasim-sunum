@@ -276,7 +276,7 @@ export function RaidIntroScene(context: SceneContext) {
     "Kapasite, paralellik ve güvenilirlik farklı hedeflerdir; çok disk kullanmak bunları kendiliğinden birlikte sağlamaz.",
     "Aynı verinin bağımsız bir sağlam kopyası disk kaybında kullanılabilir.",
     "MTTF ortalama arızalanma süresidir; tek bir diskin son kullanma tarihi değildir.",
-    "MTTR onarım süresidir. Kayıp kopya yeniden kurulana kadar ek arızaya maruz kalınan bir pencere vardır.",
+    "MTTR ortalama onarım süresidir. Kayıp kopya yeniden kurulana kadar ek arızaya maruz kalınan bir pencere vardır.",
     "Veri kaybına kadar süre arıza ve onarım varsayımlarına bağlıdır. Bağımsız arıza modeli gerçek sistem için garanti değildir.",
   ];
   return (
@@ -306,9 +306,9 @@ export function RaidIntroScene(context: SceneContext) {
         ) : stage === 4 ? (
           <div className="grid w-full grid-cols-3 gap-3">
             {[
-              { name: "MTTF", meaning: "Arızalanmaya kadar" },
-              { name: "MTTR", meaning: "Onarım tamamlanana kadar" },
-              { name: "MTTDL", meaning: "Veri kaybına kadar" },
+              { name: "MTTF", meaning: "Ortalama arızalanma süresi" },
+              { name: "MTTR", meaning: "Ortalama onarım süresi" },
+              { name: "MTTDL", meaning: "Veri kaybına kadar ortalama süre" },
             ].map((item) => (
               <div
                 key={item.name}
@@ -458,7 +458,7 @@ export function ParityRaidScene(context: SceneContext) {
           <CapacityTable parityOnly />
         ) : (
           <>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               <strong className="font-display text-xl md:text-3xl">
                 RAID {state.level}
               </strong>
@@ -550,10 +550,10 @@ export function XorRaidScene(context: SceneContext) {
 export function RaidLevelsScene(context: SceneContext) {
   const { stage } = context;
   const captions = [
-    "Resmî figürde RAID 0, 1, 4, 5 ve 6 farklı veri/koruma düzenleriyle gösterilir.",
+    "RAID seviyeleri veriyi ve koruma bilgisini farklı düzenlerde yerleştirir.",
     "RAID 6’da P ve Q bağımsız koruma bilgilerini temsil eder; bu örnek Q cebirini hesaplamaz.",
-    "Kaynak figürü ayrıca aygıtları iki boyutlu düzenleyen bir çok boyutlu RAID 6 örneği içerir.",
-    "Bu şematik indirgemede satır ve sütun koruma rolleri görünür. Yerleşimden keyfî kapasite veya evrensel arıza garantisi çıkarmıyoruz.",
+    "Çok boyutlu düzende aygıtlar satır ve sütunlar halinde gruplanır.",
+    "P ve Q, satır ve sütunlardaki farklı koruma rollerini gösterir. Kesin koruma, seçilen düzene bağlıdır.",
   ];
   return (
     <Stage
@@ -717,9 +717,6 @@ export function NestedRaidScene(context: SceneContext) {
           )}
         </div>
         <Caption>{captions[stage]}</Caption>
-        <small className="text-center text-[10px] text-slate-600">
-          Özgün dört diskli indirgeme · tam disk arızası modeli
-        </small>
       </div>
     </Stage>
   );

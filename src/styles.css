@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "./chapters/chapter-11-1/hardware-photo.css";
+@import "./chapters/chapter-11-1/memory-scenes.css";
+@import "./chapters/chapter-11-4-6/integrity.css";
 
 @theme {
   --font-sans: "Manrope", sans-serif;
@@ -57,13 +59,13 @@
     min-height: 0;
   }
   .diagram-expanded .diagram-node strong {
-    font-size: 22px;
+    font-size: 20px;
   }
   .diagram-expanded .diagram-detail {
-    font-size: 15px;
+    font-size: 14px;
   }
   .diagram-expanded .diagram-badge {
-    font-size: 12px;
+    font-size: 11px;
   }
   .remap-scene {
     display: flex;
@@ -340,8 +342,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 12px;
+    gap: 5px;
+    padding: 10px;
     border: 2px solid;
     border-radius: 18px;
     text-align: center;
@@ -362,11 +364,13 @@
     font-size: 17px;
     line-height: 1.2;
     font-family: var(--font-display);
+    overflow-wrap: anywhere;
   }
   .diagram-detail {
     max-width: 100%;
     font-size: 12px;
     line-height: 1.35;
+    overflow-wrap: anywhere;
   }
   .diagram-badge {
     max-width: 100%;
@@ -464,6 +468,12 @@
   .nav-button {
     @apply flex h-9 w-9 items-center justify-center rounded-xl hover:bg-slate-100;
   }
+  .scene-nav-button {
+    @apply w-12 flex-col gap-0.5 disabled:cursor-default disabled:opacity-35 disabled:hover:bg-transparent;
+  }
+  .scene-nav-presenter {
+    @apply text-[10px] leading-3 font-semibold whitespace-nowrap text-slate-600;
+  }
   .menu-tab {
     @apply inline-flex h-9 items-center justify-center gap-2 rounded-xl px-2 text-xs font-semibold hover:bg-slate-100;
   }
@@ -532,6 +542,18 @@
   }
   .menu-notes .note-question {
     @apply rounded-xl border border-blue/20 bg-blue/5 p-3;
+  }
+  .menu-notes .note-current {
+    @apply rounded-xl border-l-4 border-blue bg-blue/5 p-4;
+  }
+  .menu-notes details {
+    @apply space-y-3 border-t border-slate-200 pt-4;
+  }
+  .menu-notes summary {
+    @apply cursor-pointer text-xs font-bold text-ink;
+  }
+  .menu-notes li[aria-current="step"] {
+    @apply font-semibold text-blue;
   }
   .menu-notes p {
     @apply text-sm leading-7 text-slate-700;
@@ -869,9 +891,6 @@
     @apply h-9 min-w-0 flex-1 rounded-lg bg-transparent px-1 text-xs font-semibold text-slate-700;
     max-width: 290px;
   }
-  .stage-hint {
-    @apply shrink-0 pr-2 text-[10px] font-semibold text-slate-600;
-  }
   .intro-focus {
     @apply flex h-full min-h-0 w-full max-w-[1180px] flex-col items-center justify-center gap-5 md:gap-8;
   }
@@ -1098,10 +1117,6 @@
   }
   .stage-selector {
     max-width: 44vw;
-  }
-  .stage-hint {
-    max-width: 92px;
-    font-size: 9px;
   }
   .photo-layout {
     grid-template-columns: 1fr;

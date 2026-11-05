@@ -7,12 +7,13 @@ import {
   RotateCcw,
   SkipForward,
   ArrowRight,
-  Cpu,
-  Database,
+  ChevronLeft,
 } from "lucide-react";
 import type { SceneContext } from "../../presentation/types";
 import { Choice, Stage } from "../../components/presentation/ScenePrimitives";
 import { StageCaption } from "../../presentation/PresentationMotion";
+import { HddRationale } from "./SchedulingVisuals";
+import "./scheduling.css";
 import {
   calculateSchedule,
   cylinderMaximum,
@@ -36,14 +37,16 @@ const comparisonWidth = scaleLinear([0, 640], [0, 100]);
 const circularSegmentWidth = scaleLinear([0, 386], [0, 100]);
 const boundaryX = scaleLinear([0, 183], [35, 660]);
 
-export function QueueSetup({ stage, setStage }: SceneContext) {
+export function QueueSetup({ stage, setStage, enabled }: SceneContext) {
   return (
     <Stage
-      title="Aynı kuyruk. Aynı başlangıç."
+      title="HDD’de neden zamanlama gerekir?"
       controls={
         <div className="flex flex-wrap justify-center gap-2">
           {[
-            "Neden kuyruk?",
+            "Mekanik maliyet",
+            "Bekleyen istekler",
+            "Sıranın etkisi",
             "Geliş sırası",
             "Kafa ve sınırlar",
             "Yön ve ölçü",
@@ -59,38 +62,9 @@ export function QueueSetup({ stage, setStage }: SceneContext) {
         </div>
       }
     >
-      <div className="flex h-full w-full max-w-[1080px] flex-col justify-center gap-5 md:gap-8">
-        {stage === 0 ? (
-          <div className="grid grid-cols-2 gap-5">
-            {[false, true].map((busy) => (
-              <div
-                key={String(busy)}
-                className="flex flex-col items-center gap-5 rounded-2xl border-2 border-ink bg-white p-5 md:p-8"
-              >
-                <Cpu size={45} />
-                <h2 className="font-display text-xl">
-                  {busy ? "Aygıt meşgul" : "Aygıt boşta"}
-                </h2>
-                <div className="flex gap-2">
-                  {Array.from({ length: busy ? 3 : 1 }, (_, i) => (
-                    <span
-                      className={`rounded-lg px-3 py-2 text-xs font-semibold ${busy ? "bg-orange/15 text-orange" : "bg-blue/10 text-blue"}`}
-                      key={i}
-                    >
-                      İstek{i + 1}
-                    </span>
-                  ))}
-                </div>
-                <ArrowDown />
-                <Database size={45} />
-                <p className="text-center text-xs font-semibold text-slate-500">
-                  {busy
-                    ? "Bekleyen istekler: sıra seçimi var"
-                    : "Tek hazır istek: hemen işlenebilir"}
-                </p>
-              </div>
-            ))}
-          </div>
+      <div className="queue-setup-scene flex h-full w-full max-w-[1080px] flex-col justify-center">
+        {stage < 3 ? (
+          <HddRationale stage={stage} enabled={enabled} />
         ) : (
           <>
             <p className="text-center text-xs font-semibold text-slate-500">
@@ -108,9 +82,9 @@ export function QueueSetup({ stage, setStage }: SceneContext) {
             </div>
             <div className="grid grid-cols-3 gap-3">
               {[
-                { name: "Kafa", value: stage >= 2 ? "53" : "?" },
-                { name: "Fiziksel sınır", value: stage >= 2 ? "0–199" : "?" },
-                { name: "Yön", value: stage >= 3 ? "↓ Azalan" : "?" },
+                { name: "Kafa", value: stage >= 4 ? "53" : "?" },
+                { name: "Fiziksel sınır", value: stage >= 4 ? "0–199" : "?" },
+                { name: "Yön", value: stage >= 5 ? "↓ Azalan" : "?" },
               ].map((m) => (
                 <div
                   key={m.name}
@@ -125,7 +99,7 @@ export function QueueSetup({ stage, setStage }: SceneContext) {
                 </div>
               ))}
             </div>
-            {stage === 3 && (
+            {stage === 5 && (
               <div className="flex justify-center gap-3 rounded-xl bg-blue/5 p-4 font-display text-lg text-blue md:text-2xl">
                 <span>Σ |sonraki − önceki|</span>
                 <ArrowRight />
@@ -137,7 +111,9 @@ export function QueueSetup({ stage, setStage }: SceneContext) {
         <p className="text-center text-xs font-semibold text-slate-600 md:text-sm">
           {
             [
-              "Birden çok bekleyen istek varsa yeniden sıralama seçimi doğar.",
+              "Zamanlama, bekleyen isteklerin servis sırasını seçerek seek maliyetini azaltmayı amaçlar.",
+              "Kuyrukta birden çok hazır istek varsa servis sırası için seçim yapabiliriz.",
+              "Sadece sıra değişti: aynı iki isteğin toplam kafa hareketi 276’dan 162’ye indi.",
               "Kart sırası fiziksel yakınlık değil, geliş kimliğidir.",
               "Kuyruk, kafa ve sınırlar bütün karşılaştırmalarda aynı kalır.",
               "Ortak yön azalan. FCFS yönü kullanmaz. Ölçü ms değil, silindir hareketidir.",
@@ -264,7 +240,7 @@ function SchedulePlot({
               <text
                 x={
                   x(event.position) +
-                  (event.position > cylinderMaximum * 0.85 ? -11 : 11)
+                  (event.position > cylinderMaximum * 0.85 ? -22 : 22)
                 }
                 y={y(index + 1) + 5}
                 textAnchor={
@@ -330,6 +306,14 @@ export function SchedulingLab({
       controls={
         <div className="flex flex-wrap items-center justify-center gap-2">
           <button
+            className="icon-button"
+            disabled={stage === 0}
+            aria-label={`${algorithm} önceki hareket`}
+            onClick={() => setStage(stage - 1)}
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
             className="primary-button disabled:opacity-35"
             disabled={conclusion}
             onClick={() => setStage(stage + 1)}
@@ -371,6 +355,22 @@ export function SchedulingLab({
             {completeIds.size}/8 istek
           </span>
         </div>
+        <div className="schedule-decision">
+          <span>
+            {algorithm === "FCFS"
+              ? "Kural: en önce gelen istek"
+              : algorithm === "SCAN"
+                ? "Kural: aynı yönde servis, fiziksel uçta dönüş"
+                : "Kural: tek yönde servis, dönüşte servis yok"}
+          </span>
+          <strong>
+            {conclusion
+              ? "Kuyruk tamamlandı"
+              : result.events[step]
+                ? `Sıradaki: ${result.events[step].position}${result.events[step].kind === "wrap" ? " · servis yok" : result.events[step].kind === "turn" ? " · fiziksel uç" : ""}`
+                : "Sonuç hazır"}
+          </strong>
+        </div>
         <div className="min-h-0 flex-1">
           <SchedulePlot result={result} step={step} enabled={enabled} />
         </div>
@@ -409,10 +409,10 @@ export function SchedulingLab({
               <circle cx={boundaryX(0)} cy="24" r="7" fill="#2247eb" />
               <circle cx={boundaryX(14)} cy="74" r="7" fill="#f05b28" />
               <text x="230" y="15" fontSize="17" fill="#2247eb">
-                SCAN:53→0→183 =236
+                SCAN: 53 → 0 → 183 = 236
               </text>
               <text x="230" y="63" fontSize="17" fill="#a93411">
-                LOOK:53→14→183 =208
+                LOOK: 53 → 14 → 183 = 208
               </text>
               <text x="20" y="48" fontSize="13">
                 0
@@ -483,10 +483,10 @@ export function ScheduleComparison({
     calculateSchedule(algorithm, defaultSchedule),
   );
   const captions = [
-    "Geliş sırası:640 silindir.",
-    "Aynı kuyruk, fiziksel uca giden SCAN:236 silindir.",
-    "Aynı kuyruk, azalan C-SCAN:386 silindir.",
-    "53+199+134=386. Dönüşte servis yapılmaz; hareket toplamda kalır.",
+    "Geliş sırası: 640 silindir.",
+    "Aynı kuyruk, fiziksel uca giden SCAN: 236 silindir.",
+    "Aynı kuyruk, azalan C-SCAN: 386 silindir.",
+    "53 + 199 + 134 = 386. Dönüşte servis yapılmaz; hareket toplamda kalır.",
     "Tablo servis sırasıdır; gerçek bekleme süresi veya adalet puanı değildir.",
     "Kaynağın tarihsel deadline örneği: her batch sonrasında eski bekleyen isteği gözet; bu güncel Linux varsayılanı iddiası değildir.",
   ];
@@ -595,10 +595,10 @@ export function ScheduleComparison({
               { name: "Yaz · LBA sırası", value: "20 → 70", selected: false },
               {
                 name: "Oku · FCFS yaşı",
-                value: "R0(LBA90):600 ms > örnek500 ms",
+                value: "R0 (LBA 90): 600 ms > 500 ms",
                 selected: false,
               },
-              { name: "Yaz · FCFS yaşı", value: "W0:80 ms", selected: false },
+              { name: "Yaz · FCFS yaşı", value: "W0: 80 ms", selected: false },
             ].map((q) => (
               <div
                 key={q.name}

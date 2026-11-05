@@ -1,7 +1,7 @@
 [
   {
     "id": "hdd-request-queue",
-    "title": "Aynı kuyruk, aynı başlangıç",
+    "title": "HDD’de neden zamanlama gerekir?",
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
@@ -12,15 +12,17 @@
     },
     "legacyIds": ["s10"],
     "stages": [
-      "İsteğin kaynağı ve kuyruk",
+      "HDD’de mekanik erişim maliyeti",
+      "Meşgul aygıtta bekleyen istekler",
+      "Servis sırası kafa yolunu değiştirir",
       "Resmî geliş sırası",
-      "Kafa53 ve 0–199 sınırları",
+      "Kafa 53 ve 0–199 sınırları",
       "Azalan yön ve hareket ölçüsü"
     ],
-    "sections": ["11.2"],
-    "slides": [17, 18, 19],
-    "takeaway": "Birden çok bekleyen istek sıralama seçimi doğurur; adil karşılaştırma kuyruk, kafa, sınırlar ve yönü sabit tutar.",
-    "model": "Resmî sekiz istek, kafa53 ve azalan ortak yön kullanılır. Bütün istekler başlangıçta hazırdır; yeni geliş veya gerçek bekleme süresi yoktur."
+    "sections": ["11.1", "11.2"],
+    "slides": [4, 17, 18, 19],
+    "takeaway": "HDD’de servis sırası kafanın katettiği yolu ve seek maliyetini etkiler. Birden çok bekleyen istek sıralama seçimi doğurur.",
+    "model": "Önce 53 başlangıçlı iki istekli örnekte 276 ve 162 silindir hareketi karşılaştırılır. Sonra resmî sekiz istek, kafa 53 ve azalan ortak yön kullanılır. Hareket mesafesi gerçek ms gecikmesi değildir."
   },
   {
     "id": "fcfs-path",
@@ -35,16 +37,16 @@
     },
     "legacyIds": ["s11"],
     "stages": [
-      "Başlangıç53",
-      "İstek1:98",
-      "İstek2:183",
-      "İstek3:37",
-      "İstek4:122",
-      "İstek5:14",
-      "İstek6:124",
-      "İstek7:65",
-      "İstek8:67",
-      "Sonuç:640"
+      "Başlangıç: 53",
+      "İstek 1: 98",
+      "İstek 2: 183",
+      "İstek 3: 37",
+      "İstek 4: 122",
+      "İstek 5: 14",
+      "İstek 6: 124",
+      "İstek 7: 65",
+      "İstek 8: 67",
+      "Sonuç: 640"
     ],
     "sections": ["11.2"],
     "slides": [19, 20],
@@ -64,22 +66,22 @@
     },
     "legacyIds": ["s12"],
     "stages": [
-      "Başlangıç53",
-      "İstek:37",
-      "İstek:14",
-      "Fiziksel uç:0",
-      "İstek:65",
-      "İstek:67",
-      "İstek:98",
-      "İstek:122",
-      "İstek:124",
-      "İstek:183",
-      "Sonuç236 ve LOOK208 ayrımı"
+      "Başlangıç: 53",
+      "İstek: 37",
+      "İstek: 14",
+      "Fiziksel uç: 0",
+      "İstek: 65",
+      "İstek: 67",
+      "İstek: 98",
+      "İstek: 122",
+      "İstek: 124",
+      "İstek: 183",
+      "Sonuç: 236 ve LOOK: 208 ayrımı"
     ],
     "sections": ["11.2"],
     "slides": [21, 22],
-    "takeaway": "Fiziksel0 ucuna giden azalan SCAN yolu236’dır; 14’te dönen LOOK yolu208 verir ve aynı davranış değildir.",
-    "model": "Resmî21.slaytın208 ifadesi açık fiziksel uç kuralıyla uyuşmaz. Tam kitap hatası iddia edilmeden iki yol ve hesap gösterilir."
+    "takeaway": "Fiziksel 0 ucuna giden azalan SCAN yolu 236’dır; 14’te dönen LOOK yolu 208 verir. İki algoritmanın dönüş noktası farklıdır.",
+    "model": "Resmî 21. slayttaki 208 ifadesi açık fiziksel uç kuralıyla uyuşmaz. Tam kitap hatası iddia edilmeden iki yol ve hesap gösterilir."
   },
   {
     "id": "cscan-path",
@@ -94,23 +96,23 @@
     },
     "legacyIds": ["s13"],
     "stages": [
-      "Başlangıç53",
-      "İstek:37",
-      "İstek:14",
-      "Fiziksel uç:0",
+      "Başlangıç: 53",
+      "İstek: 37",
+      "İstek: 14",
+      "Fiziksel uç: 0",
       "0→199: servis yok",
-      "İstek:183",
-      "İstek:124",
-      "İstek:122",
-      "İstek:98",
-      "İstek:67",
-      "İstek:65",
-      "Sonuç:386"
+      "İstek: 183",
+      "İstek: 124",
+      "İstek: 122",
+      "İstek: 98",
+      "İstek: 67",
+      "İstek: 65",
+      "Sonuç: 386"
     ],
     "sections": ["11.2"],
     "slides": [23, 24],
-    "takeaway": "C-SCAN dönüşte servis vermez, fakat 199 silindirlik fiziksel dönüş azalan örneğin386 toplamına dahildir.",
-    "model": "Ortak azalan yön kullanılır; kaynaktaki artan yönün382 sonucu alternatif olarak notlanır. Geri aşama toplamı ve servis durumunu birlikte geri kurar."
+    "takeaway": "C-SCAN dönüşte servis vermez, fakat 199 silindirlik fiziksel dönüş azalan örneğin 386 toplamına dahildir.",
+    "model": "Ortak azalan yön kullanılır; kaynaktaki artan yönün 382 sonucu alternatif olarak notlanır. Geri aşama toplamı ve servis durumunu birlikte geri kurar."
   },
   {
     "id": "scheduling-tradeoffs",
@@ -125,10 +127,10 @@
     },
     "legacyIds": ["s14"],
     "stages": [
-      "FCFS640",
-      "SCAN236",
-      "C-SCAN386",
-      "Dönüşü ayır:53+199+134",
+      "FCFS: 640",
+      "SCAN: 236",
+      "C-SCAN: 386",
+      "Dönüşü ayır: 53 + 199 + 134",
       "Hareket ve servis sırası farklı",
       "Politika: eski bekleyen isteği gözet"
     ],
@@ -139,7 +141,7 @@
   },
   {
     "id": "nvm-scheduling",
-    "title": "Seek yok, kuyruk işi sürer",
+    "title": "SSD’de neden hâlâ optimizasyon var?",
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
@@ -150,16 +152,35 @@
     },
     "legacyIds": ["s15"],
     "stages": [
-      "OS kuyruğu",
+      "SSD’de seek ve dönme yok",
+      "Kuyruk ve yazılım maliyeti sürer",
       "Bitişik L10/L11’i birleştir",
       "Komutları aygıta gönder",
-      "Aygıt içi paralellik",
+      "Komutlar SSD denetleyicisine ulaşır",
       "Host ve denetleyici görevleri"
     ],
     "sections": ["11.3", "11.1"],
-    "slides": [11, 15, 26],
-    "takeaway": "NVM’de mekanik seek yoktur; bitişik istek birleştirme, yazılım/kuyruk maliyeti ve denetleyici işleri sürer.",
-    "model": "L10/L11 birleşimi özgün örnektir. NVM ortamı, NVMe arayüzü ve FTL görevi ayrılır; kanal sayısı veya ürün hızı vaat edilmez."
+    "slides": [9, 11, 15, 26],
+    "takeaway": "SSD’de mekanik seek yoktur. Bitişik okumaları birleştirmek komut ve yazılım yükünü azaltabilir. Host kuyruğu ile denetleyici görevleri ayrı katmanlardır.",
+    "model": "L10/L11 birleşimi dört host isteğini üç komutta taşır, dört mantıksal blok korunur. RHEL 7 NOOP örneği kitabın tarihsel bağlamıdır. Şema komut aktarımını gösterir, aygıtın fiziksel yerleşimini veya tamamlanma sırasını modellemez."
+  },
+  {
+    "id": "flash-addressing",
+    "title": "Mantıksal ve fiziksel adres",
+    "chapter": "11.3",
+    "presenterId": 2,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 90
+    },
+    "legacyIds": [],
+    "stages": ["Başlangıç eşlemesi", "Adres aynı, fiziksel yer farklı"],
+    "sections": ["11.1", "11.3"],
+    "slides": [10, 11],
+    "takeaway": "FTL mantıksal adresi güncel fiziksel konuma eşler. Güncelleme sonrası aynı mantıksal adres başka sayfayı gösterebilir.",
+    "model": "L0–L5 eşit boyutlu mantıksal veri birimleridir. Gerçek LBA ile NAND sayfasının aynı boyutta olduğu varsayılmaz. Örnek, CPU sanal bellek adreslemesi değildir."
   },
   {
     "id": "flash-write-amplification",
@@ -179,16 +200,16 @@
       "L1’i güncelle",
       "GC: canlı L2/L3’ü taşı",
       "B0’ı sil",
-      "L2’yi güncelle:5/3 oranı"
+      "L2’yi güncelle: 5/3 oranı"
     ],
     "sections": ["11.3", "11.1"],
     "slides": [10, 11, 26],
-    "takeaway": "GC canlı sayfaları kopyalarken host yazması olmadan fiziksel yazmayı artırır; örnek3host/5fiziksel/1silme ile biter.",
-    "model": "Üçblok×dörtsayfa özgün senaryodur. Her aşama başlangıçtan saf tekrar ile kurulur;1,67 bütün SSD’lerin sabit oranı değildir."
+    "takeaway": "GC canlı sayfaları kopyalarken host yazması olmadan fiziksel yazmayı artırır; örnek 3 host yazması / 5 fiziksel yazma / 1 silmeyle biter.",
+    "model": "Üç blok ve blok başına dört sayfa içeren özgün senaryodur. Her aşama başlangıçtan saf tekrar ile kurulur; 1,67 bütün SSD’lerin sabit oranı değildir."
   },
   {
     "id": "nvm-management-summary",
-    "title": "Alanı geri kazan, aşınmayı geri alma",
+    "title": "Wear leveling",
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
@@ -199,15 +220,13 @@
     },
     "legacyIds": ["s17"],
     "stages": [
-      "Host ve denetleyici görevleri",
-      "Birikmiş silmeler:[8,2,2,1]",
-      "Yeni19döngü:[8,8,8,8]",
-      "B0’da1silme:[9,8,8,8]",
-      "Host’a sunulmayan GC çalışma alanı"
+      "Birikmiş silmeler",
+      "Üç yeni silme tek blokta",
+      "Üç yeni silme dağıtılır"
     ],
     "sections": ["11.3", "11.1"],
     "slides": [10, 11, 26],
-    "takeaway": "FTL, GC, wear leveling ve ayrılmış alan farklı görevlerdir; alanı geri kazanmak geçmiş aşınmayı geri almaz.",
-    "model": "Birikmiş sayaçlar ileri aşamalarda azalmaz; yeni19döngü B1+6/B2+6/B3+7 dağıtılır. Gerçek wear-leveling verimliliği veya ömür hesaplanmaz."
+    "takeaway": "Wear leveling yeni yazma/silme yükünü bloklara dağıtır. Geçmiş aşınma azalmaz. Aynı üç yeni silme farklı dağılımlar oluşturabilir.",
+    "model": "Başlangıç [8, 2, 2]. Üç yeni silme için tek blok [11, 2, 2], dağıtılmış örnek [8, 4, 3]. Toplam her iki durumda üç artar. Bu örnek ürün algoritması veya ömür tahmini değildir."
   }
 ]

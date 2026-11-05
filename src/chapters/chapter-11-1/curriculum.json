@@ -1,5 +1,23 @@
 [
   {
+    "id": "storage-devices",
+    "title": "HDD, SSD ve RAM",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 60
+    },
+    "legacyIds": ["hdd-history", "magnetic-tape"],
+    "stages": ["Çalışma alanı ve kalıcı depolama"],
+    "sections": ["11.1"],
+    "slides": [4, 9, 12],
+    "takeaway": "RAM çalışma alanıdır. HDD ve flash SSD kaydedilmiş veriyi güç kesildiğinde de tutar.",
+    "model": "Gerçek aygıt fotoğrafları ve kavramsal öğretim modeli kullanılır. Boyutlar veya gösterim süresi ürün ölçümü değildir."
+  },
+  {
     "id": "hdd-anatomy",
     "title": "HDD: hareketin kaynağı",
     "chapter": "11.1",
@@ -95,26 +113,99 @@
     "model": "İki istek boyutu aynı mekanik koşullarda karşılaştırılır; sonuçlar özgün birim gösterimiyle hesaplanır, ürün kıyası yapılmaz."
   },
   {
-    "id": "hdd-history",
-    "title": "Kitaptaki ilk ticari disk örneği",
+    "id": "nvm-device",
+    "title": "NVM ve SSD’nin parçaları",
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "extension",
+    "depth": "core",
     "seconds": {
-      "core": 0,
-      "full": 45
+      "core": 45,
+      "full": 75
+    },
+    "legacyIds": ["s06"],
+    "stages": ["Gerçek SSD", "NAND flash", "Denetleyici ve SATA bağlantısı"],
+    "sections": ["11.1"],
+    "slides": [9],
+    "takeaway": "Flash tabanlı SSD kalıcıdır ve hareketli parça taşımaz; bütün NVM biçimleri tek bir SSD ürünüyle aynı değildir.",
+    "model": "Mevcut gerçek SSD fotoğrafları temel görevler için kullanılır; fiyat, güncel hız, kapasite veya evrensel güvenilirlik iddiası eklenmez."
+  },
+  {
+    "id": "flash-page-block",
+    "title": "NAND’da sayfa ve blok",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 90,
+      "full": 135
+    },
+    "legacyIds": ["s07"],
+    "stages": ["Sayfa ve blok", "Sayfa oku/yaz", "Bloğu sil"],
+    "sections": ["11.1"],
+    "slides": [10, 11],
+    "takeaway": "NAND flash sayfa düzeyinde okunup yazılır, daha büyük blok düzeyinde silinir. Yazılmış sayfanın üzerine doğrudan yazılmaz.",
+    "model": "Üç blok ve her blokta dört sayfa kavramsal yapıyı gösterir. FTL, GC ve wear leveling örneği 2. kişinin 11.3 bölümündedir."
+  },
+  {
+    "id": "flash-endurance",
+    "title": "Sınırlı silme ömrü ve DWPD",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 60,
+      "full": 90
     },
     "legacyIds": [],
     "stages": [
-      "1956: IBM Model 350",
-      "50 plaka ve 5 milyon 7-bit karakter",
-      "Tarihsel erişim ölçeği"
+      "Sınırlı program/silme dayanıklılığı",
+      "Kaynaktaki 1 TB / 5 DWPD",
+      "Günlük örnek bütçe: 5 TB",
+      "3 TB ve 6 TB günlük yükü karşılaştır"
     ],
     "sections": ["11.1"],
-    "slides": [8],
-    "takeaway": "Kitaptaki IBM Model 350 örneği depolamanın tarihsel ölçeğini gösterir; güncel ürün özelliklerini anlatmaz.",
-    "model": "Tarihsel bilgi kısa tipografi ve özgün sayma şemasıyla gösterilir; kapasite birimi sessizce modern MB değerine dönüştürülmez."
+    "slides": [10, 11],
+    "takeaway": "Silme dayanıklılığı sınırlıdır; DWPD kapasiteye göre günlük yazma hacmi derecelendirmesidir, hücre silme sayısı değildir.",
+    "model": "1 TB × 5 DWPD = 5 TB/gün kaynaktaki örnektir. Garanti koşulu korunur; kesin ömür veya evrensel NAND silme limiti çıkarılmaz."
+  },
+  {
+    "id": "ram-memory",
+    "title": "RAM ve elektrik",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 60
+    },
+    "legacyIds": ["ram-disk", "s04"],
+    "stages": ["Çalışma alanı", "Güç kesilir", "Güç geri gelir"],
+    "sections": ["11.1"],
+    "slides": [12],
+    "takeaway": "DRAM çalışma verisini korumak için güç gerektirir. Gücün geri gelmesi eski çalışma verisini geri getirmez.",
+    "model": "Gerçek aygıt fotoğrafları ve kavramsal öğretim modeli kullanılır. Boyutlar veya gösterim süresi ürün ölçümü değildir."
+  },
+  {
+    "id": "memory-comparison",
+    "title": "Çalışma alanı ve kalıcı depolama",
+    "chapter": "11.1",
+    "presenterId": 1,
+    "kind": "chapter",
+    "depth": "core",
+    "seconds": {
+      "core": 45,
+      "full": 60
+    },
+    "legacyIds": [],
+    "stages": ["RAM, HDD ve flash SSD karşılaştırması"],
+    "sections": ["11.1"],
+    "slides": [4, 9, 12],
+    "takeaway": "RAM uçucu çalışma alanıdır. HDD ve flash SSD kalıcı depolamadır. Hareketli parça ve kalıcılık farklı özelliklerdir.",
+    "model": "Gerçek aygıt fotoğrafları ve kavramsal öğretim modeli kullanılır. Boyutlar veya gösterim süresi ürün ölçümü değildir."
   },
   {
     "id": "hdd-performance-metrics",
@@ -140,129 +231,14 @@
     "model": "Kaynak sayıları tarihsel örnek olarak etiketlenir; farklı birimler aynı çubuk uzunluğuyla yanlış karşılaştırılmaz."
   },
   {
-    "id": "nvm-device",
-    "title": "SSD, NVM ailesinin bir örneği",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
-    "legacyIds": ["s06"],
-    "stages": [
-      "Gerçek SSD dışı",
-      "İç kart: flash ve denetleyici",
-      "Mekanik maliyetleri karşılaştır",
-      "NVM aygıt ailesi"
-    ],
-    "sections": ["11.1"],
-    "slides": [9],
-    "takeaway": "Flash tabanlı SSD kalıcıdır ve hareketli parça taşımaz; bütün NVM biçimleri tek bir SSD ürünüyle aynı değildir.",
-    "model": "Mevcut gerçek SSD fotoğrafları temel görevler için kullanılır; fiyat, güncel hız, kapasite veya evrensel güvenilirlik iddiası eklenmez."
-  },
-  {
-    "id": "flash-page-block",
-    "title": "Sayfa oku, blok sil",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 135
-    },
-    "legacyIds": ["s07"],
-    "stages": [
-      "Sayfa ve silme bloğu",
-      "P0’ı oku: içerik değişmez",
-      "Yeni L0 sürümünü boş P6’ya yaz",
-      "Canlı verisi kalmayan A’yı sil",
-      "Geçerli, geçersiz ve silinmiş"
-    ],
-    "sections": ["11.1"],
-    "slides": [10, 11],
-    "takeaway": "Flash güncellemesi boş sayfaya gider; geçersiz sayfa yeniden yazılabilir boş sayfa değildir ve silme daha büyük blokta yapılır.",
-    "model": "İki küçük blok fiziksel kuralı öğretir. Tam FTL tablosu, GC canlı taşıması ve yazma büyütmesi hesabı burada tekrarlanmaz."
-  },
-  {
-    "id": "flash-endurance",
-    "title": "Sınırlı silme ömrü ve DWPD",
+    "id": "logical-blocks",
+    "title": "OS’nin mantıksal blok görünümü",
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
     "depth": "extension",
     "seconds": {
       "core": 0,
-      "full": 90
-    },
-    "legacyIds": [],
-    "stages": [
-      "Sınırlı program/silme dayanıklılığı",
-      "Kaynaktaki 1 TB / 5 DWPD",
-      "Günlük örnek bütçe: 5 TB",
-      "3 TB ve 6 TB günlük yükü karşılaştır"
-    ],
-    "sections": ["11.1"],
-    "slides": [10, 11],
-    "takeaway": "Silme dayanıklılığı sınırlıdır; DWPD kapasiteye göre günlük yazma hacmi derecelendirmesidir, hücre silme sayısı değildir.",
-    "model": "1 TB × 5 DWPD = 5 TB/gün kaynaktaki örnektir. Garanti koşulu korunur; kesin ömür veya evrensel NAND silme limiti çıkarılmaz."
-  },
-  {
-    "id": "ram-disk",
-    "title": "Dosya sistemi RAM’i kalıcı yapmaz",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
-    "legacyIds": ["s04"],
-    "stages": [
-      "RAM disk olarak sunulur",
-      "Dosya olarak veri yerleştir",
-      "Gücü kes: RAM verisi kaybolur",
-      "Güç geri gelir: eski RAM verisi dönmez"
-    ],
-    "sections": ["11.1"],
-    "slides": [4, 9, 12],
-    "takeaway": "RAM disk blok aygıtı ve dosya sistemi sunabilir; fiziksel ortamın uçuculuğunu değiştirmez.",
-    "model": "Kavramsal bitler ve gerçek RAM/HDD/SSD fotoğrafları kullanılır; fiziksel güç komutu gönderilmez ve tmpfs ayrıntısı genişletilmez."
-  },
-  {
-    "id": "magnetic-tape",
-    "title": "Önce konumu bul, sonra sırayla aktar",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 30,
-      "full": 60
-    },
-    "legacyIds": [],
-    "stages": [
-      "Sıralı kayıt şeridi",
-      "Uzak kaydın konumunu bul",
-      "Ardışık kayıtları oku"
-    ],
-    "sections": ["11.1"],
-    "slides": [13],
-    "takeaway": "Teypte bir kaydın konumunu bulma ile o noktadan ardışık aktarım farklı işlerdir; rastgele seçim imkânsız diye sunulmaz.",
-    "model": "Özgün kayıt şeridi ve seçici kullanılır; gerçek süre, ürün hızı veya doğrulanmamış kitap alt bölümü verilmez."
-  },
-  {
-    "id": "logical-blocks",
-    "title": "OS’nin mantıksal blok görünümü",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
       "full": 75
     },
     "legacyIds": ["s08"],
@@ -283,9 +259,9 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
+    "depth": "extension",
     "seconds": {
-      "core": 60,
+      "core": 0,
       "full": 105
     },
     "legacyIds": [],

@@ -5,11 +5,11 @@ export const motionGroups = {
   focus: [
     "hdd-anatomy",
     "hdd-geometry",
-    "hdd-history",
     "nvm-device",
     "flash-page-block",
-    "ram-disk",
-    "magnetic-tape",
+    "ram-memory",
+    "storage-devices",
+    "flash-addressing",
     "logical-blocks",
     "error-detection",
     "error-correction",
@@ -18,6 +18,7 @@ export const motionGroups = {
   ],
   compare: [
     "hdd-request-size",
+    "memory-comparison",
     "flash-endurance",
     "scheduling-tradeoffs",
     "nvm-management-summary",
@@ -31,7 +32,7 @@ export const motionGroups = {
   ],
   trace: ["fcfs-path", "scan-path", "cscan-path"],
   flow: [
-    "presentation-map",
+    "why-error-detection",
     "storage-data-path",
     "hdd-request-queue",
     "nvm-scheduling",

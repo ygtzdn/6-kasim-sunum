@@ -1,3 +1,5 @@
+import introductionCurriculum from "../chapters/chapter-11-1/curriculum.json";
+import schedulingCurriculum from "../chapters/chapter-11-2-3/curriculum.json";
 import { exercises } from "../chapters/closing/exercise-data.mjs";
 /** OSC10 Chapter 11, official 47-slide deck; slide numbers are one-based. */
 export const textbook = {
@@ -26,6 +28,17 @@ export interface SceneReference {
 // Cross-references deliberately include earlier concepts reused in later scenes.
 export const sceneReferences: Record<string, SceneReference> = {
   ...Object.fromEntries(
+    [...introductionCurriculum, ...schedulingCurriculum].map((scene) => [
+      scene.id,
+      {
+        sections: scene.sections as TextbookSection[],
+        slides: scene.slides,
+        takeaway: scene.takeaway,
+        model: scene.model,
+      },
+    ]),
+  ),
+  ...Object.fromEntries(
     exercises.map((exercise) => [
       exercise.id,
       {
@@ -41,185 +54,17 @@ export const sceneReferences: Record<string, SceneReference> = {
     sections: ["11.1", "11.2", "11.3", "11.4", "11.5", "11.6", "11.7", "11.8"],
     slides: [1, 2, 3],
     takeaway:
-      "Bir depolama isteğini aygıt yapısı, işletim sistemi politikası, yönetim ve güvenilirlik kararları birlikte belirler.",
+      "Bölüm 11 aygıt yapısı, HDD ve NVM zamanlaması, hata kontrolü, aygıt yönetimi, swap, bağlantı ve RAID konularını içerir.",
     model:
-      "Açılış sorusu, fotoğraf vurguları ve Türkçe anlatım özgündür; gerçek I/O veya aygıt performansı ölçülmez.",
+      "Sekiz bölüm başlığı resmî içindekiler sırasındadır. Türkçe başlıklar sunum için kısa karşılıklardır.",
   },
-  "presentation-map": {
-    sections: ["11.1", "11.2", "11.3", "11.4", "11.5", "11.6", "11.7", "11.8"],
-    slides: [2, 3],
+  "why-error-detection": {
+    sections: ["11.4"],
+    slides: [27],
     takeaway:
-      "Donanım, zamanlama, veri ve alan yönetimi, bağlantı ve güvenilirlik aynı bölümün birbirini tamamlayan kararlarıdır.",
+      "Saklama veya aktarım sırasında bitler değişebilir. Denetim bilgisi bozulmayı saptamak için kullanılır; hata saptanınca işlem durdurulabilir.",
     model:
-      "Sunuculara dağılım ve kısa/tam rota proje tasarımıdır; bu harita her I/O isteğinin zorunlu işlem sırası değildir.",
-  },
-  "hdd-anatomy": {
-    sections: ["11.1"],
-    slides: [4, 5],
-    takeaway:
-      "HDD’de kol konumlanması ve plaka dönüşü farklı işlerdir; normal okumada kafa yüzeye temas etmez.",
-    model:
-      "Gerçek fotoğrafın işaretleri ile özgün küçük yan kesit kullanılır; fotoğrafta görünmeyen fiziksel çizgiler varmış gibi sunulmaz.",
-  },
-  "hdd-geometry": {
-    sections: ["11.1"],
-    slides: [5, 14, 16],
-    takeaway:
-      "İz, sektör ve silindir farklı geometrik gruplardır; silindir tek bir yüzey parçası değildir.",
-    model:
-      "Özgün düz SVG geometri modelidir; gerçek aygıt geometrisi veya kaynaktaki şeklin birebir kopyası olduğu iddia edilmez.",
-  },
-  "hdd-access-cost": {
-    sections: ["11.1"],
-    slides: [4, 6, 7],
-    takeaway:
-      "Konumlandırma seek ve dönmedir; bu örneğin servis süresi aktarım ve denetleyici katkısını da içerir.",
-    model:
-      "Kaynak girdileri açık birimlerle hesaplanır: 4 KiB, 7200 RPM, 5 ms seek, 125 MB/s, 0,1 ms denetleyici. Kuyruk beklemesi dışarıdadır.",
-  },
-  "hdd-request-size": {
-    sections: ["11.1"],
-    slides: [7],
-    takeaway:
-      "Aktarım boyutu veya hızı değişince seek ve dönme aynı kalabilir; küçük I/O toplamı transfer hızıyla aynı oranda değişmez.",
-    model:
-      "İki istek boyutu aynı mekanik koşullarda karşılaştırılır; sonuçlar özgün birim gösterimiyle hesaplanır, ürün kıyası yapılmaz.",
-  },
-  "hdd-history": {
-    sections: ["11.1"],
-    slides: [8],
-    takeaway:
-      "Kitaptaki IBM Model 350 örneği depolamanın tarihsel ölçeğini gösterir; güncel ürün özelliklerini anlatmaz.",
-    model:
-      "Tarihsel bilgi kısa tipografi ve özgün sayma şemasıyla gösterilir; kapasite birimi sessizce modern MB değerine dönüştürülmez.",
-  },
-  "hdd-performance-metrics": {
-    sections: ["11.1", "11.2"],
-    slides: [6, 7, 17],
-    takeaway:
-      "Arayüz tavanı, etkin transfer, tek I/O gecikmesi ve toplam disk bandwidth’i aynı ölçü değildir.",
-    model:
-      "Kaynak sayıları tarihsel örnek olarak etiketlenir; farklı birimler aynı çubuk uzunluğuyla yanlış karşılaştırılmaz.",
-  },
-  "nvm-device": {
-    sections: ["11.1"],
-    slides: [9],
-    takeaway:
-      "Flash tabanlı SSD kalıcıdır ve hareketli parça taşımaz; bütün NVM biçimleri tek bir SSD ürünüyle aynı değildir.",
-    model:
-      "Mevcut gerçek SSD fotoğrafları temel görevler için kullanılır; fiyat, güncel hız, kapasite veya evrensel güvenilirlik iddiası eklenmez.",
-  },
-  "flash-page-block": {
-    sections: ["11.1"],
-    slides: [10, 11],
-    takeaway:
-      "Flash güncellemesi boş sayfaya gider; geçersiz sayfa yeniden yazılabilir boş sayfa değildir ve silme daha büyük blokta yapılır.",
-    model:
-      "İki küçük blok fiziksel kuralı öğretir. Tam FTL tablosu, GC canlı taşıması ve yazma büyütmesi hesabı burada tekrarlanmaz.",
-  },
-  "flash-endurance": {
-    sections: ["11.1"],
-    slides: [10, 11],
-    takeaway:
-      "Silme dayanıklılığı sınırlıdır; DWPD kapasiteye göre günlük yazma hacmi derecelendirmesidir, hücre silme sayısı değildir.",
-    model:
-      "1 TB × 5 DWPD = 5 TB/gün kaynaktaki örnektir. Garanti koşulu korunur; kesin ömür veya evrensel NAND silme limiti çıkarılmaz.",
-  },
-  "ram-disk": {
-    sections: ["11.1"],
-    slides: [4, 9, 12],
-    takeaway:
-      "RAM disk blok aygıtı ve dosya sistemi sunabilir; fiziksel ortamın uçuculuğunu değiştirmez.",
-    model:
-      "Kavramsal bitler ve gerçek RAM/HDD/SSD fotoğrafları kullanılır; fiziksel güç komutu gönderilmez ve tmpfs ayrıntısı genişletilmez.",
-  },
-  "magnetic-tape": {
-    sections: ["11.1"],
-    slides: [13],
-    takeaway:
-      "Teypte bir kaydın konumunu bulma ile o noktadan ardışık aktarım farklı işlerdir; rastgele seçim imkânsız diye sunulmaz.",
-    model:
-      "Özgün kayıt şeridi ve seçici kullanılır; gerçek süre, ürün hızı veya doğrulanmamış kitap alt bölümü verilmez.",
-  },
-  "logical-blocks": {
-    sections: ["11.1"],
-    slides: [14, 16],
-    takeaway:
-      "Disk OS’ye tek boyutlu mantıksal blok dizisi olarak görünür; LBA her aygıtta aynı fiziksel koordinatı garanti etmez.",
-    model:
-      "Küçük sıralı eşleme eğitim modelidir. Bozuk sektör ve değişken geometri notlarda anılır; yeniden eşleme demosu kişi3’e bırakılır.",
-  },
-  "storage-data-path": {
-    sections: ["11.1", "11.2"],
-    slides: [15, 18],
-    takeaway:
-      "Komutun controller’lar üzerinden iletilmesi ile verinin DMA ile DRAM’e aktarılması ayrı akışlardır.",
-    model:
-      "Özgün iki hatlı diyagram ve aşamadan türetilen payload konumu kullanılır; gerçek DMA protokolü veya ürün arayüz performansı ölçülmez.",
-  },
-  "hdd-request-queue": {
-    sections: ["11.2"],
-    slides: [17, 18, 19],
-    takeaway:
-      "Birden çok bekleyen istek sıralama seçimi doğurur; adil karşılaştırma kuyruk, kafa, sınırlar ve yönü sabit tutar.",
-    model:
-      "Resmî sekiz istek, kafa53 ve azalan ortak yön kullanılır. Bütün istekler başlangıçta hazırdır; yeni geliş veya gerçek bekleme süresi yoktur.",
-  },
-  "fcfs-path": {
-    sections: ["11.2"],
-    slides: [19, 20],
-    takeaway:
-      "FCFS geliş sırasını korur; resmî sekiz istek için tamamlanmış yol toplamı 640 silindir hareketidir.",
-    model:
-      "Saf motor her aşamada kafa, tamamlanan kimlikler ve toplamı yeniden hesaplar. Dikey olay sırası zaman ekseni değildir.",
-  },
-  "scan-path": {
-    sections: ["11.2"],
-    slides: [21, 22],
-    takeaway:
-      "Fiziksel0 ucuna giden azalan SCAN yolu236’dır; 14’te dönen LOOK yolu208 verir ve aynı davranış değildir.",
-    model:
-      "Resmî21.slaytın208 ifadesi açık fiziksel uç kuralıyla uyuşmaz. Tam kitap hatası iddia edilmeden iki yol ve hesap gösterilir.",
-  },
-  "cscan-path": {
-    sections: ["11.2"],
-    slides: [23, 24],
-    takeaway:
-      "C-SCAN dönüşte servis vermez, fakat 199 silindirlik fiziksel dönüş azalan örneğin386 toplamına dahildir.",
-    model:
-      "Ortak azalan yön kullanılır; kaynaktaki artan yönün382 sonucu alternatif olarak notlanır. Geri aşama toplamı ve servis durumunu birlikte geri kurar.",
-  },
-  "scheduling-tradeoffs": {
-    sections: ["11.2"],
-    slides: [17, 18, 19, 20, 21, 22, 23, 24, 25],
-    takeaway:
-      "Bu sabit kuyrukta kısa yol SCAN’indir; bekleme, adalet ve politika seçimi yalnız toplam mesafeden çıkarılmaz.",
-    model:
-      "Çubuklar hesaplanan toplamdır, adalet puanı değildir. Deadline/NOOP/CFQ anlatımı kaynağın tarihsel bağlamında tutulur.",
-  },
-  "nvm-scheduling": {
-    sections: ["11.3", "11.1"],
-    slides: [11, 15, 26],
-    takeaway:
-      "NVM’de mekanik seek yoktur; bitişik istek birleştirme, yazılım/kuyruk maliyeti ve denetleyici işleri sürer.",
-    model:
-      "L10/L11 birleşimi özgün örnektir. NVM ortamı, NVMe arayüzü ve FTL görevi ayrılır; kanal sayısı veya ürün hızı vaat edilmez.",
-  },
-  "flash-write-amplification": {
-    sections: ["11.3", "11.1"],
-    slides: [10, 11, 26],
-    takeaway:
-      "GC canlı sayfaları kopyalarken host yazması olmadan fiziksel yazmayı artırır; örnek3host/5fiziksel/1silme ile biter.",
-    model:
-      "Üçblok×dörtsayfa özgün senaryodur. Her aşama başlangıçtan saf tekrar ile kurulur;1,67 bütün SSD’lerin sabit oranı değildir.",
-  },
-  "nvm-management-summary": {
-    sections: ["11.3", "11.1"],
-    slides: [10, 11, 26],
-    takeaway:
-      "FTL, GC, wear leveling ve ayrılmış alan farklı görevlerdir; alanı geri kazanmak geçmiş aşınmayı geri almaz.",
-    model:
-      "Birikmiş sayaçlar ileri aşamalarda azalmaz; yeni19döngü B1+6/B2+6/B3+7 dağıtılır. Gerçek wear-leveling verimliliği veya ömür hesaplanmaz.",
+      "1011001 → 1001001 değişimi özgün bir öğretim örneğidir. Saklama/okuma yolu kavramsaldır; belirli bir fiziksel arıza nedeni veya oranı modellenmez.",
   },
   "error-detection": {
     sections: ["11.4"],
@@ -227,15 +72,15 @@ export const sceneReferences: Record<string, SceneReference> = {
     takeaway:
       "Veriyle saklanan denetim bilgisi bazı bozulmaları saptar; tek paritenin geçmesi kesin veri doğruluğu değildir.",
     model:
-      "1011001 ve sabit P=0 özgün parite örneğidir. CRC/checksum için algoritma veya sahte hesap sonucu üretilmez.",
+      "1011001 ve sabit P=0 özgün çift parite örneğidir. Değişen bit işaretleri anlatıcının eklediği hataları gösterir; denetleyicinin bulduğu konumlar değildir. Parite basit bir checksum türü olarak gösterilir; CRC/checksum için sahte hesap sonucu üretilmez.",
   },
   "error-correction": {
     sections: ["11.4"],
     slides: [27],
     takeaway:
-      "Uygun ECC, tasarlandığı hata sınırları içinde bazı hataları düzeltebilir; tespit edilen her hata düzeltilemez.",
+      "ECC bazı hataları hem tespit eder hem düzeltebilir. Kodun sınırları içindeki soft error düzeltilebilir; hard error saptansa da ECC fiziksel arızayı onaramaz.",
     model:
-      "Gerçek SECDED hesabı genel ECC fikrini somutlaştıran özgün ve sınırlı örnektir; Hamming konumları/sendromu ana anlatıma alınmaz, kapasite bütün aygıtlara genellenmez.",
+      "1011 → 1001 → 1011 özgün örneği gerçek kod çözme hesabını kullanır; ECC bilgisi kavramsal kutudur. Hamming yerleşimi, sendrom ve evrensel bit sınırı öğretilmez. Son hard error şeması ayrı bir kavramdır, iki bit hatası veya fiziksel arıza simülasyonu değildir.",
   },
   "device-preparation": {
     sections: ["11.5"],

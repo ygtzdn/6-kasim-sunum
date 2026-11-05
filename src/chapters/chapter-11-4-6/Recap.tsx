@@ -72,7 +72,7 @@ export function ManagementRecap({ stage, setStage }: SceneContext) {
         <h2 className="text-center font-display text-2xl font-semibold md:text-4xl">
           {question.prompt}
         </h2>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-center gap-3">
           {question.options.map((option, i) => (
             <span
               key={option}

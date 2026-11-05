@@ -29,7 +29,7 @@ const PREPARATION = [
   "Denetleyicinin okuyup yazabildiği sektörler: başlık, veri ve ECC.",
   "Alan iki mantıksal bölüme ayrıldı; henüz dosya sistemi yok.",
   "Bölüm 1'de dosya sistemi metaverisi oluşturuldu.",
-  "Bölüm 1 bağlandı; dosya erişimine hazır.",
+  "Bölüm 1'in dosya sistemi denetlenip bağlandı; dosya erişimine hazır.",
   "Örnek dosya, bağlı dosya sistemi içinde saklandı.",
 ];
 
@@ -52,7 +52,6 @@ export function DeviceLab({ stage, setStage }: SceneContext) {
             <span className="flex items-center gap-2">
               <HardDrive size={22} /> Fiziksel aygıt
             </span>
-            <span>Özgün eğitim modeli</span>
           </div>
           <div
             className="flex h-[clamp(150px,28vh,240px)] gap-3"
@@ -86,8 +85,8 @@ export function DeviceLab({ stage, setStage }: SceneContext) {
               device.partitions.map((part) => (
                 <div
                   key={part.id}
-                  style={{ width: `${part.percent}%` }}
-                  className={`state-cell relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 ${part.filesystem ? "border-blue bg-blue/8" : "border-slate-300 bg-slate-50"}`}
+                  style={{ flex: part.percent }}
+                  className={`state-cell relative flex min-w-0 flex-col items-center justify-center gap-2 rounded-2xl border-2 p-2 ${part.filesystem ? "border-blue bg-blue/8" : "border-slate-300 bg-slate-50"}`}
                 >
                   {part.filesystem ? (
                     <FolderOpen className="size-9 text-blue md:size-14" />
@@ -117,7 +116,7 @@ export function DeviceLab({ stage, setStage }: SceneContext) {
             )}
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-2 text-center text-xs font-semibold">
+        <div className="grid grid-cols-2 gap-2 text-center text-xs font-semibold sm:grid-cols-4">
           {["Fiziksel biçim", "Bölümleme", "Dosya sistemi", "Bağlama"].map(
             (label, i) => (
               <div
@@ -205,41 +204,21 @@ export function BootLab({ stage, setStage, enabled }: SceneContext) {
           nodes={nodes}
           edges={edges}
           enabled={enabled}
-          className="h-[clamp(170px,27dvh,260px)] w-full"
+          className="h-[clamp(150px,25dvh,230px)] w-full"
         />
         {stage >= 3 && (
-          <FlowDiagram
-            id="boot-loading"
-            label="Kernel görüntüsünün depolamadan RAM'e yüklenmesi"
-            nodes={[
-              {
-                id: "kernel-image",
-                label: "Kernel görüntüsü",
-                detail: "Depolama aygıtında",
-                icon: HardDrive,
-                tone: stage === 3 ? "active" : "complete",
-              },
-              {
-                id: "kernel-ram",
-                label: "RAM",
-                detail: stage === 4 ? "Kernel çalışıyor" : "Yükleniyor",
-                icon: Cpu,
-                tone: stage === 4 ? "active" : "muted",
-              },
-            ]}
-            edges={[
-              {
-                id: "load-kernel",
-                source: "kernel-image",
-                target: "kernel-ram",
-                label: stage === 4 ? "Yüklendi" : "Yükleme",
-                active: true,
-                animated: stage === 3,
-              },
-            ]}
-            enabled={enabled}
-            className="h-[clamp(108px,17dvh,160px)] w-full"
-          />
+          <div
+            role="status"
+            className="flex flex-wrap items-center justify-center gap-3 rounded-xl bg-blue/5 px-5 py-3 text-center text-xs font-semibold text-blue md:text-sm"
+          >
+            <span className="inline-flex items-center gap-2">
+              <HardDrive size={20} /> Depolamadaki kernel görüntüsü
+            </span>
+            <ArrowRight size={20} aria-hidden="true" />
+            <span className="inline-flex items-center gap-2">
+              <Cpu size={20} /> RAM · {stage === 4 ? "yüklendi" : "yükleniyor"}
+            </span>
+          </div>
         )}
         <StageCaption className="rounded-xl border border-slate-300 bg-white px-5 py-3 text-center text-xs font-semibold md:text-sm">
           {BOOT_EXPLANATIONS[stage]}
@@ -310,16 +289,6 @@ export function RemapLab({ stage, setStage, enabled }: SceneContext) {
       }
     >
       <div className="remap-scene">
-        <div className="remap-address-row">
-          <span>OS · LBA</span>
-          <div className="grid grid-cols-8 gap-2">
-            {mapping.map((_, i) => (
-              <span key={i} className={i === 5 ? "address-selected" : ""}>
-                {i}
-              </span>
-            ))}
-          </div>
-        </div>
         <FlowDiagram
           id="sector-remapping"
           label={`LBA 5 → P${mapping[5]}; ${stage === 1 ? "P45 arızalı" : stage === 2 ? "yedek eşleme etkin" : "ilk eşleme"}`}
@@ -328,26 +297,6 @@ export function RemapLab({ stage, setStage, enabled }: SceneContext) {
           enabled={enabled}
           className="diagram-expanded"
         />
-        <div className="remap-address-row">
-          <span>Aygıt · sektör</span>
-          <div className="grid grid-cols-9 gap-2">
-            {[...PHYSICAL, 90].map((p) => (
-              <span
-                key={p}
-                className={
-                  p === 45 && stage >= 1
-                    ? "address-failed"
-                    : p === mapping[5]
-                      ? "address-selected"
-                      : ""
-                }
-              >
-                P{p}
-                {p === 45 && stage >= 1 ? " ×" : ""}
-              </span>
-            ))}
-          </div>
-        </div>
         <StageCaption className="text-center text-xs font-semibold text-slate-600 md:text-sm">
           {REMAP_EXPLANATIONS[stage]}
         </StageCaption>

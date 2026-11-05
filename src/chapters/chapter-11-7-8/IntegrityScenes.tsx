@@ -215,8 +215,7 @@ export function IntegrityScene(context: SceneContext) {
         <Caption>{captions[stage]}</Caption>
         {stage >= 2 && (
           <small className="text-center text-[10px] text-slate-600">
-            C₁/C₂ temsili checksum adlarıdır; hash algoritması hesaplanmaz. ZFS
-            bağlamı: OSC10 slayt 43.
+            C₁/C₂: temsili checksum değerleri
           </small>
         )}
       </div>
@@ -326,10 +325,6 @@ export function PoolScene(context: SceneContext) {
           </div>
         )}
         <Caption>{captions[stage]}</Caption>
-        <small className="text-center text-[10px] text-slate-600">
-          Özgün alan örneği · toplam 12 birim korunur · ZFS/havuz bağlamı, slayt
-          43–44
-        </small>
       </div>
     </Stage>
   );
@@ -373,7 +368,6 @@ function objectGraph(
         target: `system-${system}`,
         active: copied,
         muted: !copied,
-        label: copied ? "Yerleştirilen kopya" : "Kopya yok",
         animated: stage === 5 && system === 3,
       });
     }
@@ -467,7 +461,7 @@ export function ObjectStorageScene(context: SceneContext) {
     "Oluşturma işlemi obj:42 kimliğini döndürdü. Program bu kimliği sonraki işlemler için saklar.",
     "Program obj:42 ile erişti; var olan nesnenin verisi 1010 olarak döndü.",
     "obj:42 silindi. Bu örnekte aynı kimlikle okunabilecek canlı nesne kalmadı.",
-    "Yeni yerleştirme örneği: obj:99, üç farklı sistemde üç kopya olarak korunur. Önceki silinmiş nesne geri getirilmedi.",
+    "Yeni örnek: obj:99, üç farklı sistemde üç kopya olarak korunur.",
     "Dördüncü sistem eklendi. Örnek yönetici obj:99’un üç kopyasını yeni yerleşime dağıttı; uygulama hâlâ aynı kimliği kullanır.",
   ];
   const graph = objectGraph(state, stage);
@@ -479,17 +473,12 @@ export function ObjectStorageScene(context: SceneContext) {
           {...context}
           choices={[
             { label: "Yaşam döngüsü", stage: 0, until: 3 },
-            { label: "Yeni yerleştirme örneği", stage: 4, until: 5 },
+            { label: "Yerleştirme", stage: 4, until: 5 },
           ]}
         />
       }
     >
       <div className="flex h-full min-h-0 w-full max-w-5xl flex-col items-center justify-center gap-4 md:gap-6">
-        {state.example === "placement" && (
-          <span className="rounded-xl bg-[#c4b2fa]/30 px-4 py-2 font-mono text-sm font-semibold">
-            Yeni örnek · {state.id} · N = {state.copies.length} kopya
-          </span>
-        )}
         <FlowDiagram
           id={
             state.example === "placement"
@@ -505,8 +494,7 @@ export function ObjectStorageScene(context: SceneContext) {
         />
         {state.example === "placement" && (
           <span className="text-center text-xs font-semibold text-slate-600">
-            Yerleştirme ve koruma: depolama yönetim yazılımı · kaynak örnekleri
-            HDFS / Ceph
+            Yerleştirme ve koruma: depolama yönetim yazılımı
           </span>
         )}
         <Caption>{captions[stage]}</Caption>

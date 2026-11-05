@@ -1,30 +1,35 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { createServer } from "vite";
 import {
   motionGroups,
   sceneMotionPose,
   sceneMotionProfile,
 } from "../src/presentation/motion-presets.mjs";
 
-const contract = JSON.parse(
-  readFileSync(
-    new URL("../docs/presentation-contract.json", import.meta.url),
-    "utf8",
-  ),
-);
-
-test("every planned scene has exactly one intentional motion profile", () => {
+test("every registered scene has exactly one intentional motion profile", async () => {
   const ids = Object.values(motionGroups).flat();
   assert.equal(
     new Set(ids).size,
     ids.length,
     "No duplicate profile assignments",
   );
-  assert.deepEqual(
-    ids.toSorted(),
-    contract.map((scene) => scene.id).toSorted(),
-  );
+  const server = await createServer({
+    server: { middlewareMode: true, hmr: false, ws: false, watch: null },
+    appType: "custom",
+    logLevel: "error",
+  });
+  try {
+    const { scenes } = await server.ssrLoadModule(
+      "/src/presentation/registry.ts",
+    );
+    assert.deepEqual(
+      ids.toSorted(),
+      scenes.map((scene) => scene.id).toSorted(),
+    );
+  } finally {
+    await server.close();
+  }
   assert.equal(Object.keys(motionGroups).length, 6);
 });
 

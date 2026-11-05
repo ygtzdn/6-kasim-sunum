@@ -19,11 +19,11 @@ import { managementStages } from "./stages";
 import { StageControls } from "./StageControls";
 
 const SPACE_CAPTIONS = [
-  "RAM sınırlıdır. Depolamadaki arka alan, taşınan içerik için yer sağlar; RAM hızını artırmaz.",
+  "RAM yetersiz kaldığında bazı içerikler depolamadaki swap alanına taşınabilir.",
   "Bütün süreç veya sayfalar taşınabilir. Sonraki örnekte yalnız P sayfasını izleyeceğiz.",
   "Dosya sistemi içindeki bir dosyada swap alanı sağlanabilir; alan eklemek kolaylaşabilir.",
   "Swap ayrı bir raw bölümde de sağlanabilir. Bu, normal dosya/dizin hizmeti değildir.",
-  "Birden çok swap alanı I/O yükünü paylaşabilir. Çizim bir hız çarpanı değildir.",
+  "Farklı aygıtlardaki swap alanları I/O yükünü paylaşabilir.",
 ];
 function PageTile({
   id,
@@ -171,7 +171,7 @@ const JOURNEY_CAPTIONS = [
   "S0 hedef olarak ayrıldı; henüz geçerli veri yok. P, F0'da kalır.",
   "P dışarı yazılıyor. Yazma tamamlanmadan F0 serbest bırakılmaz.",
   "Yazma tamamlandı: S0 geçerli, F0 serbest. Yazma sayacı şimdi 1.",
-  "P yeniden gerekli. S0'dan F0'a okuma başladı; F0 henüz boş.",
+  "P yeniden gerekli. S0'dan F0'a okuma başladı; P henüz RAM'de geçerli değil.",
   "P RAM'e döndü. Bu örnekte swap slot'u artık bırakılır; okuma sayacı 1.",
   "P'nin kimliği korundu. İki farklı konum arasında 1 yazma ve 1 okuma yapıldı.",
 ];
@@ -182,7 +182,12 @@ export function SwapJourney({ stage, setStage, enabled }: SceneContext) {
     {
       id: "ram-f0",
       label: "RAM · Frame F0",
-      detail: state.ram ? "Sayfa P" : "Boş frame",
+      detail: state.ram
+        ? "Sayfa P"
+        : state.pending === "read"
+          ? "Okuma için ayrıldı"
+          : "Boş frame",
+      position: { x: 0, y: 40 },
       tone: summary ? "complete" : state.ram ? "active" : "muted",
       body: (
         <span
@@ -196,15 +201,15 @@ export function SwapJourney({ stage, setStage, enabled }: SceneContext) {
     {
       id: "swap-s0",
       label: "Swap · Slot S0",
+      position: { x: 440, y: 40 },
       detail:
         state.slotStatus === "reserved"
           ? "Ayrıldı · henüz geçerli değil"
           : state.slotStatus === "valid"
             ? "Geçerli sayfa P"
             : "Boş slot",
-      tone: summary
-        ? "complete"
-        : state.slotStatus === "valid"
+      tone:
+        state.slotStatus === "valid"
           ? "active"
           : state.slotStatus === "reserved"
             ? "default"
@@ -230,6 +235,8 @@ export function SwapJourney({ stage, setStage, enabled }: SceneContext) {
       active: state.pending === "write" || state.writes > 0,
       muted: state.pending !== "write" && state.writes === 0,
       animated: state.pending === "write",
+      sourceSide: "right",
+      targetSide: "left",
     },
     {
       id: "page-read",
@@ -239,6 +246,8 @@ export function SwapJourney({ stage, setStage, enabled }: SceneContext) {
       active: state.pending === "read" || state.reads > 0,
       muted: state.pending !== "read" && state.reads === 0,
       animated: state.pending === "read",
+      sourceSide: "bottom",
+      targetSide: "bottom",
     },
   ];
   return (
@@ -267,9 +276,8 @@ export function SwapJourney({ stage, setStage, enabled }: SceneContext) {
           label={`P sayfası; RAM F0 ${state.ram ?? "boş"}, swap S0 ${state.slotStatus === "reserved" ? "P için ayrılmış, henüz geçerli değil" : state.slotStatus === "valid" ? "P geçerli" : "boş"}; ${state.writes} yazma, ${state.reads} okuma`}
           nodes={nodes}
           edges={edges}
-          direction="TB"
           enabled={enabled}
-          className="h-[clamp(240px,42dvh,370px)] w-full"
+          className="h-[clamp(220px,35dvh,320px)] w-full"
         />
         {state.pending && (
           <span role="status" className="text-sm font-semibold text-blue">

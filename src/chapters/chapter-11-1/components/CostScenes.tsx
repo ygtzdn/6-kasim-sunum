@@ -2,7 +2,7 @@ import type { SceneContext } from "../../../presentation/types";
 import { motion } from "motion/react";
 import AccessLab, { initialAccess } from "../../../components/AccessLab";
 import { calculateAccess } from "../../../models/hdd.mjs";
-import { hardwareCaptions } from "../notes";
+import { hardwareCaptions } from "../captions";
 import { Lesson, Metric, number } from "./LearningPrimitives";
 export function AccessCost(context: SceneContext) {
   return (

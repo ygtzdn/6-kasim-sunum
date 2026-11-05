@@ -1,17 +1,22 @@
-/** Finite, reversible teaching stages from the approved OSC10 V3 contract. */
+/** Finite, reversible teaching stages, limited to the OSC10 chapter's concepts. */
 export const managementStages = {
+  "why-error-detection": [
+    "Veriyi saklama ve okuma",
+    "Bir bitin değişmesi",
+    "Denetim bilgisine ihtiyaç",
+  ],
   "error-detection": [
     "Saklanan denetim bilgisi",
-    "Tek bit değişimi",
-    "Çift hata sınırı",
-    "Diğer denetim yöntemleri",
+    "Tek bitin değişmesi",
+    "Parite kontrolü",
+    "İki bit ve paritenin sınırı",
+    "Checksum ve CRC",
   ],
   "error-correction": [
-    "Veri ve ek kod",
-    "Tek bozuk bit",
-    "Tespit ve düzeltme",
-    "İki bozuk bit",
-    "Kodun sınırı",
+    "Veri ve ECC bilgisi",
+    "Okumada bit hatası",
+    "ECC ile düzeltme",
+    "Düzeltilemeyen hata",
   ],
   "device-preparation": [
     "Ham ortam",

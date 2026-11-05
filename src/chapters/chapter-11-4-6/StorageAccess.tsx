@@ -29,14 +29,15 @@ export function StorageAccess({ stage, setStage, enabled }: SceneContext) {
     },
     {
       id: "block-manager",
-      label: raw ? "Kendi blok yönetimi" : "Dosya sistemi",
+      label: raw ? "Blok yönetimi" : "Dosya sistemi",
       icon: raw ? Database : FolderOpen,
       tone: "active",
     },
     { id: "os-io", label: "OS I/O", detail: "Sürücüler", tone: "complete" },
     {
       id: "block-device",
-      label: "Mantıksal blok aygıtı",
+      label: "Blok aygıtı",
+      detail: "Mantıksal adresler",
       icon: HardDrive,
       tone: "complete",
     },

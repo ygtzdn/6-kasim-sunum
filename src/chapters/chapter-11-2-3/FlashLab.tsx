@@ -21,71 +21,87 @@ const actions = [
   "Tamamlandı",
 ];
 
-export function FlashLab({ enabled, stage, setStage }: SceneContext) {
-  const state = flashStateAtStage(stage);
-  const selected = [0, 0, 1, 2, 2, 2][state.step];
+export function FlashAddressing(context: SceneContext) {
+  return <FlashLab {...context} addressing />;
+}
+
+export function FlashLab({
+  enabled,
+  stage,
+  setStage,
+  addressing = false,
+}: SceneContext & { addressing?: boolean }) {
+  const state = flashStateAtStage(addressing ? Math.min(stage, 1) : stage);
+  const selected =
+    state.step === 3 ? [2, 3] : [[0], [0], [1], [2], [2], [2]][state.step];
   const ratio = flashWriteAmplification(state);
   return (
     <Stage
       title={
-        state.step >= 5
-          ? "3 host yazması. 5 fiziksel yazma."
-          : "Host yazması = fiziksel yazma mı?"
+        addressing
+          ? "Mantıksal ve fiziksel adres"
+          : state.step >= 5
+            ? "3 host yazması. 5 fiziksel yazma."
+            : "Flash'ta güncelleme ve garbage collection"
       }
       controls={
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <button
-            className="primary-button disabled:opacity-40"
-            disabled={state.step >= 5}
-            onClick={() => setStage(stage + 1)}
-          >
-            {actions[state.step]}
-            <SkipForward size={18} />
-          </button>
-          <button
-            className="icon-button"
-            aria-label="Flash yazma ve GC modelini sıfırla"
-            onClick={() => setStage(0)}
-          >
-            <RotateCcw size={19} />
-          </button>
-          <span className="ml-2 text-xs font-semibold text-slate-600">
-            {state.step}/5
-          </span>
-        </div>
+        addressing ? undefined : (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <button
+              className="primary-button disabled:opacity-40"
+              disabled={state.step >= 5}
+              onClick={() => setStage(stage + 1)}
+            >
+              {actions[state.step]}
+              <SkipForward size={18} />
+            </button>
+            <button
+              className="icon-button"
+              aria-label="Flash yazma ve GC modelini sıfırla"
+              onClick={() => setStage(0)}
+            >
+              <RotateCcw size={19} />
+            </button>
+            <span className="ml-2 text-xs font-semibold text-slate-600">
+              {state.step}/5
+            </span>
+          </div>
+        )
       }
     >
       <div className="flex h-full w-full max-w-[1100px] flex-col justify-center gap-2 md:gap-4">
-        <div className="flex shrink-0 items-center justify-center gap-5 md:gap-12">
-          {[
-            [state.hostWrites, "Host yazması"],
-            [state.physicalWrites, "Fiziksel yazma"],
-            [state.erases, "Silme"],
-          ].map(([value, label]) => (
-            <div className="flex flex-col items-center gap-1" key={label}>
-              <strong className="font-display text-3xl font-medium text-blue md:text-5xl">
-                {value}
+        {!addressing && (
+          <div className="flex shrink-0 items-center justify-center gap-5 md:gap-12">
+            {[
+              [state.hostWrites, "Host yazması"],
+              [state.physicalWrites, "Fiziksel yazma"],
+              [state.erases, "Silme"],
+            ].map(([value, label]) => (
+              <div className="flex flex-col items-center gap-1" key={label}>
+                <strong className="font-display text-3xl font-medium text-blue md:text-5xl">
+                  {value}
+                </strong>
+                <span className="text-[9px] font-semibold text-slate-600 md:text-xs">
+                  {label}
+                </span>
+              </div>
+            ))}
+            <div className="flex flex-col items-center gap-1 border-l border-slate-300 pl-4 md:pl-10">
+              <strong className="font-display text-3xl font-medium md:text-5xl">
+                {ratio === null
+                  ? "—"
+                  : ratio.toLocaleString("tr-TR", { maximumFractionDigits: 2 })}
+                <span className="text-sm">×</span>
               </strong>
               <span className="text-[9px] font-semibold text-slate-600 md:text-xs">
-                {label}
+                Yazma büyütmesi
+              </span>
+              <span className="text-[8px] text-slate-500 md:text-[10px]">
+                Fiziksel / host
               </span>
             </div>
-          ))}
-          <div className="flex flex-col items-center gap-1 border-l border-slate-300 pl-4 md:pl-10">
-            <strong className="font-display text-3xl font-medium md:text-5xl">
-              {ratio === null
-                ? "—"
-                : ratio.toLocaleString("tr-TR", { maximumFractionDigits: 2 })}
-              <span className="text-sm">×</span>
-            </strong>
-            <span className="text-[9px] font-semibold text-slate-600 md:text-xs">
-              Yazma büyütmesi
-            </span>
-            <span className="text-[8px] text-slate-500 md:text-[10px]">
-              Fiziksel / host
-            </span>
           </div>
-        </div>
+        )}
         <div className="flex shrink-0 items-center justify-between text-[9px] font-semibold text-slate-500 md:text-[10px]">
           <span>SSD denetleyicisi / flash</span>
           <span>Eğitim modeli · 3 × 4 sayfa</span>
@@ -110,7 +126,9 @@ export function FlashLab({ enabled, stage, setStage }: SceneContext) {
               <div className="grid min-h-0 grid-rows-4 gap-1.5 md:gap-2">
                 {block.map((page, pageIndex) => {
                   const active =
-                    page.status === "valid" && page.logical === selected;
+                    page.status === "valid" &&
+                    page.logical !== null &&
+                    selected.includes(page.logical);
                   const invalid = page.status === "invalid";
                   return (
                     <motion.div
@@ -174,16 +192,20 @@ export function FlashLab({ enabled, stage, setStage }: SceneContext) {
           {Object.entries(state.mapping).map(([logical, location]) => (
             <span
               key={logical}
-              aria-label={`L${logical} → B${location.block}.P${location.page}${selected === Number(logical) ? ", bu aşamada izlenen eşleme" : ""}`}
-              className={`inline-flex items-center gap-1 rounded-md border px-1.5 py-1 text-[9px] font-semibold md:px-2 md:text-[10px] ${selected === Number(logical) ? "border-blue bg-blue text-white" : "border-slate-300 bg-white"}`}
+              aria-label={`L${logical} → B${location.block}.P${location.page}${selected.includes(Number(logical)) ? ", bu aşamada izlenen eşleme" : ""}`}
+              className={`inline-flex items-center gap-1 rounded-md border px-1.5 py-1 text-[9px] font-semibold md:px-2 md:text-[10px] ${selected.includes(Number(logical)) ? "border-blue bg-blue text-white" : "border-slate-300 bg-white"}`}
             >
               L{logical}
               <ArrowRight size={10} />B{location.block}.P{location.page}
             </span>
           ))}
         </div>
-        <StageCaption className="h-4 text-center text-[10px] font-semibold text-slate-600 md:h-5 md:text-xs">
-          {state.event}
+        <StageCaption className="shrink-0 text-center text-xs font-semibold leading-relaxed text-slate-600 md:text-sm">
+          {addressing
+            ? stage === 0
+              ? "L0 mantıksal adresi, B0.P0 fiziksel konumunu gösterir."
+              : "L0 aynı kaldı. Yeni sürüm B1.P2'ye yazıldı, FTL güncel konumu gösteriyor."
+            : state.event}
         </StageCaption>
       </div>
     </Stage>

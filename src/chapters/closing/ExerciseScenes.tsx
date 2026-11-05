@@ -15,6 +15,19 @@ const scheduleResults = (["FCFS", "SCAN", "C-SCAN"] as ScheduleAlgorithm[]).map(
 );
 const n = (value: number) =>
   value.toLocaleString("tr-TR", { maximumFractionDigits: 4 });
+const explanations: Record<string, string> = {
+  nvm: "Mekanik seek ve dönme yoktur. FCFS basit ve düşük ek yüklüdür.",
+  schedule:
+    "Yön artandır. SCAN fiziksel uca gider; C-SCAN dönüş hareketini de sayar.",
+  rotation:
+    "Ortalama bekleme bir turun yarısıdır. Seek ve aktarım bu hesaba dahil değildir.",
+  comparison:
+    "HDD’de büyük sıralı aktarım mekanik maliyetin payını azaltır; NVM’de küçük rastgele I/O düşük gecikmeden yararlanır.",
+  "raid-write":
+    "Yeni pariteyi hesaplamak için eski veri ve eski parite gerekir.",
+  reliability:
+    "Bağımsız ve sabit arıza hızı varsayımıyla disklerin arıza hızları toplanır. MTBF, garanti süresini belirlemez.",
+};
 
 function ExerciseVisual({
   type,
@@ -138,19 +151,7 @@ export const exerciseScenes: SceneDefinition[] = exercises.map((exercise) => ({
   legacyIds: [],
   stages: exercise.stages,
   seconds: exercise.seconds,
-  notes: {
-    represents: `${exercise.model} Önce yalnız soru ve verilenler görünür. Enter ile sonraki aşamada hesap veya karşılaştırma açılır; Backspace soruya döner. Yanıtın görünürlüğü yalnız seçilen aşamadan üretilir.`,
-    learningGoal: exercise.answer,
-    walkthrough: [
-      exercise.question,
-      exercise.answer,
-      "Çözümde hangi varsayımın kullanıldığını söyleyin; gerçek aygıt veya ürün garantisi sonucu çıkarmayın.",
-    ],
-    keyPoints: [exercise.answer, exercise.model],
-    limits: exercise.model,
-    question: { prompt: exercise.question, answer: exercise.answer },
-    transition: "Sonraki alıştırmaya veya tasarım değerlendirmesine geçin.",
-  },
+  notes: { explanation: exercise.answer },
   render: (context) => <ExerciseScene {...context} exercise={exercise} />,
 }));
 
@@ -188,11 +189,11 @@ function ExerciseScene({
           {revealed ? (
             <StageReveal className="exercise-answer">
               <strong>Gerekçe</strong>
-              <p>{exercise.answer}</p>
+              <p>{explanations[exercise.visual]}</p>
             </StageReveal>
           ) : (
             <p className="exercise-prompt">
-              Önce sonucu ve gerekçeni söyle. Enter ile çözümü aç.
+              Sonucunu gerekçesiyle birlikte düşün.
             </p>
           )}
         </div>

@@ -91,7 +91,6 @@ const DiagramNodeView = memo(function DiagramNodeView({
         color: tone.color,
         borderColor: tone.border,
         opacity: tone.opacity,
-        scale: data.tone === "active" ? 1.025 : 1,
       }}
       transition={{
         duration: data.enabled ? 0.24 : 0,
@@ -258,6 +257,7 @@ export function FlowDiagram({
       aria-label={`${label}. ${summary}. Bağlantılar: ${relationships}`}
       data-diagram-library="react-flow-dagre"
     >
+      {/* Initial dimensions support SSR; ResizeObserver supplies the real size. */}
       <ReactFlow
         id={`flow-${id}-${instanceId}`}
         nodes={flowNodes}

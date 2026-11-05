@@ -3,7 +3,7 @@ import type { SceneContext, SceneDefinition } from "../../presentation/types";
 import curriculum from "./curriculum.json";
 import { schedulingNotes } from "./notes";
 import { QueueSetup, ScheduleComparison, SchedulingLab } from "./SchedulingLab";
-import { FlashLab } from "./FlashLab";
+import { FlashLab, FlashAddressing } from "./FlashLab";
 import { NvmCheckpoint, NvmScheduling } from "./NvmScenes";
 const renderers: Record<string, (context: SceneContext) => ReactNode> = {
   "hdd-request-queue": (context) => <QueueSetup {...context} />,
@@ -12,6 +12,7 @@ const renderers: Record<string, (context: SceneContext) => ReactNode> = {
   "cscan-path": (context) => <SchedulingLab {...context} algorithm="C-SCAN" />,
   "scheduling-tradeoffs": (context) => <ScheduleComparison {...context} />,
   "nvm-scheduling": (context) => <NvmScheduling {...context} />,
+  "flash-addressing": (context) => <FlashAddressing {...context} />,
   "flash-write-amplification": (context) => <FlashLab {...context} />,
   "nvm-management-summary": (context) => <NvmCheckpoint {...context} />,
 };

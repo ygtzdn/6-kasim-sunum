@@ -34,6 +34,21 @@ export function layoutDiagram(nodes, edges, direction = "LR") {
     for (const edge of edges)
       if (!ids.has(edge.source) || !ids.has(edge.target))
         throw new RangeError("Sabit yerleşimde bağlantı düğümü bulunamadı.");
+    for (let i = 0; i < nodes.length; i++) {
+      const a = positions[nodes[i].id];
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = positions[nodes[j].id];
+        if (
+          a.x < b.x + DIAGRAM_NODE_WIDTH &&
+          b.x < a.x + DIAGRAM_NODE_WIDTH &&
+          a.y < b.y + DIAGRAM_NODE_HEIGHT &&
+          b.y < a.y + DIAGRAM_NODE_HEIGHT
+        )
+          throw new RangeError(
+            `Diyagram kartları çakışıyor: ${nodes[i].id} / ${nodes[j].id}`,
+          );
+      }
+    }
     return {
       width: Math.max(
         ...Object.values(positions).map(

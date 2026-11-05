@@ -122,8 +122,8 @@ export function HostAttachedScene(context: SceneContext) {
     "Aygıt hazır. Host ona hangi bağlantı yoluyla ulaşır?",
     "Host-attached erişim yerel I/O portu üzerinden aygıta ulaşır.",
     "Bir bus, host ile birden çok aygıtın bağlantısını taşıyabilir.",
-    "Kaynak FC fabric örneğinde birden çok host ve depolama aygıtı bağlanabilir.",
-    "Bağlantı konumu ve sunulan arayüz ayrı eksenlerdir; bu etiketler birbirini dışlayan üç ürün sınıfı değildir.",
+    "FC fabric, birden çok host ile depolama aygıtını bağlayabilir.",
+    "Bağlantı yolu ile blok, dosya veya API arayüzü ayrı kararlardır.",
   ];
   return (
     <Stage
@@ -193,7 +193,7 @@ export function NasScene(context: SceneContext) {
   const captions = [
     "İstemci /sunum.pdf verisini istiyor. Uzaktaki dosyayı hangi uç yönetir?",
     "NAS, NFS/CIFS gibi dosya protokolleriyle uzak dosya sistemi hizmeti sunar.",
-    "Kaynak örneğinde uzak çağrılar IP üzerinde TCP/UDP ile taşınır; fiziksel ağ, hizmet semantiği değildir.",
+    "Dosya işlemleri, IP üzerinde TCP/UDP ile taşınan uzak çağrılara dönüşür.",
     "Sunucunun dosya sistemi dosya isteğini kendi aygıtındaki blok işlemlerine dönüştürür.",
     "Karşı örnek: iSCSI, SCSI/blok erişimini IP üzerinden taşır. NAS dosya protokolü değildir.",
     "Aynı ağda dosya hizmeti de blok hacmi de sunulabilir. Dosya sistemi sorumluluğu farklı uçtadır.",
@@ -277,7 +277,7 @@ export function CloudScene(context: SceneContext) {
     "İstek WAN / Internet üzerinden uzak veri merkezine gider.",
     "API bir fiziksel aygıt değil, programın hizmeti kullandığı arayüzdür.",
     "Uzak hizmet yanıt verebilir; bağlantı veya işlem başarısız da olabilir.",
-    "Kitabın API gerekçesi yalnız aktarım hızı değildir: gecikme ve başarısızlık durumları da ele alınır.",
+    "Uzak istekte gecikme ve başarısızlık durumları da ele alınmalıdır.",
   ];
   return (
     <Stage
@@ -344,9 +344,9 @@ export function StorageArrayScene(context: SceneContext) {
   const captions = [
     "Host tek aygıta veya aygıtları birleştiren bir depolama dizisine bağlanabilir.",
     "Dizi host portları ve denetleyici üzerinden erişim sunar.",
-    "Denetleyici bellek/yazılım ve çok sayıda diski yönetir; çizimdeki dört disk yalnız temsildir.",
+    "Denetleyici, bellek ve yönetim yazılımıyla disk grubunu düzenler.",
     "Birden çok host paylaşılan dizi kaynaklarını kullanabilir; hacimler ve hizmetler ayrıca düzenlenir.",
-    "RAID, snapshot, clone, thin provisioning, replication ve deduplication farklı görevlerdir; hepsi RAID seviyesi değildir.",
+    "RAID ve diğer dizi hizmetleri farklı görevler üstlenir.",
   ];
   return (
     <Stage
@@ -381,20 +381,18 @@ export function StorageArrayScene(context: SceneContext) {
             </div>
           </div>
         ) : stage === 4 ? (
-          <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-3">
+          <div className="grid w-full grid-cols-3 gap-3">
             {[
-              "RAID",
-              "Snapshot",
-              "Clone",
-              "Thin provisioning",
-              "Replication",
-              "Deduplication",
-            ].map((name) => (
+              { name: "RAID", task: "Çoklu disk düzeni" },
+              { name: "Snapshot", task: "Geçmiş görünüm" },
+              { name: "Replication", task: "Yazmaları uzak merkeze kopyalama" },
+            ].map(({ name, task }) => (
               <div
                 key={name}
-                className={`rounded-xl border-2 p-4 text-center text-sm font-semibold md:text-lg ${name === "RAID" ? "border-blue bg-blue text-white" : "border-ink bg-white"}`}
+                className={`rounded-xl border-2 p-4 text-center ${name === "RAID" ? "border-blue bg-blue text-white" : "border-ink bg-white"}`}
               >
-                {name}
+                <strong className="block text-sm md:text-xl">{name}</strong>
+                <span className="mt-3 block text-xs md:text-base">{task}</span>
               </div>
             ))}
           </div>
@@ -475,9 +473,7 @@ function ArrayStructure({
       source: "host-b",
       target: "ports",
       active: true,
-      label: "Host B hacmi",
     });
-    edges[0] = { ...edges[0], label: "Host A hacmi" };
   }
   const positions: Record<string, { x: number; y: number }> =
     stage === 1
@@ -595,75 +591,18 @@ function FabricDiagram({
       muted: stage === 0,
     },
   ];
-  if (stage >= 3 && stage < 5 && !generic) {
-    nodes.push(
-      {
-        id: "lun-a",
-        label: "LUN A",
-        detail: "Sunulan blok hacmi",
-        icon: HardDrive,
-        badge: stage >= 4 ? "Yalnız Host A" : "Görünürlük seçilmedi",
-        tone: stage >= 4 ? "active" : "default",
-      },
-      {
-        id: "lun-b",
-        label: "LUN B",
-        detail: "Sunulan blok hacmi",
-        icon: HardDrive,
-        badge: stage >= 4 ? "Yalnız Host B" : "Görünürlük seçilmedi",
-      },
-    );
-    edges.push(
-      {
-        id: "array-a-volume",
-        source: "array-a",
-        target: "lun-a",
-        active: stage >= 4,
-        label: "Hacim",
-      },
-      {
-        id: "array-b-volume",
-        source: "array-b",
-        target: "lun-b",
-        label: "Hacim",
-      },
-    );
-  }
-  if (stage === 5) {
-    nodes.find((node) => node.id === "array-a")!.badge = "LUN A · Host A";
-    nodes.find((node) => node.id === "array-b")!.badge = "LUN B · Host B";
-    nodes.push({
-      id: "communications",
-      label: "İletişim ağı",
-      detail: "Ayrı düzenlenebilir",
-      icon: Cloud,
-      badge: "iSCSI / FCoE bağlamı",
-    });
-    edges.push(
-      {
-        id: "a-communications",
-        source: "host-a",
-        target: "communications",
-        muted: true,
-        label: "İletişim yolu",
-      },
-      {
-        id: "b-communications",
-        source: "host-b",
-        target: "communications",
-        muted: true,
-      },
-    );
+  if (stage >= 3 && !generic) {
+    nodes.find((node) => node.id === "array-a")!.badge =
+      stage >= 4 ? "LUN A · yalnız Host A" : "LUN A";
+    nodes.find((node) => node.id === "array-b")!.badge =
+      stage >= 4 ? "LUN B · yalnız Host B" : "LUN B";
   }
   const positions: Record<string, { x: number; y: number }> = {
     "host-a": { x: 0, y: 0 },
     "host-b": { x: 0, y: 210 },
-    fabric: { x: 290, y: stage === 5 ? 210 : 105 },
-    "array-a": { x: 580, y: 0 },
-    "array-b": { x: 580, y: 210 },
-    "lun-a": { x: 870, y: 0 },
-    "lun-b": { x: 870, y: 210 },
-    communications: { x: 290, y: 0 },
+    fabric: { x: 300, y: 105 },
+    "array-a": { x: 600, y: 0 },
+    "array-b": { x: 600, y: 210 },
   };
   for (const node of nodes) node.position = positions[node.id];
   return (
@@ -704,6 +643,18 @@ export function SanScene(context: SceneContext) {
           stage={stage}
           enabled={context.enabled}
         />
+        {stage === 5 && (
+          <div className="grid w-full max-w-3xl grid-cols-2 gap-3 text-center text-sm">
+            <div className="rounded-xl border border-blue bg-blue/5 p-3">
+              <strong className="block text-blue">Depolama ağı</strong>
+              <span>Host ↔ dizi · blok erişimi</span>
+            </div>
+            <div className="rounded-xl border border-slate-300 bg-white p-3">
+              <strong className="block">İletişim ağı</strong>
+              <span>Diğer ağ trafiği</span>
+            </div>
+          </div>
+        )}
         <Caption>{captions[stage]}</Caption>
       </div>
     </Stage>

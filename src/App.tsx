@@ -21,7 +21,7 @@ export default function App() {
       >
         <main className="presentation-canvas" aria-label="Sunum">
           <AnimatePresence
-            mode="sync"
+            mode="wait"
             initial={false}
             custom={{ enabled, direction: presentation.direction }}
           >

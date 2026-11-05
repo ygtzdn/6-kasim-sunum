@@ -1,8 +1,8 @@
-# Mass Storage — Kitaba bağlı etkileşimli sunum
+# Kütlesel depolama — Etkileşimli sunum
 
-**Operating System Concepts, Tenth Edition · Bölüm 11.1–11.8.** Türkçe sunum; 56 sahne, 280 adlandırılmış aşama, dört sunucu. Açık tasarım dili korunarak içerik ve sahne sırası kitap kapsamına göre yeniden kuruldu.
+**Operating System Concepts, Tenth Edition · Bölüm 11.1–11.8.** Dört kişinin Türkçe sunumu. İlk ekranda sekiz bölüm başlığı birlikte görünür. Sunum varsayılan olarak 51 sayfalık **Ana akış** rotasında açılır. **Tüm içerik** 57 sayfayı kapsar.
 
-Yerel sunum: **[http://localhost:5173/](http://localhost:5173/)**.
+Yerel sunum: [http://localhost:5173/](http://localhost:5173/).
 
 ## Başlangıç
 
@@ -13,90 +13,92 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Node PATH'te yoksa `./scripts/dev.sh` kullanılabilir. Uygulama istemci tarafındadır; hesap, veritabanı, API anahtarı veya çalışma sırasında dış servis gerekmez. Font ve gerçek donanım fotoğrafları yereldir.
+Node PATH'te yoksa `./scripts/dev.sh` kullanılabilir. Fotoğraflar ve fontlar yereldir. Sunum sırasında hesap, veritabanı, API anahtarı veya dış hizmet gerekmez.
 
-## İki anlatım rotası
+## Güncel akış
 
-| Rota | Sahne | Aşama | Prova hedefi |
-| --- | ---: | ---: | --- |
-| Ana anlatım | 50 | 256 | 48:20 · yaklaşık 49 dk |
-| Ayrıntılı | 56 | 280 | 84:10 · yaklaşık 85 dk |
+Açılıştaki her başlık kendi bölümünün ilk sayfasına bağlanır. Menü de 11.1–11.8 başlıklarıyla gruplanır.
 
-Rota menüden seçilir. Ana rota, kitabın bütün 11.1–11.8 başlıklarını korur. Altı ek açıklama ayrıntılı rotada sıraya girer; menüden her zaman doğrudan açılabilir. Bunlar HDD tarihçesi, performans ölçüleri, flash dayanıklılığı/DWPD, raw erişim, XOR ve çok boyutlu paritedir. Süreler plan hedefidir; gerçek konuşma süresi ölçülmüş sayılmaz. Uzun soru-cevap ve tekrar için 90 dakikalık prova önerileri rehberdedir.
+| Sunucu | Kapsam |
+| --- | --- |
+| 1. kişi | 11.1 · HDD, SSD/NVM, sayfa/blok ve temel yazma/silme kuralları, DWPD, RAM |
+| 2. kişi | 11.2–11.3 · HDD/NVM zamanlaması, ayrıntılı adresleme, güncelleme, GC, yazma büyütmesi ve wear leveling |
+| 3. kişi | 11.4–11.6 · Hata kontrolü, aygıt yönetimi ve swap |
+| 4. kişi | 11.7–11.8 · Bağlantılar, RAID, bütünlük, havuz ve nesne depolama |
 
-## Vercel
+11.1 ana akışı:
 
-`vercel.json`, Vite derlemesini ve `dist/` çıktı klasörünü tanımlar. Kurulum ve derleme pnpm 11.25.0 sürümünü kullanır; Node.js sürümü `package.json` içinde 24.x olarak sabittir. Ortam değişkeni gerekmez.
+1. Gerçek HDD, SSD ve RAM fotoğraflarıyla ortak tanıtım.
+2. Gerçek fotoğraf üzerinden HDD parçaları.
+3. İz, sektör ve silindir.
+4. HDD okuması ve erişim süresi.
+5. İstek boyutu ve mekanik bekleme.
+6. Gerçek kart üzerinden NVM/SSD parçaları.
+7. NAND'da sayfa ve blok.
+8. Flash dayanıklılığı ve DWPD.
+9. RAM'in çalışma alanı ve elektrikle ilişkisi.
+10. RAM, HDD ve SSD karşılaştırması.
 
-Proje kökü depo köküdür. Sunum adresleri `/#/sunum/s01` biçiminde hash yönlendirmesi kullandığı için ek sunucu yönlendirme kuralına gerek yoktur. `.vercel/` içindeki yerel hesap/proje bağlantıları Git'e eklenmez.
+Teyp ve HDD tarihçesi sunumdan çıkarıldı. RAM disk anlatımı RAM'in çalışma alanı ve güç bağımlılığıyla değiştirildi. GC ve wear leveling 2. kişinin bölümünde kalır. Adresleme ve GC aynı üç bloklu flash modelini kullanır.
 
-## Sunucu dağılımı
+Ana akışın dışındaki altı ek sayfa menüden veya Tüm içerik rotasından açılabilir: performans ölçüleri, HDD mantıksal blok görünümü, komut/DMA veri yolu, raw erişim, XOR ve çok boyutlu parite. DWPD ana akıştadır.
 
-| Blok | Kapsam | Ana / tam süre | Hazırlık |
-| --- | --- | --- | --- |
-| Açılış | Bölümün sorusu ve dört kişinin haritası | 2:00 / 3:00 | Ortak rehber |
-| 1. kişi | 11.1 · HDD, NVM, RAM disk, teyp, blok ve veri yolu | 9:30 / 19:30 | [Sunucu 1](docs/sunucu-1-prova.md) |
-| 2. kişi | 11.2–11.3 · HDD ve NVM zamanlaması | 10:50 / 16:45 | [Sunucu 2](docs/sunucu-2-prova.md) |
-| 3. kişi | 11.4–11.6 · Doğruluk, aygıt, boot ve swap | 9:00 / 16:00 | [Sunucu 3](docs/sunucu-3-prova.md) |
-| 4. kişi | 11.7–11.8 · Bağlantı, RAID, bütünlük, havuz ve nesne | 11:00 / 18:55 | [Sunucu 4](docs/sunucu-4-prova.md) |
-| Kapanış | İsteğin yolculuğu, seçilmiş Exercises ve tasarım ölçütleri | 6:00 / 10:00 | Sunucu 4 ve ekip |
+3. kişinin 11.4 bölümü önce hata tespitinin neden gerektiğini gösterir. Ardından bit değişimi ve parite kontrolü ayrı adımlarda açılır, iki bitlik hatanın pariteden kaçması açıklanır. Paritenin basit bir checksum türü olduğu ve CRC'nin başka bir tespit yöntemi olduğu gösterilir. ECC, veri/denetim/sonuç diyagramıyla anlatılır; son adım kitabın soft error / hard error ayrımıdır. Bölümün başlangıç adresi `/#/sunum/why-error-detection` olur. Ayrıntılar [3. kişi düzenleme kaydındadır](docs/24-ucuncu-kisi-hata-tespiti-ve-duzeltme.md).
 
-Her sahnenin Notlar sekmesinde geçerli aşama, kaynak bölümü/slaytı, ana çıkarım, anlatım adımları, soru ve gerekçesi, model sınırı ve geçiş bulunur.
+Kapanışta bütünleşik I/O yolculuğu, altı seçilmiş alıştırma ve tasarım değerlendirmesi bulunur. Kullanıcının sağladığı yerel Exercises PDF'sinden 11.13, 11.14, 11.16(a), 11.17, 11.21(a), 11.25(a,c) kullanılır.
 
-## Klavye ve aşama davranışı
+## Notlar ve kaynaklar
 
-- **Enter:** aynı sahnede ileri; son aşamada kalır.
-- **Backspace:** aynı sahnede geri; ilk aşamada kalır. Diyagram, hesap, eşleme, sayaç ve görünür cevap birlikte geri gelir.
-- **Sol/sağ ok:** seçili rotada önceki/sonraki sahne. **Home/End:** başlangıç/kapanış.
-- **M/N:** menü/notlar. **Space:** açıklayıcı hareketi duraklat/oynat. **F:** tam ekran.
-- Aşama listesinden veya sahne içi sekmelerden doğrudan aşama seçilebilir. Görünür Enter düğmesi geri eklenmedi.
-- Metin/form kontrolleri yerel klavyelerini korur. Odaktaki düğmede Enter/Space o düğmenin eylemini çalıştırır. Menü açıkken sunum tuşları ve hareket durur.
+Notlar sekmesi, her sayfanın anlattığı konuyu kısa metinle açıklar. Notlar aşama başına konuşma metni, sunucu yönergesi, dinleyici sorusu veya geçiş konuşması içermez. Kitap dayanağı ve model ayrıntıları ayrı **Kaynaklar** sekmesindedir.
 
-Aşamalar otomatik zamanlayıcıyla ilerlemez. Flash, swap ve RAID durumları seçilen aşamadan saf model geçişleriyle yeniden üretilir. Sahneye geri dönmek veya doğrudan aşama seçmek başka bir demonun gizli ilerlemesini devralmaz.
+Not biçimi, metin uzunluğu, soru sayısı ve aşama başına ayrı açıklama için zorunlu kontroller kaldırıldı. En az iki aşama, aşama adlarının biçimi, her aşamanın farklı görünmesi ve bütün aşamaların ileri/geri karşılaştırılması gibi içerik kuralları da kaldırıldı.
 
-Adresler konu adını kullanır: `/#/sunum/hdd-anatomy`, `/#/sunum/swap-journey`, `/#/sunum/raid-rebuild`. Eski `s01–s36` bağlantıları ilgili yeni konuya yönlenir. Yenileme aynı sahneyi başlangıç aşamasında açar.
-
-## Plan ve sunum hazırlığı
-
-- [14 — Ayrıntılı mimari ve kesin sahne tablosu](docs/14-kitaba-dayali-yeni-sunum-mimarisi.md)
-- [15 — Ortak prova, kavram yanılgıları ve kurtarma rehberi](docs/15-sunum-prova-ve-kaynak-rehberi.md)
-- [1–2. sunucu kaynaklı bölüm planı](docs/bolum-planlari/01-02-donanim-zamanlama.md)
-- [3. sunucu kaynaklı bölüm planı](docs/bolum-planlari/03-dogruluk-yonetim-swap.md)
-- [4. sunucu kaynaklı bölüm planı](docs/bolum-planlari/04-baglanti-raid-kapanis.md)
-- [Makine okunabilir uygulama öncesi sözleşme](docs/presentation-contract.json)
-- [Yazdırılabilir çevrimdışı notlar](public/references/sunum-notlari.html)
+- [Çevrimdışı sayfa açıklamaları](public/references/sunum-notlari.html)
 - [HDD ve SSD görsel parça rehberi](public/references/donanim-gorsel-rehberi.html)
-- [16 — Sonuç ve doğrulama raporu](docs/16-yeni-sunum-sonucu-ve-dogrulama.md)
-- [17 — Kütüphane tabanlı diyagramlar ve akıcı geçiş altyapısı](docs/17-kutuphane-tabanli-diyagram-ve-gecis.md)
-- [18 — Sahneye uygun animasyonlar ve proje incelemesi](docs/18-sahneye-uygun-animasyonlar.md)
-- [19 — Donanım fotoğraflarındaki parça anlatımı](docs/19-donanim-fotograflari-ve-gorsel-rehber.md)
-- [20 — Diyagram boyutları ve kapanış alıştırmaları](docs/20-diyagram-boyutlari-ve-exercises.md)
+- [1. kişinin sayfa açıklamaları](docs/sunucu-1-prova.md)
+- [2. kişinin sayfa açıklamaları](docs/sunucu-2-prova.md)
+- [3. kişinin sayfa açıklamaları](docs/sunucu-3-prova.md)
+- [4. kişinin sayfa açıklamaları](docs/sunucu-4-prova.md)
+- [Güncel plan ve kararlar](docs/22-acilis-ve-11-1-yeniden-duzenleme-plani.md)
+- [Uygulama kaydı](docs/23-yeni-acilis-ve-notlar.md)
 
-Kapanışta, kullanıcının sağladığı `11.pdf` içinden altı alıştırma bulunur: 11.13, 11.14, 11.16(a), 11.17, 11.21(a), 11.25(a,c). Her sorunun çözümü ayrı aşamada açılır. 1–49. sahneler yerlerini korur; alıştırmalar 50–55, son değerlendirme 56. sahnedir. Kaynak PDF, Kaynaklar menüsünde ve soruların üzerinde açılır.
+01–21 numaralı belgeler önceki revizyonların tarihçesidir. Eski not ve aşama gereksinimleri güncel uygulamayı bağlamaz. `docs/presentation-contract.json`, güncel sayfaların veri dökümüdür. İçerik üretimini sınırlayan bir sözleşme olarak kullanılmaz.
 
-01–13 belgeleri önceki plan ve revizyonların tarihçesini içerir. Temel içerik mimarisi 14 numaralı plan, güncel diyagram/kapanış dizisi 20 numaralı belge ve makine okunabilir sunum sözleşmesidir; önceki 36 sahne / 213 aşama sınırı kaldırılmıştır.
+## Klavye ve gezinme
 
-## Kaynak doğruluğu
+- **Enter / Backspace:** aynı sayfada sonraki / önceki aşama.
+- **Sol / sağ ok:** seçili rotada önceki / sonraki sayfa.
+- **Home / End:** rotanın başlangıcı / sonu.
+- **M / N:** menü / notlar.
+- **Space:** açıklayıcı hareketi duraklat / oynat.
+- **F:** tam ekran.
 
-İçerik çerçevesi [10. baskı resmî sitesi](https://os-book.com/OS10/index.html), [resmî içindekiler](https://os-book.com/OS10/toc-dir/toc.pdf), [Chapter 11 slaytları](https://os-book.com/OS10/slide-dir/PPTX-dir/ch11.pptx), [tekrar soruları](https://os-book.com/OS10/review-dir/11-rev.pdf) ve düzeltmelerdir. Tam kitap metni depoda bulunmadığından sayfa/satır düzeyinde tam kitap doğrulaması iddia edilmez. Kaynaklar aynı 10. baskıya aittir; kitap dışı güncel Linux/UEFI/ürün belgeleri müfredatın yerine kullanılmaz.
+Tek görünümü yeterli olan sayfalarda aşama seçicisi gösterilmez. Form kontrolleri ve düğmeler kendi klavye davranışlarını korur. Menü açıkken sunum kısayolları ve hareket durur. Aşamalar zamanlayıcıyla ilerlemez.
 
-HDD kuyruğu kaynak örneğidir: kafa 53, 0–199 aralığı, 98/183/37/122/14/124/65/67. Ortak azalan yönde FCFS 640, SCAN 236, C-SCAN 386. Resmî SCAN slaydındaki 208 ile fiziksel-uç kuralı arasındaki fark açıklanır: 53→0→183=236; 14'te dönen LOOK yolu 208. Kaynak uyuşmazlığı sessizce düzeltilmiş veya kitap metni hatası kesinleşmiş gibi sunulmaz.
+Adresler `/#/sunum/hdd-anatomy` biçimindedir. Eski s01–s36 adresleri korunur. Eski harita açılışa, eski RAM disk bağlantısı yeni RAM sayfasına yönlenir. Yenileme aynı sayfayı başlangıç durumunda açar.
 
-Türkçe anlatım, bit/sayfa/disk dizileri ve özgün çizimler eğitim modelleridir. RAID 6 Q ve bazı kavramsal koruma diyagramları semboliktir. Animasyon temposu gerçek aygıt hızı değildir. Fotoğraf atıfları [ATTRIBUTION.md](public/media/ATTRIBUTION.md) içindedir.
+## Kaynak ve model doğruluğu
 
-## Geliştirme ve kodla doğrulama
+Çerçeve [resmî 10. baskı sitesi](https://os-book.com/OS10/index.html), [içindekiler](https://os-book.com/OS10/toc-dir/toc.pdf) ve [Chapter 11 slaytlarına](https://os-book.com/OS10/slide-dir/PPTX-dir/ch11.pptx) dayanır. Tam kitap metni depoda bulunmadığından kitap sayfası/satırı düzeyinde tam doğrulama iddia edilmez. Gerçek fotoğrafların atıfları [medya kaydındadır](public/media/ATTRIBUTION.md).
+
+HDD örneğinde kafa 53, aralık 0–199, kuyruk 98/183/37/122/14/124/65/67'dir. Ortak azalan yönde FCFS 640, fiziksel uca giden SCAN 236, C-SCAN 386 hareket üretir. Kaynak slaydındaki 208 değeri, 14'te dönen LOOK yolu ile açıklanır. Kaynak uyuşmazlığı sessizce değiştirilmez.
+
+Flash, swap ve RAID örnekleri eğitim modelleridir. Animasyon süresi aygıt hızı değildir. Flash güncelleme ve GC durumu saf modelden üretilir. Wear leveling karşılaştırmaları aynı başlangıç ve aynı üç yeni silme üzerinden yapılır.
+
+## Geliştirme ve kontroller
 
 ```sh
 pnpm test
 pnpm check:content
-pnpm build:notes    # Bağımsız, gömülü fontlu not HTML'i
-pnpm build          # TypeScript + notlar + statik üretim
+pnpm build
 ```
 
-`check:content`, sahne/rota metadata'sını uygulama öncesi sözleşmeyle karşılaştırır; bütün aşamaları hareket açık/kapalı ve ileri/ters sırada Node/SSR ile oluşturur. Eski bağlantılar, bölüm/sunucu kapsamı, süreler, kaynaklar, notlar ve yerel medya denetlenir.
+`test`, gezinme ve işlem modellerinin doğruluğunu sınar. `check:content`, sayfaların ilk görünümünün oluşturulmasını, bölüm bağlantılarını, eski adresleri ve yerel görselleri kontrol eder. Not biçimini veya her aşamayı denetlemez. `build`, TypeScript kontrolü, çevrimdışı not üretimi ve statik derlemeyi yapar. Notları tek başına üretmek için `pnpm build:notes` kullanılabilir.
 
-React, TypeScript, Vite, Tailwind, Motion, React Flow, Dagre, D3, Radix Dialog ve Lucide kullanılır. Kavramsal grafiklerin otomatik yerleşimi Dagre, kompakt sunum yerleşimleri açık düğüm konumları, bağlantıları React Flow; sayısal yol/ölçekler D3 ile yönetilir. Sahne geçişleri içerik türüne bağlı altı Motion profili kullanır. Aşama değişirken görsel alan korunur; disk kafası, işaretler, grafikler, hücreler ve açıklamalar kendi değişimlerini canlandırır. Sahne ve aşama atomik güncellenir; geçiş sırasında eski sahnenin sıfırlanması ve gecikmiş hash bildiriminin ilerlemeyi silmesi engellenir.
+React, TypeScript, Vite, Tailwind, Motion, React Flow, Dagre, D3, Radix Dialog ve Lucide kullanılır. `src/presentation/` ortak kabuk ve kaynakları, `src/chapters/` içerik ve modelleri, `public/` yerel varlıkları, `dist/` derleme çıktısını içerir.
 
-`src/presentation/` ortak kabuk/rota/kaynak; `src/components/diagrams/` kütüphane tabanlı grafikler; `src/chapters/` sahne/not/model; `tests/` hesap ve davranış denetimidir. `dist/` statik üretim çıktısıdır. Bu revizyonda haricî dağıtım yapılmaz.
+Kullanıcının mevcut tercihi doğrultusunda tarayıcı otomasyonu ve ekran görüntüsü kullanılmaz. Statik oluşturma, model ve HTTP kontrolleri projeksiyon okunurluğu veya gerçek tarayıcı provasının yerine geçmez.
 
-Kullanıcının isteğiyle uygulama tarayıcı üzerinden test edilmez; tarayıcı otomasyonu ve ekran görüntüsü kullanılmaz. Statik çıktı/model/HTTP kontrolleri gerçek ekran uyumu, odak sırası veya projeksiyon provasının yerine geçmez.
+## Dağıtım
+
+`vercel.json`, Vite derlemesini ve `dist/` klasörünü tanımlar. Node.js 24.x ve pnpm 11.25.0 kullanılır. Ortam değişkeni gerekmez. Hash adresleme ek yönlendirme kuralı gerektirmez. `.vercel/` yerel proje bağlantıları Git'e eklenmez. Bu çalışma yerel uygulamayı değiştirir, haricî dağıtım yapmaz.

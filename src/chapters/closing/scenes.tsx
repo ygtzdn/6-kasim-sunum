@@ -111,7 +111,7 @@ function Journey(context: SceneContext) {
   }));
   return (
     <Stage
-      title="Tek istek. Bütün sistem."
+      title="Bir okuma isteğinin yolculuğu"
       controls={
         <StoryControls
           {...context}
@@ -136,12 +136,6 @@ function Journey(context: SceneContext) {
             ? "Dört bölümün kararlarını tek bir dosya okuma isteğinde birleştirelim."
             : JOURNEY[stage - 1].detail}
         </StageCaption>
-        {stage === 6 && (
-          <span className="rounded-xl bg-blue/10 px-4 py-2 text-center text-xs font-semibold md:text-sm">
-            Bu kavramsal yol örnektir; swap sıradan dosya okumasının zorunlu
-            aşaması değildir.
-          </span>
-        )}
       </div>
     </Stage>
   );

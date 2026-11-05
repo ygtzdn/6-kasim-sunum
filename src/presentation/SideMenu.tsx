@@ -17,14 +17,26 @@ import {
 } from "lucide-react";
 import { resources } from "../data/content";
 import { scenes, sceneGroups } from "./registry";
+import { adjacentSceneId } from "./navigation.mjs";
 import NotesPanel from "./NotesPanel";
+import SceneSources from "./SceneSources";
 import type { usePresentation } from "./usePresentation";
 
 type Props = ReturnType<typeof usePresentation>;
 export default function SideMenu(p: Props) {
-  const [expanded, setExpanded] = useState<string[]>(["intro", "presenter-1"]);
+  const [expanded, setExpanded] = useState<string[]>(["intro", "11.1"]);
   const stages = p.current.stages;
   const finalStage = p.stage === stages.length - 1;
+  const previousId = adjacentSceneId(scenes, p.current.id, -1, p.mode);
+  const nextId = adjacentSceneId(scenes, p.current.id, 1, p.mode);
+  const previousScene = scenes.find((scene) => scene.id === previousId);
+  const nextScene = scenes.find((scene) => scene.id === nextId);
+  const previousLabel = previousScene
+    ? `Önceki sahne: ${previousScene.presenterId}. kişi · ${previousScene.shortTitle}`
+    : "Önceki sahne yok";
+  const nextLabel = nextScene
+    ? `Sonraki sahne: ${nextScene.presenterId}. kişi · ${nextScene.shortTitle}`
+    : "Sunum menüsünü aç";
   useEffect(() => {
     const group = sceneGroups.find((g) =>
       g.scenes.some((s) => s.id === p.current.id),
@@ -38,50 +50,53 @@ export default function SideMenu(p: Props) {
     );
   return (
     <Dialog.Root modal={false} open={p.menu} onOpenChange={p.setMenu}>
-      <div className="stage-progress" role="group" aria-label="Sahne aşamaları">
-        <button
-          className="nav-button"
-          aria-label="Aşamaları başa al"
-          disabled={p.stage === 0}
-          onClick={() => p.setStage(0)}
+      {stages.length > 1 && (
+        <div
+          className="stage-progress"
+          role="group"
+          aria-label="Sahne aşamaları"
         >
-          <RotateCcw size={16} />
-        </button>
-        <button
-          className="nav-button"
-          aria-label="Önceki aşama (Backspace)"
-          title="Önceki aşama (Backspace)"
-          disabled={p.stage === 0}
-          onClick={p.retreat}
-        >
-          <ChevronLeft size={18} />
-        </button>
-        <span className="stage-position">
-          {p.stage + 1}/{stages.length}
-        </span>
-        <select
-          className="stage-selector"
-          aria-label="Sahne aşamasını seç"
-          aria-describedby="stage-instruction"
-          value={p.stage}
-          onChange={(event) => p.setStage(Number(event.currentTarget.value))}
-        >
-          {stages.map((name, index) => (
-            <option key={name} value={index}>
-              {name}
-            </option>
-          ))}
-        </select>
-        <span className="stage-hint" aria-hidden="true">
-          {finalStage ? "Tamam · → sahne" : "Enter ileri · ⌫ geri"}
-        </span>
-        <span id="stage-instruction" className="sr-only" aria-live="polite">
-          {p.stage + 1}/{stages.length}: {stages[p.stage]}.{" "}
-          {finalStage
-            ? "Aşamalar tamamlandı. Backspace ile önceki aşamaya, sağ ok veya Sonraki sahne düğmesiyle sonraki sahneye geçin."
-            : "Aşamayı listeden seçin. Sunum alanında Enter ile ileri, Backspace ile geri gidin."}
-        </span>
-      </div>
+          <button
+            className="nav-button"
+            aria-label="Aşamaları başa al"
+            disabled={p.stage === 0}
+            onClick={() => p.setStage(0)}
+          >
+            <RotateCcw size={16} />
+          </button>
+          <button
+            className="nav-button"
+            aria-label="Önceki aşama (Backspace)"
+            title="Önceki aşama (Backspace)"
+            disabled={p.stage === 0}
+            onClick={p.retreat}
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <span className="stage-position">
+            {p.stage + 1}/{stages.length}
+          </span>
+          <select
+            className="stage-selector"
+            aria-label="Sahne aşamasını seç"
+            aria-describedby="stage-instruction"
+            value={p.stage}
+            onChange={(event) => p.setStage(Number(event.currentTarget.value))}
+          >
+            {stages.map((name, index) => (
+              <option key={name} value={index}>
+                {name}
+              </option>
+            ))}
+          </select>
+          <span id="stage-instruction" className="sr-only" aria-live="polite">
+            {p.stage + 1}/{stages.length}: {stages[p.stage]}.{" "}
+            {finalStage
+              ? "Aşamalar tamamlandı. Backspace ile önceki aşamaya, sağ ok veya Sonraki sahne düğmesiyle sonraki sahneye geçin."
+              : "Aşamayı listeden seçin. Sunum alanında Enter ile ileri, Backspace ile geri gidin."}
+          </span>
+        </div>
+      )}
       <div className="floating-nav" aria-label="Sunum kontrolleri">
         <button
           className="nav-button"
@@ -97,12 +112,16 @@ export default function SideMenu(p: Props) {
           {p.motionOn ? <Pause size={17} /> : <Play size={17} />}
         </button>
         <button
-          className="nav-button"
-          aria-label="Önceki sahne"
-          disabled={p.index === 0}
+          className="nav-button scene-nav-button"
+          aria-label={previousLabel}
+          title={previousLabel}
+          disabled={!previousScene}
           onClick={() => p.move(-1)}
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={18} aria-hidden="true" />
+          <span className="scene-nav-presenter" aria-hidden="true">
+            {previousScene ? `${previousScene.presenterId}. kişi` : "—"}
+          </span>
         </button>
         <Dialog.Trigger asChild>
           <button
@@ -116,15 +135,15 @@ export default function SideMenu(p: Props) {
           </button>
         </Dialog.Trigger>
         <button
-          className="nav-button"
-          aria-label={
-            p.index === scenes.length - 1
-              ? "Sunum menüsünü aç"
-              : "Sonraki sahne"
-          }
+          className="nav-button scene-nav-button"
+          aria-label={nextLabel}
+          title={nextLabel}
           onClick={() => p.move(1)}
         >
-          <ArrowRight size={18} />
+          <ArrowRight size={18} aria-hidden="true" />
+          <span className="scene-nav-presenter" aria-hidden="true">
+            {nextScene ? `${nextScene.presenterId}. kişi` : "Menü"}
+          </span>
         </button>
       </div>
       <Dialog.Portal>
@@ -148,7 +167,7 @@ export default function SideMenu(p: Props) {
           </div>
           <Dialog.Description className="sr-only">
             Sunucu ve bölüm gruplarıyla {scenes.length} sahnede serbest gezinme,
-            ayrıntılı konuşmacı notları ve kaynaklar.
+            sayfa açıklamaları ve kaynaklar.
           </Dialog.Description>
           <fieldset className="shrink-0">
             <legend className="mb-2 text-xs font-semibold text-slate-600">
@@ -162,9 +181,15 @@ export default function SideMenu(p: Props) {
                   onClick={() => p.setMode(mode)}
                   className={`rounded-lg px-2 py-2 text-xs font-semibold ${p.mode === mode ? "bg-white text-blue shadow-sm" : "text-slate-600"}`}
                 >
-                  {mode === "core" ? "Ana anlatım" : "Ayrıntılı"}
+                  {mode === "full" ? "Tüm içerik" : "Ana akış"}
                   <small className="mt-1 block font-normal">
-                    ≈
+                    {
+                      scenes.filter(
+                        (scene) =>
+                          mode === "full" || scene.depth !== "extension",
+                      ).length
+                    }{" "}
+                    sahne · ≈
                     {Math.ceil(
                       scenes.reduce(
                         (sum, scene) => sum + (scene.seconds?.[mode] ?? 0),
@@ -250,11 +275,10 @@ export default function SideMenu(p: Props) {
                 ))}
               </div>
             )}
-            {p.tab === "notes" && (
-              <NotesPanel scene={p.current} stage={p.stage} />
-            )}
+            {p.tab === "notes" && <NotesPanel scene={p.current} />}
             {p.tab === "sources" && (
               <div className="menu-sources">
+                <SceneSources scene={p.current} />
                 <p>
                   İçerik: Operating System Concepts, 10. baskı, Bölüm 11.
                   Fotoğraflar yalnızca görsel destektir.
@@ -262,7 +286,7 @@ export default function SideMenu(p: Props) {
                 <p>
                   Tam kitap metni yerel depoda bulunmuyor. Kavramlar resmî
                   içindekiler ve destek slaytlarıyla denetlendi; sahneye özel
-                  kaynaklar Notlar sekmesindedir.
+                  kaynaklar bu sekmede gösterilir.
                 </p>
                 {resources.map((r, i) => (
                   <a

@@ -56,7 +56,7 @@ export const resources = [
     kind: "YEREL · SUNUM NOTLARI",
     title: "Yazdırılabilir kaynaklı sunum notları",
     detail:
-      "Bütün sahneler, aşama listeleri, kaynaklar ve anlatım notları. Yerel dosya; ana/ayrıntılı rota süzülebilir.",
+      "Her sayfanın kısa konu açıklaması ve ayrı kaynak bölümü. Ana akış veya tüm içerik olarak okunabilir.",
     href: "/references/sunum-notlari.html",
   },
   {

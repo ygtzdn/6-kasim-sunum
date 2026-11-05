@@ -1,13 +1,7 @@
 import type { ReactNode } from "react";
 
 export interface SceneNotes {
-  represents: string;
-  learningGoal: string;
-  walkthrough: string[];
-  keyPoints: string[];
-  limits: string;
-  question?: { prompt: string; answer: string };
-  transition?: string;
+  explanation: string;
 }
 export interface SceneContext {
   enabled: boolean;

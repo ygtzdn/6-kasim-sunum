@@ -5,17 +5,10 @@ import {
   type DiagramNode,
   type DiagramEdge,
 } from "../../../components/diagrams/FlowDiagram";
-import {
-  ArrowDown,
-  ArrowRight,
-  Database,
-  Cpu,
-  HardDrive,
-  Power,
-} from "lucide-react";
+import { ArrowRight, Cpu, Database, HardDrive } from "lucide-react";
 import type { SceneContext } from "../../../presentation/types";
-import { hardwareCaptions } from "../notes";
-import { Lesson, Photo, Bits, Metric } from "./LearningPrimitives";
+import { hardwareCaptions } from "../captions";
+import { Lesson, Photo, Metric } from "./LearningPrimitives";
 import { HardwarePartsLegend } from "./HardwarePhoto";
 
 type DiagramPoint = [number, number];
@@ -267,40 +260,40 @@ export function HddGeometry({ stage }: SceneContext) {
     </Lesson>
   );
 }
-export function HddHistory({ stage }: SceneContext) {
+export function NvmDevice({ stage }: SceneContext) {
+  const parts =
+    stage === 0
+      ? []
+      : stage === 1
+        ? ["nand"]
+        : ["nand", "controller", "connector"];
+  const active = stage === 2 ? ["controller", "connector"] : parts;
   return (
     <Lesson
-      title="1956 · IBM Model 350."
-      caption={hardwareCaptions["hdd-history"][stage]}
+      title="NVM ve SSD'nin parçaları"
+      caption={hardwareCaptions["nvm-device"][stage]}
     >
-      <div className="grid w-full max-w-[950px] grid-cols-2 items-center gap-8">
-        <div
-          className="grid grid-cols-5 gap-1.5"
-          aria-label={
-            stage >= 1
-              ? "50 adet plaka temsili"
-              : "Tarihsel aygıtın ölçeği henüz açılmadı"
-          }
-        >
-          {Array.from({ length: stage >= 1 ? 50 : 5 }, (_, i) => (
-            <div
-              className="h-3 rounded-[50%] border border-ink bg-slate-200 md:h-4"
-              key={i}
-            />
-          ))}
-        </div>
-        <div className="flex flex-col gap-4">
-          <Metric value="1956" label="Kitabın tarihsel örneği" />
-          {stage >= 1 && (
-            <Metric
-              value="5 milyon"
-              label="7-bit karakter · 50 × 24 inç plaka"
-            />
-          )}
-          {stage >= 2 && (
-            <Metric
-              value="< 1 saniye"
-              label="Tarihsel erişim · güncel ürün aralığı değil"
+      <div className="hardware-layout">
+        <Photo
+          device={stage === 0 ? "ssd-case" : "ssd-board"}
+          visibleParts={parts}
+          activeParts={active}
+        />
+        <div className="hardware-explanation">
+          {stage === 0 ? (
+            <>
+              <h2 className="font-display text-3xl">Flash SSD</h2>
+              <p className="text-lg leading-relaxed text-slate-600">
+                Kalıcı bellek kullanır.
+                <br />
+                Hareketli parçası yoktur.
+              </p>
+            </>
+          ) : (
+            <HardwarePartsLegend
+              device="ssd-board"
+              visibleParts={parts}
+              activeParts={active}
             />
           )}
         </div>
@@ -308,159 +301,49 @@ export function HddHistory({ stage }: SceneContext) {
     </Lesson>
   );
 }
-export function NvmDevice({ stage }: SceneContext) {
-  return (
-    <Lesson
-      title="SSD: kalıcı, hareketli parça yok."
-      caption={hardwareCaptions["nvm-device"][stage]}
-    >
-      {stage < 2 ? (
-        <div className="hardware-layout">
-          <Photo
-            device={stage === 0 ? "ssd-case" : "ssd-board"}
-            visibleParts={
-              stage === 1 ? ["controller", "nand", "connector"] : []
-            }
-          />
-          <div className="hardware-explanation">
-            <h2 className="font-display text-xl font-medium md:text-3xl">
-              {stage === 0 ? "Dış kasa" : "İç kart: görevler farklı"}
-            </h2>
-            {stage === 0 ? (
-              <Metric value="Flash SSD" label="Kalıcı NVM aygıtı" />
-            ) : (
-              <HardwarePartsLegend
-                device="ssd-board"
-                visibleParts={["controller", "nand", "connector"]}
-              />
-            )}
-          </div>
-        </div>
-      ) : stage === 2 ? (
-        <div className="grid w-full max-w-[900px] grid-cols-2 gap-5">
-          <div className="space-y-4">
-            <Metric value="HDD" label="Seek + dönme + aktarım" />
-            <Photo />
-          </div>
-          <div className="space-y-4">
-            <Metric
-              value="Flash SSD"
-              label="Seek yok · dönme yok · diğer işler var"
-            />
-            <Photo device="ssd-board" />
-          </div>
-        </div>
-      ) : (
-        <div className="w-full max-w-[900px] text-center">
-          <div className="mx-auto mb-6 w-fit rounded-xl border-2 border-ink bg-white px-14 py-5 font-display text-3xl">
-            NVM
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            {["Flash SSD", "USB flash", "Gömülü NVM"].map((name, i) => (
-              <div
-                key={name}
-                className="flex flex-col items-center gap-5 rounded-xl border border-blue bg-blue/5 p-5"
-              >
-                {i === 0 ? (
-                  <HardDrive size={48} />
-                ) : i === 1 ? (
-                  <Database size={48} />
-                ) : (
-                  <Cpu size={48} />
-                )}
-                <span className="text-sm font-semibold">{name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </Lesson>
-  );
-}
 
-function basicPage(stage: number, address: number) {
-  if (address < 4 && stage >= 3) return { label: "Boş", status: "free" };
-  if (address === 0)
-    return { label: "L0 · v0", status: stage >= 2 ? "invalid" : "valid" };
-  if (address === 6)
-    return {
-      label: stage >= 2 ? "L0 · v1" : "Boş",
-      status: stage >= 2 ? "valid" : "free",
-    };
-  if (address === 4) return { label: "L1", status: "valid" };
-  if (address === 7) return { label: "Boş", status: "free" };
-  return { label: "Eski", status: "invalid" };
-}
 export function FlashBasics({ stage }: SceneContext) {
   return (
     <Lesson
-      title="Sayfa oku/yaz. Daha büyük blok sil."
+      title="NAND'da sayfa ve blok"
       caption={hardwareCaptions["flash-page-block"][stage]}
     >
-      <div className="flex w-full max-w-[1050px] flex-col gap-4 md:gap-7">
-        <div className="grid grid-cols-2 gap-4">
-          {[0, 1].map((block) => (
+      <div className="nand-structure">
+        <div className="nand-blocks">
+          {[0, 1, 2].map((block) => (
             <div
               key={block}
-              className={`rounded-2xl border-2 p-3 md:p-5 ${stage >= 3 && block === 0 ? "border-blue bg-blue/5" : "border-ink bg-white"}`}
+              className={`nand-block ${stage === 2 && block === 0 ? "erasing-block" : ""}`}
             >
-              <h2 className="mb-4 text-xs font-semibold md:text-lg">
-                Silme bloğu {block === 0 ? "A" : "B"}
-              </h2>
-              <div className="grid grid-cols-4 gap-2">
-                {[0, 1, 2, 3].map((p) => {
-                  const address = block * 4 + p,
-                    state = basicPage(stage, address),
-                    highlight =
-                      (stage === 1 && address === 0) ||
-                      (stage >= 2 && address === 6) ||
-                      (stage === 4 && (address === 0 || address === 5));
-                  return (
-                    <div
-                      key={address}
-                      className={`state-cell flex min-h-28 flex-col items-center justify-center gap-2 rounded-lg border px-1 py-3 text-center md:min-h-36 ${highlight ? "border-blue outline-2 outline-blue" : "border-slate-300"} ${state.status === "invalid" ? "bg-slate-100" : "bg-white"}`}
-                    >
-                      <small className="text-[9px] text-slate-500">
-                        P{address}
-                      </small>
-                      <strong
-                        className={`font-display text-xs md:text-xl ${state.status === "invalid" ? "line-through text-slate-500" : "text-blue"}`}
-                      >
-                        {state.label}
-                      </strong>
-                      <span className="text-[8px] font-semibold md:text-[10px]">
-                        {state.status === "valid"
-                          ? "Geçerli"
-                          : state.status === "invalid"
-                            ? "Geçersiz"
-                            : "Silinmiş / boş"}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+              <h2>Blok B{block}</h2>
+              {[0, 1, 2, 3].map((page) => {
+                const selected = block === 0 && page === 0;
+                const filled =
+                  (stage === 1 && selected) || (block === 1 && page === 0);
+                return (
+                  <div
+                    key={page}
+                    className={`nand-page ${selected && stage < 2 ? "selected-page" : ""}`}
+                  >
+                    <span>P{page}</span>
+                    <strong>{filled ? "Veri" : "Boş"}</strong>
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
-        {stage >= 2 && (
-          <div className="flex items-center justify-center gap-3 text-sm font-semibold">
-            <span>L0</span>
-            <ArrowRight size={20} />
-            <span className="rounded-lg bg-blue px-3 py-2 text-white">
-              P6 · güncel
-            </span>
-            {stage === 4 && (
-              <>
-                <span className="rounded-lg bg-slate-200 px-3 py-2">
-                  P5 · geçersiz
-                </span>
-                <span className="rounded-lg border border-blue px-3 py-2 text-blue">
-                  P0 · boş
-                </span>
-              </>
-            )}
-          </div>
-        )}
+        <div className="nand-operation">
+          <strong>
+            {
+              [
+                "Bir blok, birden çok sayfa içerir",
+                "Okuma ve yazma: bir sayfa",
+                "Silme: bloğun bütün sayfaları",
+              ][stage]
+            }
+          </strong>
+        </div>
       </div>
     </Lesson>
   );
@@ -479,12 +362,12 @@ export function FlashEndurance({ stage, enabled }: SceneContext) {
             {stage === 0 ? (
               <>
                 <Metric
-                  value="Alan geri gelir"
-                  label="Blok yeniden yazılabilir"
+                  value="Sınırlı döngü"
+                  label="Flash bloklarının yazma/silme dayanıklılığı"
                 />
                 <Metric
-                  value="Aşınma kalır"
-                  label="Geçmiş silme sayısı azalmaz"
+                  value="Dayanıklılık"
+                  label="Yazılabilecek veri hacmiyle değerlendirilir"
                 />
               </>
             ) : (
@@ -532,125 +415,6 @@ export function FlashEndurance({ stage, enabled }: SceneContext) {
             ))}
           </div>
         )}
-      </div>
-    </Lesson>
-  );
-}
-export function RamDisk({ stage }: SceneContext) {
-  const lost = stage >= 2;
-  return (
-    <Lesson
-      title="Dosya sistemi RAM’i kalıcı yapmaz."
-      caption={hardwareCaptions["ram-disk"][stage]}
-    >
-      <div className="flex w-full max-w-[1000px] flex-col gap-5 md:gap-7">
-        <div className="grid grid-cols-2 items-center gap-4">
-          <img
-            src="/media/ram-module.png"
-            width="1774"
-            height="407"
-            alt="Gerçek RAM modülü"
-            className="w-full"
-          />
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <Power
-                className={stage === 2 ? "text-orange" : "text-blue"}
-                size={18}
-              />
-              {stage === 2 ? "Güç yok" : "Güç var"}
-            </div>
-            {stage === 0 ? (
-              <span className="rounded-xl border border-slate-300 px-7 py-3 text-sm text-slate-500">
-                Boş RAM disk
-              </span>
-            ) : (
-              <Bits lost={lost} />
-            )}
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-semibold md:text-base">
-          <span className="rounded-lg bg-blue/10 px-3 py-2 text-blue">RAM</span>
-          <ArrowRight size={20} />
-          <span className="rounded-lg border border-slate-300 px-3 py-2">
-            Blok aygıtı
-          </span>
-          <ArrowRight size={20} />
-          <span className="rounded-lg border border-slate-300 px-3 py-2">
-            Dosya sistemi
-          </span>
-          {stage >= 1 && (
-            <>
-              <ArrowRight size={20} />
-              <span className="rounded-lg border border-slate-300 px-3 py-2">
-                {lost ? "Eski dosya verisi yok" : "Örnek dosya: veri var"}
-              </span>
-            </>
-          )}
-        </div>
-        {stage === 3 && (
-          <div className="grid grid-cols-3 gap-2 text-center text-[10px] font-semibold md:text-sm">
-            {[
-              ["RAM", "Uçucu", "Hareket yok"],
-              ["HDD", "Kalıcı", "Mekanik"],
-              ["Flash SSD", "Kalıcı", "Hareket yok"],
-            ].map(([a, b, c]) => (
-              <div
-                className="rounded-xl border border-slate-300 bg-white p-3"
-                key={a}
-              >
-                <strong className="block font-display text-lg md:text-xl">
-                  {a}
-                </strong>
-                <p>{b}</p>
-                <p className="text-slate-500">{c}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </Lesson>
-  );
-}
-export function MagneticTape({ stage, enabled }: SceneContext) {
-  return (
-    <Lesson
-      title="Önce konumu bul. Sonra sırayla aktar."
-      caption={hardwareCaptions["magnetic-tape"][stage]}
-    >
-      <div className="w-full max-w-[1000px] space-y-8">
-        <div className="grid grid-cols-10 gap-1 border-y-8 border-ink py-5">
-          {Array.from({ length: 10 }, (_, i) => (
-            <div
-              key={i}
-              className={`state-cell flex aspect-square items-center justify-center border font-display text-xl md:text-3xl ${stage === 1 && i === 7 ? "border-orange bg-orange/15 text-orange" : stage === 2 && i >= 7 ? "border-blue bg-blue text-white" : "border-slate-300 bg-white"}`}
-            >
-              {i}
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-10 gap-1">
-          <motion.div
-            className="flex flex-col items-center text-center text-xs font-semibold"
-            layout={enabled ? "position" : false}
-            transition={{ duration: enabled ? 0.55 : 0, ease: "easeInOut" }}
-            style={{
-              gridColumn: `${stage === 0 ? 1 : 8}/span ${stage === 2 ? 3 : 1}`,
-            }}
-          >
-            <ArrowDown
-              className={stage === 1 ? "text-orange" : "text-blue"}
-              size={28}
-            />
-            <span>
-              {stage === 0
-                ? "Başlangıç"
-                : stage === 1
-                  ? "Hedef 7 bulundu"
-                  : "7 → 8 → 9 aktar"}
-            </span>
-          </motion.div>
-        </div>
       </div>
     </Lesson>
   );
@@ -749,26 +513,41 @@ export function LogicalBlocks({ stage }: SceneContext) {
 }
 export function DataPath({ stage, enabled }: SceneContext) {
   const definitions = [
-    { id: "os", label: "OS", detail: "Oku LBA3 · hedef DRAM", icon: Cpu },
+    {
+      id: "os",
+      label: "OS",
+      detail: "Oku LBA 3 · hedef DRAM",
+      icon: Cpu,
+      position: { x: 0, y: 0 },
+    },
     {
       id: "host",
       label: "Host denetleyicisi",
       detail: "Bilgisayar tarafı",
       icon: Cpu,
+      position: { x: 400, y: 0 },
     },
     {
       id: "device",
       label: "Aygıt denetleyicisi",
       detail: "Komutu alır",
       icon: Cpu,
+      position: { x: 800, y: 0 },
     },
     {
       id: "storage",
       label: "Depolama",
       detail: "Veriye erişir",
       icon: Database,
+      position: { x: 800, y: 250 },
     },
-    { id: "ram", label: "DRAM", detail: "DMA hedef alanı", icon: Database },
+    {
+      id: "ram",
+      label: "DRAM",
+      detail: "DMA hedef alanı",
+      icon: Database,
+      position: { x: 400, y: 250 },
+    },
   ];
   const nodes: DiagramNode[] = definitions.map((node, index) => ({
     ...node,
@@ -805,6 +584,8 @@ export function DataPath({ stage, enabled }: SceneContext) {
       source: "device",
       target: "storage",
       label: "Veriye erişim",
+      sourceSide: "bottom",
+      targetSide: "top",
       active: stage >= 3,
       muted: stage < 3,
     },
@@ -812,6 +593,8 @@ export function DataPath({ stage, enabled }: SceneContext) {
       source: "storage",
       target: "ram",
       label: "DMA · veri",
+      sourceSide: "left",
+      targetSide: "right",
       active: stage >= 4,
       muted: stage < 4,
     },

@@ -6,7 +6,6 @@ import {
   type ReactNode,
 } from "react";
 import {
-  AnimatePresence,
   motion,
   useIsPresent,
   usePresenceData,
@@ -214,19 +213,14 @@ function TitleLayer({
   title: string;
   state: TransitionState;
 }) {
-  const present = useIsPresent();
-  const presence = usePresenceData() as TransitionState | undefined;
-  const transition = presence ?? state;
   return (
     <motion.span
       className="stage-title-layer"
       key={title}
-      custom={transition}
+      custom={state}
       variants={titleVariants}
-      initial={transition.enabled ? "enter" : false}
+      initial={state.enabled ? "enter" : false}
       animate="visible"
-      exit="exit"
-      aria-hidden={!present || undefined}
     >
       {title}
     </motion.span>
@@ -240,9 +234,7 @@ export function StageTitle({ title }: { title: string }) {
       tabIndex={-1}
       className="stage-title stage-title-stack"
     >
-      <AnimatePresence initial={false} mode="sync" custom={state}>
-        <TitleLayer key={title} title={title} state={state} />
-      </AnimatePresence>
+      <TitleLayer key={title} title={title} state={state} />
     </h1>
   );
 }

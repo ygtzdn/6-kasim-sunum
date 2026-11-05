@@ -1,6 +1,7 @@
 import type { SceneDefinition } from "../../presentation/types";
 import { DeviceLab, BootLab, RemapLab } from "./DeviceLab";
 import { ParityLab, EccLab } from "./ParityLab";
+import { ErrorNeed } from "./ErrorNeed";
 import { StorageAccess } from "./StorageAccess";
 import { ManagementRecap } from "./Recap";
 import { SwapConcept, SwapJourney } from "./SwapLab";
@@ -9,8 +10,21 @@ import { managementStages } from "./stages";
 
 export const managementScenes: SceneDefinition[] = [
   {
+    id: "why-error-detection",
+    title: "Hata tespitine neden ihtiyaç var?",
+    chapter: "11.4",
+    presenterId: 3,
+    kind: "chapter",
+    depth: "core",
+    seconds: { core: 45, full: 60 },
+    shortTitle: "Neden hata tespiti?",
+    notes: managementNotes["why-error-detection"],
+    stages: managementStages["why-error-detection"],
+    render: (context) => <ErrorNeed {...context} />,
+  },
+  {
     id: "error-detection",
-    title: "Veri bozulduğunu nasıl anlarız?",
+    title: "Parite ile hata tespiti",
     chapter: "11.4",
     presenterId: 3,
     kind: "chapter",
@@ -20,14 +34,14 @@ export const managementScenes: SceneDefinition[] = [
       full: 120,
     },
     legacyIds: ["s18"],
-    shortTitle: "Veri bozulduğunu nasıl anlarız?",
+    shortTitle: "Parite ile hata tespiti",
     notes: managementNotes["error-detection"],
     stages: managementStages["error-detection"],
     render: (context) => <ParityLab {...context} />,
   },
   {
     id: "error-correction",
-    title: "Tespit etmek, düzeltmek değildir",
+    title: "ECC ile hata düzeltme",
     chapter: "11.4",
     presenterId: 3,
     kind: "chapter",
@@ -37,7 +51,7 @@ export const managementScenes: SceneDefinition[] = [
       full: 75,
     },
     legacyIds: ["s19"],
-    shortTitle: "Tespit etmek, düzeltmek değildir",
+    shortTitle: "ECC ile hata düzeltme",
     notes: managementNotes["error-correction"],
     stages: managementStages["error-correction"],
     render: (context) => <EccLab {...context} />,

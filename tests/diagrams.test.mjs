@@ -91,3 +91,26 @@ test("invalid diagram identity or dangling edges fail clearly", () => {
     RangeError,
   );
 });
+
+test("fixed layouts reject intersecting cards while preserving intentional rows", () => {
+  assert.throws(
+    () =>
+      layoutDiagram(
+        [
+          { id: "ram", position: { x: 0, y: 0 } },
+          { id: "swap", position: { x: W - 1, y: H - 1 } },
+        ],
+        [],
+      ),
+    /kartları çakışıyor/,
+  );
+  const nodes = [
+    { id: "ram", position: { x: 0, y: 0 } },
+    { id: "swap", position: { x: W + 80, y: 0 } },
+    { id: "device", position: { x: W + 80, y: H + 80 } },
+  ];
+  assert.deepEqual(layoutDiagram(nodes, []).positions.swap, {
+    x: W + 80,
+    y: 0,
+  });
+});

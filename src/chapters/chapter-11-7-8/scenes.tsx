@@ -21,16 +21,23 @@ import {
 } from "./IntegrityScenes";
 import { attachmentRaidNotes } from "./notes";
 import { attachmentStoryData } from "./storyData";
+import {
+  StorageAttachmentScene,
+  NasSanCompareScene,
+} from "./AttachmentOverview";
+import "./attachment.css";
 
 const renderers: Record<
   (typeof attachmentStoryData)[number]["id"],
   SceneDefinition["render"]
 > = {
+  "storage-attachment": (context) => <StorageAttachmentScene {...context} />,
   "host-attached": (context) => <HostAttachedScene {...context} />,
   nas: (context) => <NasScene {...context} />,
   "cloud-storage": (context) => <CloudScene {...context} />,
   "storage-arrays": (context) => <StorageArrayScene {...context} />,
   san: (context) => <SanScene {...context} />,
+  "nas-san-comparison": (context) => <NasSanCompareScene {...context} />,
   "raid-intro": (context) => <RaidIntroScene {...context} />,
   "raid-striping": (context) => <StripingMirrorScene {...context} />,
   "raid-parity": (context) => <ParityRaidScene {...context} />,

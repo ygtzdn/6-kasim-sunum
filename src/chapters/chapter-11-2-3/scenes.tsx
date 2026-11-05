@@ -8,8 +8,11 @@ import { NvmCheckpoint, NvmScheduling } from "./NvmScenes";
 const renderers: Record<string, (context: SceneContext) => ReactNode> = {
   "hdd-request-queue": (context) => <QueueSetup {...context} />,
   "fcfs-path": (context) => <SchedulingLab {...context} algorithm="FCFS" />,
+  "sstf-path": (context) => <SchedulingLab {...context} algorithm="SSTF" />,
   "scan-path": (context) => <SchedulingLab {...context} algorithm="SCAN" />,
+  "look-path": (context) => <SchedulingLab {...context} algorithm="LOOK" />,
   "cscan-path": (context) => <SchedulingLab {...context} algorithm="C-SCAN" />,
+  "clook-path": (context) => <SchedulingLab {...context} algorithm="C-LOOK" />,
   "scheduling-tradeoffs": (context) => <ScheduleComparison {...context} />,
   "nvm-scheduling": (context) => <NvmScheduling {...context} />,
   "flash-addressing": (context) => <FlashAddressing {...context} />,

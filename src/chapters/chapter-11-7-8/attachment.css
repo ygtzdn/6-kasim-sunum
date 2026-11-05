@@ -1,0 +1,165 @@
+.attachment-scene {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 2.6dvh, 28px);
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  min-height: 0;
+}
+.attachment-subtitle {
+  flex-shrink: 0;
+  font-size: clamp(16px, 1.8vw, 25px);
+  color: #64748b;
+  text-align: center;
+}
+.attachment-approaches {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 28px);
+  width: 100%;
+  min-height: 0;
+  flex: 0 1 390px;
+}
+.attachment-approach {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 0;
+  padding: clamp(12px, 2vw, 24px);
+  border: 2px solid #cbd5e1;
+  border-radius: 22px;
+  text-align: center;
+}
+.attachment-number {
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: #2247eb;
+}
+.attachment-approach-name,
+.attachment-compare-pictures h2 {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.1vw, 28px);
+  font-weight: 600;
+}
+.attachment-picture {
+  flex: 1 1 0%;
+  min-height: 0;
+  width: 100%;
+}
+.attachment-approach > strong {
+  font-size: clamp(15px, 1.7vw, 23px);
+}
+.attachment-route {
+  margin-top: 8px;
+  font-size: clamp(12px, 1.2vw, 17px);
+  color: #64748b;
+}
+.attachment-caption {
+  max-width: 1000px;
+  flex-shrink: 0;
+  font-size: clamp(14px, 1.65vw, 22px);
+  font-weight: 600;
+  line-height: 1.55;
+  text-align: center;
+  text-wrap: balance;
+}
+.attachment-facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.attachment-facts > span {
+  border: 1px solid #cbd5e1;
+  background: white;
+  border-radius: 12px;
+  padding: 9px 18px;
+  font-size: clamp(13px, 1.35vw, 19px);
+}
+.attachment-facts > .attachment-fact-active {
+  border-color: #2247eb;
+  color: #2247eb;
+  background: #e7eaff;
+}
+.attachment-compare-pictures {
+  display: grid;
+  grid-template-columns: 20% repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  min-height: 0;
+  flex: 0 1 240px;
+}
+.attachment-compare-pictures > section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  min-height: 0;
+}
+.attachment-compare-pictures > section:first-child {
+  grid-column: 2;
+}
+.attachment-comparison-path {
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 0%;
+}
+.attachment-comparison-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  font-size: clamp(13px, 1.6vw, 21px);
+  text-align: center;
+}
+.attachment-comparison-table th,
+.attachment-comparison-table td {
+  padding: clamp(8px, 1.6dvh, 16px) 12px;
+}
+.attachment-comparison-table th {
+  width: 20%;
+  border-radius: 10px 0 0 10px;
+  font-size: 0.85em;
+  color: #64748b;
+  text-align: left;
+}
+.attachment-comparison-table td:last-child {
+  border-radius: 0 10px 10px 0;
+}
+.attachment-comparison-table td {
+  font-weight: 600;
+}
+@media (max-width: 767px) {
+  .attachment-approaches {
+    gap: 8px;
+    flex-basis: 320px;
+  }
+  .attachment-approach {
+    padding: 10px 6px;
+    border-radius: 14px;
+  }
+  .attachment-approach-name {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+  .attachment-approach > strong {
+    font-size: 12px;
+  }
+  .attachment-route {
+    font-size: 10px;
+  }
+  .attachment-compare-pictures {
+    flex-basis: 170px;
+  }
+  .attachment-comparison-table th,
+  .attachment-comparison-table td {
+    padding: 8px 5px;
+    overflow-wrap: anywhere;
+  }
+}

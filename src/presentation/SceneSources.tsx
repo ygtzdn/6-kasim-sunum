@@ -17,6 +17,11 @@ export default function SceneSources({ scene }: { scene: SceneDefinition }) {
         Chapter 11 · {formatSlideNumbers(reference.slides)}
       </a>
       <p>{reference.model}</p>
+      {reference.supplement && (
+        <a href={reference.supplement.url} target="_blank" rel="noreferrer">
+          {reference.supplement.label}
+        </a>
+      )}
       {reference.exercise && (
         <a
           href={`${textbook.exercisesUrl}#page=${reference.exercise.page}`}

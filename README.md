@@ -1,6 +1,6 @@
 # Kütlesel depolama — Etkileşimli sunum
 
-**Operating System Concepts, Tenth Edition · Bölüm 11.1–11.8.** Dört kişinin Türkçe sunumu. İlk ekranda sekiz bölüm başlığı birlikte görünür. Sunum yalnızca 51 sayfalık **Ana akış** ile çalışır.
+**Operating System Concepts, Tenth Edition · Bölüm 11.1–11.8.** Dört kişinin Türkçe sunumu. İlk ekranda sekiz bölüm başlığı birlikte görünür. Sunum 56 sayfalık **Ana akış** ile çalışır.
 
 Yerel sunum: [http://localhost:5173/](http://localhost:5173/).
 
@@ -41,9 +41,13 @@ Açılıştaki her başlık kendi bölümünün ilk sayfasına bağlanır. Menü
 
 Teyp ve HDD tarihçesi sunumdan çıkarıldı. RAM disk anlatımı RAM'in çalışma alanı ve güç bağımlılığıyla değiştirildi. GC ve wear leveling 2. kişinin bölümünde kalır. Adresleme ve GC aynı üç bloklu flash modelini kullanır.
 
-Sunum, menü ve çevrimdışı notlar aynı 51 sayfayı içerir. Önceki altı ek sayfa kaldırıldı. DWPD ana akıştadır.
+Sunum, menü ve çevrimdışı notlar aynı 56 sayfayı içerir. Önceki altı ek sayfa kaldırıldı. DWPD ana akıştadır.
+
+2. kişinin 11.2 bölümünde FCFS, SSTF, SCAN, LOOK, C-SCAN ve C-LOOK aynı kuyruk üzerinde adım adım ilerler. Karşılaştırma sayfası altı algoritmanın toplam kafa hareketini, servis sırasını ve dairesel dönüş maliyetini gösterir.
 
 3. kişinin 11.4 bölümü önce hata tespitinin neden gerektiğini gösterir. Ardından bit değişimi ve parite kontrolü ayrı adımlarda açılır, iki bitlik hatanın pariteden kaçması açıklanır. Paritenin basit bir checksum türü olduğu ve CRC'nin başka bir tespit yöntemi olduğu gösterilir. ECC, veri/denetim/sonuç diyagramıyla anlatılır; son adım kitabın soft error / hard error ayrımıdır. Bölümün başlangıç adresi `/#/sunum/why-error-detection` olur. Ayrıntılar [3. kişi düzenleme kaydındadır](docs/24-ucuncu-kisi-hata-tespiti-ve-duzeltme.md).
+
+4. kişinin 11.7 akışı, üç erişim yaklaşımını görselleştiren **Storage Attachment** girişiyle başlar. Host-attached, network-attached/NAS ve cloud sırayla anlatılır. Depolama dizisinin ardından SAN ve NAS–SAN karşılaştırması gelir. Aşamalar manuel ilerler; istek yolu, LUN görünürlüğü ve dosya sistemi konumu görsellerle açıklanır. RAID bölümü bu revizyonda değiştirilmedi. Ayrıntılar [11.7 düzenleme kaydındadır](docs/25-dorduncu-kisi-storage-attachment.md).
 
 Kapanışta bütünleşik I/O yolculuğu, altı seçilmiş alıştırma ve tasarım değerlendirmesi bulunur. Kullanıcının sağladığı yerel Exercises PDF'sinden 11.13, 11.14, 11.16(a), 11.17, 11.21(a), 11.25(a,c) kullanılır.
 
@@ -81,7 +85,7 @@ Adresler `/#/sunum/hdd-anatomy` biçimindedir. Eski s01–s36 adresleri korunur.
 
 Çerçeve [resmî 10. baskı sitesi](https://os-book.com/OS10/index.html), [içindekiler](https://os-book.com/OS10/toc-dir/toc.pdf) ve [Chapter 11 slaytlarına](https://os-book.com/OS10/slide-dir/PPTX-dir/ch11.pptx) dayanır. Tam kitap metni depoda bulunmadığından kitap sayfası/satırı düzeyinde tam doğrulama iddia edilmez. Gerçek fotoğrafların atıfları [medya kaydındadır](public/media/ATTRIBUTION.md).
 
-HDD örneğinde kafa 53, aralık 0–199, kuyruk 98/183/37/122/14/124/65/67'dir. Ortak azalan yönde FCFS 640, fiziksel uca giden SCAN 236, C-SCAN 386 hareket üretir. Kaynak slaydındaki 208 değeri, 14'te dönen LOOK yolu ile açıklanır. Kaynak uyuşmazlığı sessizce değiştirilmez.
+HDD örneğinde kafa 53, aralık 0–199, kuyruk 98/183/37/122/14/124/65/67'dir. Toplam kafa hareketi FCFS için 640, SSTF için 236, SCAN için 236, LOOK için 208, C-SCAN için 386 ve C-LOOK için 326 silindirdir. Taramalı algoritmalar azalan yönde başlar. 10. baskının SCAN slaydındaki 208 değeri, fiziksel uç 0 yerine 14'te dönen LOOK yoluyla elde edilir. Ek algoritmaların kuralları yazarların [8. baskı ders slaytlarına](https://www.os-book.com/OS8/os8c/slide-dir/PDF-dir/ch12.pdf) dayanır.
 
 Flash, swap ve RAID örnekleri eğitim modelleridir. Animasyon süresi aygıt hızı değildir. Flash güncelleme ve GC durumu saf modelden üretilir. Wear leveling karşılaştırmaları aynı başlangıç ve aynı üç yeni silme üzerinden yapılır.
 

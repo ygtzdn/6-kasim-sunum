@@ -1,13 +1,17 @@
 import type { SceneNotes } from "../../presentation/types";
 
 export const attachmentRaidNotes: Record<string, SceneNotes> = {
+  "storage-attachment": {
+    explanation:
+      "Storage Attachment, depolamanın bilgisayara nasıl bağlandığını ele alır. Kitap üç temel erişim yaklaşımı tanıtır: host-attached, network-attached ve cloud. Yerel bağlantıda host’un I/O portu kullanılır. Ağ bağlantısında uzaktaki depolamaya erişilir. Bulut örneğinde program Internet veya WAN üzerinden bir hizmetin API’sini kullanır. SAN, bu üçlü girişin ardından depolama dizileriyle birlikte ele alınır.",
+  },
   "host-attached": {
     explanation:
-      "Host-attached depolama bilgisayarın yerel I/O bağlantıları üzerinden erişilir. Bağlantının fiziksel yolu ile üst katmana sunulan dosya veya blok arayüzü ayrı özelliklerdir. Yerel bir aygıt, işletim sistemine adreslenebilir bloklar sunabilir.",
+      "Host-attached depolamaya bilgisayarın yerel I/O portundan erişilir. Bir depolama bus’ı birden çok aygıtı bağlayabilir. Kitap USB, FireWire ve Thunderbolt’u bus örnekleri olarak verir. Üst düzey sistemlerde Fibre Channel da kullanılır. Şema, yerel porttan tek aygıta erişimi ve aynı bus üzerinden birden çok aygıtın bağlanmasını gösterir.",
   },
   nas: {
     explanation:
-      "NAS, ağ üzerinden dosya sistemi hizmeti sunar. İstemci dosya ve dizin işlemleri gönderir, sunucu bunları kendi depolama işlemlerine dönüştürür. Aynı IP ağı üzerinde çalışan iSCSI ise blok erişimi taşıyabilir. Ağ kullanılması tek başına dosya hizmeti anlamına gelmez.",
+      "NAS, ağ üzerinden uzak bir dosya sistemine erişim sağlar. NFS ve CIFS yaygın dosya protokolleridir. Dosya işlemleri, genellikle IP üzerinde TCP veya UDP ile taşınan uzak çağrılarla gerçekleştirilir. NAS sunucusu dosya sistemini yönetir ve dosya işlemlerini kendi aygıtındaki blok işlemlerine dönüştürür. Aynı IP ağı üzerinde çalışan iSCSI ise SCSI komutlarıyla uzak aygıtlara blok erişimi sağlar.",
   },
   "cloud-storage": {
     explanation:
@@ -15,11 +19,15 @@ export const attachmentRaidNotes: Record<string, SceneNotes> = {
   },
   "storage-arrays": {
     explanation:
-      "Depolama dizisi host bağlantılarını, denetleyicileri ve birden çok aygıtı bir araya getirir. Host’a mantıksal depolama hacimleri sunabilir. RAID, snapshot ve replication bu yapı üzerinde sağlanabilen farklı hizmetlerdir.",
+      "Host’a tek disk veya bir depolama dizisi bağlanabilir. Dizide host portları, denetleyici, bellek, yönetim yazılımı ve birden çok disk bulunur. Bu kaynaklardan birden çok host yararlanabilir. Buradaki amaç dizinin bileşenlerini tanımaktır. Dizinin RAID ve diğer koruma hizmetleri sonraki bölümün konusudur.",
   },
   san: {
     explanation:
-      "SAN, birden çok host ile depolama dizisini birbirine bağlayan depolama ağıdır. Diziler host’lara belirli mantıksal hacimleri sunar. Bir hacmin iki host tarafından görülebilmesi, dosya sistemi yazmalarının kendiliğinden koordine edildiği anlamına gelmez.",
+      "SAN, büyük depolama ortamlarında birden çok host ile depolama dizisini bağlar. Host’lar ve diziler Fibre Channel switch’lerine veya InfiniBand ağına bağlanabilir. LUN masking ile belirli dizilerdeki mantıksal birimler belirli host’lara sunulur. Örnekte Host A yalnız LUN A’yı, Host B yalnız LUN B’yi görür. Çizgiler fiziksel bağlantıları, vurgular seçili erişimi gösterir. Kitap depolama ağı ile iletişim ağının ayrılmasını sorgular ve iSCSI ile FCoE örneklerini verir.",
+  },
+  "nas-san-comparison": {
+    explanation:
+      "NAS istemciye dosya ve dizin işlemleri sunar. Dosya sistemini NAS sunucusu yönetir. SAN ise host’lara depolama bloklarını ulaştırır, bu blokları kullanan dosya sistemi host tarafındadır. Bu konum ayrımı, kitaptaki dosya hizmeti ve blok erişiminin tipik sorumluluklarını gösterir. NAS’ın kaynak örnekleri IP üzerinde NFS ve CIFS, SAN’ın kaynak örnekleri Fibre Channel ve InfiniBand’dir. iSCSI, blok erişiminin de IP üzerinden taşınabileceğini gösterir. Bu nedenle ağın kullanılması tek başına dosya erişimi anlamına gelmez.",
   },
   "raid-intro": {
     explanation:

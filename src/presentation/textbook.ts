@@ -22,6 +22,7 @@ export interface SceneReference {
   slides: readonly number[];
   takeaway: string;
   model: string;
+  supplement?: { label: string; url: string };
   exercise?: { label: string; page: number };
 }
 
@@ -35,6 +36,7 @@ export const sceneReferences: Record<string, SceneReference> = {
         slides: scene.slides,
         takeaway: scene.takeaway,
         model: scene.model,
+        ...("supplement" in scene && { supplement: scene.supplement }),
       },
     ]),
   ),
@@ -130,13 +132,21 @@ export const sceneReferences: Record<string, SceneReference> = {
     model:
       "Üç soru/cevap çifti özgün sentezdir. Yanıt görünürlüğü ortak aşamaya bağlıdır; bağımsız veya geriye gitmeyen bir cevap hafızası tutulmaz.",
   },
+  "storage-attachment": {
+    sections: ["11.7"],
+    slides: [32],
+    takeaway:
+      "Kitap depolamaya erişimi host-attached, network-attached ve cloud yaklaşımlarıyla tanıtır.",
+    model:
+      "Üç özgün donanım/bağlantı çizimi kaynak slayt 32’nin girişini görselleştirir. SAN bu üçünün yerine geçen bir sınıflandırma olarak sunulmaz. Paket hareketi aygıt hızı değildir.",
+  },
   "host-attached": {
     sections: ["11.7"],
-    slides: [15, 32],
+    slides: [32],
     takeaway:
-      "Bağlantı yolu ile istemciye sunulan dosya, blok veya API arayüzü ayrı eksenlerdir.",
+      "Host-attached erişim yerel I/O portunu kullanır. Bir depolama bus’ı birden çok aygıtı bağlayabilir.",
     model:
-      "Yerel port, bus ve fabric kavramsal çizimlerdir; aygıt/protokol hızı ölçülmez ve üç evrensel, birbirini dışlayan ürün sınıfı oluşturulmaz.",
+      "Yerel port ve iki aygıtlı bus özgün kavramsal çizimlerdir. USB, FireWire, Thunderbolt ve FC kaynak örnekleridir. Aygıt veya protokol hızı ölçülmez.",
   },
   nas: {
     sections: ["11.7"],
@@ -158,7 +168,7 @@ export const sceneReferences: Record<string, SceneReference> = {
     sections: ["11.7"],
     slides: [35],
     takeaway:
-      "Storage array host bağlantılarını, denetleyiciyi ve aygıtları birleştirir; RAID ve snapshot gibi hizmetler aynı kavram değildir.",
+      "Depolama dizisi host portlarını, denetleyiciyi, belleği, yönetim yazılımını ve diskleri birleştirir.",
     model:
       "Diskler ve denetleyici temsildir. Kitabın doğrudan dizi/NAS ağ yükü karşılaştırması bütün diziler ağsızdır biçiminde genellenmez.",
   },
@@ -166,9 +176,17 @@ export const sceneReferences: Record<string, SceneReference> = {
     sections: ["11.7"],
     slides: [33, 36, 37],
     takeaway:
-      "SAN çok host ve diziyi bağlar; belirli hacimlerin hostlara görünürlüğü dosya sistemi koordinasyonundan ayrı bir karardır.",
+      "SAN birden çok host ile depolama dizisini bağlar. LUN masking belirli birimleri belirli host’lara sunar.",
     model:
-      "LUN görünürlüğü çizimde değişir; gerçek ağ, yetkilendirme veya küme dosya sistemi kurulmaz. Kaynaktaki FC/InfiniBand ve iSCSI/FCoE bağlamı korunur.",
+      "İki host, iki dizi ve iki LUN özgün örnektir. Fiziksel bağlantılar sabit kalır, görünür birim ve seçili erişim yolu vurgulanır. Gerçek ağ kurulmaz. Kaynaktaki FC/InfiniBand ve iSCSI/FCoE bağlamı korunur.",
+  },
+  "nas-san-comparison": {
+    sections: ["11.7"],
+    slides: [33, 36, 37],
+    takeaway:
+      "NAS dosya sistemi hizmeti sunar. SAN host’lara depolama bloklarını ulaştırır. Dosya sistemi sorumluluğu farklı uçlardadır.",
+    model:
+      "Slayt 33 ve 36–37’nin özgün karşılaştırmasıdır. Dosya sistemi konumu, NAS dosya hizmeti ile SAN blok erişiminden çıkarılan tipik sorumluluk ayrımıdır. Hız, fiyat veya tüm ürünler için bir üstünlük iddiası eklenmez. iSCSI, IP üzerinden blok erişiminin kaynak örneğidir.",
   },
   "raid-intro": {
     sections: ["11.8"],

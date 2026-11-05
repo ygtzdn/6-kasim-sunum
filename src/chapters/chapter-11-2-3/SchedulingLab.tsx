@@ -18,14 +18,74 @@ import {
   calculateSchedule,
   cylinderMaximum,
   defaultSchedule,
+  scheduleAlgorithms,
   type ScheduleAlgorithm,
   type ScheduleResult,
 } from "./model";
 
-const colors: Record<ScheduleAlgorithm, string> = {
-  FCFS: "#2247eb",
-  SCAN: "#111827",
-  "C-SCAN": "#ef602e",
+const traceDetails: Record<
+  ScheduleAlgorithm,
+  {
+    sceneId: string;
+    color: string;
+    title: string;
+    rule: string;
+    summary: string;
+    breakdown?: string[];
+  }
+> = {
+  FCFS: {
+    sceneId: "fcfs-path",
+    color: "#2247eb",
+    title: "FCFS. Geliş sırası.",
+    rule: "En önce gelen isteği seç",
+    summary:
+      "640 silindir. Kafa, geliş sırasını izleyerek uzak silindirler arasında gidip geldi.",
+    breakdown: ["45 + 85 + 146 = 276", "85 + 108 + 110 = 303", "59 + 2 = 61"],
+  },
+  SSTF: {
+    sceneId: "sstf-path",
+    color: "#6843b6",
+    title: "SSTF · En yakın istek",
+    rule: "Her adımda kafaya en yakın bekleyen isteği seç",
+    summary:
+      "236 = 14 + 53 + 169. Sürekli yeni yakın istekler gelirse uzaktaki istekler uzun süre bekleyebilir.",
+    breakdown: ["14 · 53’ten 67’ye", "53 · 67’den 14’e", "169 · 14’ten 183’e"],
+  },
+  SCAN: {
+    sceneId: "scan-path",
+    color: "#111827",
+    title: "SCAN. Fiziksel uca git, dön.",
+    rule: "Aynı yönde servis ver, fiziksel uçta dön",
+    summary:
+      "236 = 53 + 183. SCAN fiziksel uç 0’a gider. LOOK, 14’te döner ve 208 silindir yol alır.",
+  },
+  LOOK: {
+    sceneId: "look-path",
+    color: "#087c68",
+    title: "LOOK · Son istekte yön değişimi",
+    rule: "Seçilen yöndeki son istekte yön değiştir",
+    summary:
+      "208 = 39 + 169. Kafa 14’te döner. SCAN’in 0’a gidip geri gelmek için harcadığı 28 silindirlik yolu atlar.",
+  },
+  "C-SCAN": {
+    sceneId: "cscan-path",
+    color: "#ef602e",
+    title: "C-SCAN. Dönüşte servis yok.",
+    rule: "Tek yönde servis ver, fiziksel uçlar arasında dön",
+    summary:
+      "386 = 53 + 199 + 134. Servissiz 0 → 199 dönüşü toplam harekete dahildir.",
+    breakdown: ["53 · 0’a kadar", "199 · servis yok", "134 · kalan servis"],
+  },
+  "C-LOOK": {
+    sceneId: "clook-path",
+    color: "#99621f",
+    title: "C-LOOK · İstekler arasında dönüş",
+    rule: "Tek yönde servis ver, son istekten karşıdaki en uç isteğe dön",
+    summary:
+      "326 = 39 + 169 + 118. Servis 183’te yeniden başlar ve azalan yönde sürer.",
+    breakdown: ["39 · 14’e kadar", "169 · servis yok", "118 · kalan servis"],
+  },
 };
 const number = (n: number) => new Intl.NumberFormat("tr-TR").format(n);
 
@@ -33,8 +93,6 @@ const chartPolyline = line<[number, number]>()
   .x((point) => point[0])
   .y((point) => point[1])
   .curve(curveLinear);
-const comparisonWidth = scaleLinear([0, 640], [0, 100]);
-const circularSegmentWidth = scaleLinear([0, 386], [0, 100]);
 const boundaryX = scaleLinear([0, 183], [35, 660]);
 
 export function QueueSetup({ stage, setStage, enabled }: SceneContext) {
@@ -116,7 +174,7 @@ export function QueueSetup({ stage, setStage, enabled }: SceneContext) {
               "Sadece sıra değişti: aynı iki isteğin toplam kafa hareketi 276’dan 162’ye indi.",
               "Kart sırası fiziksel yakınlık değil, geliş kimliğidir.",
               "Kuyruk, kafa ve sınırlar bütün karşılaştırmalarda aynı kalır.",
-              "Ortak yön azalan. FCFS yönü kullanmaz. Ölçü ms değil, silindir hareketidir.",
+              "Taramalı algoritmalar azalan yönde başlar. Ölçü silindir hareketidir.",
             ][stage]
           }
         </p>
@@ -142,6 +200,7 @@ function SchedulePlot({
     .curve(curveLinear);
   const points = [{ position: result.start }, ...result.events];
   const current = points[step];
+  const color = traceDetails[result.algorithm].color;
   return (
     <svg
       viewBox="0 0 1080 450"
@@ -210,9 +269,7 @@ function SchedulePlot({
                 ]) ?? ""
               }
               fill="none"
-              stroke={
-                event.kind === "wrap" ? "#ef602e" : colors[result.algorithm]
-              }
+              stroke={event.kind === "wrap" ? "#ef602e" : color}
               strokeWidth={complete ? 4 : 2}
               strokeDasharray={event.kind === "wrap" ? "9 7" : undefined}
             />
@@ -232,8 +289,8 @@ function SchedulePlot({
               cx={x(event.position)}
               cy={y(index + 1)}
               r={event.kind === "service" ? 5 : 4}
-              fill={complete ? colors[result.algorithm] : "#fff"}
-              stroke={complete ? colors[result.algorithm] : "#a1aabb"}
+              fill={complete ? color : "#fff"}
+              stroke={complete ? color : "#a1aabb"}
               strokeWidth="2"
             />
             {event.kind === "service" && (
@@ -283,6 +340,7 @@ export function SchedulingLab({
   setStage,
   enabled,
 }: SceneContext & { algorithm: ScheduleAlgorithm }) {
+  const details = traceDetails[algorithm];
   const result = calculateSchedule(algorithm, defaultSchedule);
   const step = Math.min(stage, result.events.length);
   const conclusion = stage > result.events.length;
@@ -293,16 +351,23 @@ export function SchedulingLab({
       .map((event) => event.requestId),
   );
   const last = result.events[step - 1];
+  const next = result.events[step];
   const total = last?.total ?? 0;
+  const usesDirection = algorithm !== "FCFS" && algorithm !== "SSTF";
+  let caption =
+    "Kafa 53’te. Bir sonraki hareketin yönünü ve mesafesini tahmin edin.";
+  if (conclusion) caption = details.summary;
+  else if (last?.kind === "wrap")
+    caption = `${result.path[step - 1]} → ${last.position}: servis yok · +${last.distance}`;
+  else if (last?.kind === "turn")
+    caption = `Fiziksel uç ${last.position}’a ulaşıldı · bu adım bir isteği tamamlamaz`;
+  else if (algorithm === "LOOK" && last?.position === 14)
+    caption = "14 bu yöndeki son istek. Kafa şimdi yön değiştirir.";
+  else if (last?.kind === "service")
+    caption = `İstek ${(last.requestId ?? 0) + 1} tamamlandı · kafa ${last.position}`;
   return (
     <Stage
-      title={
-        algorithm === "FCFS"
-          ? "FCFS. Geliş sırası."
-          : algorithm === "SCAN"
-            ? "SCAN. Fiziksel uca git, dön."
-            : "C-SCAN. Dönüşte servis yok."
-      }
+      title={details.title}
       controls={
         <div className="flex flex-wrap items-center justify-center gap-2">
           <button
@@ -331,7 +396,12 @@ export function SchedulingLab({
             <RotateCcw size={19} />
           </button>
           <span className="ml-1 inline-flex items-center gap-1 text-xs font-semibold text-slate-600">
-            <ArrowDown size={14} /> Azalan · kafa 53
+            {usesDirection && (
+              <>
+                <ArrowDown size={14} /> Azalan ·{" "}
+              </>
+            )}
+            Başlangıç 53
           </span>
         </div>
       }
@@ -352,90 +422,81 @@ export function SchedulingLab({
             )}
           </div>
           <span className="text-xs font-semibold text-slate-600">
-            {completeIds.size}/8 istek
+            {completeIds.size}/{defaultSchedule.queue.length} istek
           </span>
         </div>
         <div className="schedule-decision">
-          <span>
-            {algorithm === "FCFS"
-              ? "Kural: en önce gelen istek"
-              : algorithm === "SCAN"
-                ? "Kural: aynı yönde servis, fiziksel uçta dönüş"
-                : "Kural: tek yönde servis, dönüşte servis yok"}
-          </span>
+          <span>{details.rule}</span>
           <strong>
             {conclusion
               ? "Kuyruk tamamlandı"
-              : result.events[step]
-                ? `Sıradaki: ${result.events[step].position}${result.events[step].kind === "wrap" ? " · servis yok" : result.events[step].kind === "turn" ? " · fiziksel uç" : ""}`
+              : next
+                ? `Sıradaki: ${next.position}${next.kind === "wrap" ? " · servis yok" : next.kind === "turn" ? " · fiziksel uç" : ""}`
                 : "Sonuç hazır"}
           </strong>
         </div>
         <div className="min-h-0 flex-1">
           <SchedulePlot result={result} step={step} enabled={enabled} />
         </div>
-        {conclusion &&
-          (algorithm === "SCAN" ? (
-            <svg
-              viewBox="0 0 720 105"
-              className="h-20 w-full shrink-0"
-              role="img"
-              aria-label="SCAN:53→0→183=236; LOOK:53→14→183=208"
-            >
-              <path
-                d={
-                  chartPolyline([
-                    [boundaryX(53), 24],
-                    [boundaryX(0), 24],
-                    [boundaryX(183), 24],
-                  ]) ?? ""
-                }
-                fill="none"
-                stroke="#2247eb"
-                strokeWidth="5"
-              />
-              <path
-                d={
-                  chartPolyline([
-                    [boundaryX(53), 74],
-                    [boundaryX(14), 74],
-                    [boundaryX(183), 74],
-                  ]) ?? ""
-                }
-                fill="none"
-                stroke="#f05b28"
-                strokeWidth="5"
-              />
-              <circle cx={boundaryX(0)} cy="24" r="7" fill="#2247eb" />
-              <circle cx={boundaryX(14)} cy="74" r="7" fill="#f05b28" />
-              <text x="230" y="15" fontSize="17" fill="#2247eb">
-                SCAN: 53 → 0 → 183 = 236
-              </text>
-              <text x="230" y="63" fontSize="17" fill="#a93411">
-                LOOK: 53 → 14 → 183 = 208
-              </text>
-              <text x="20" y="48" fontSize="13">
-                0
-              </text>
-              <text x="70" y="101" fontSize="13">
-                14
-              </text>
-            </svg>
-          ) : (
-            <div className="grid shrink-0 grid-cols-3 gap-2 text-center text-xs font-semibold">
-              {(algorithm === "FCFS"
-                ? ["45+85+146=276", "85+108+110=303", "59+2=61"]
-                : ["53 · 0’a kadar", "199 · servis yok", "134 · kalan servis"]
-              ).map((label, index) => (
-                <div
-                  key={label}
-                  className={`rounded-lg px-2 py-3 ${algorithm === "C-SCAN" && index === 1 ? "bg-orange/10 text-orange" : "bg-blue/10 text-blue"}`}
-                >
-                  {label}
-                </div>
-              ))}
-            </div>
-          ))}
+        {conclusion && algorithm === "SCAN" && (
+          <svg
+            viewBox="0 0 720 105"
+            className="h-20 w-full shrink-0"
+            role="img"
+            aria-label="SCAN:53→0→183=236; LOOK:53→14→183=208"
+          >
+            <path
+              d={
+                chartPolyline([
+                  [boundaryX(53), 24],
+                  [boundaryX(0), 24],
+                  [boundaryX(183), 24],
+                ]) ?? ""
+              }
+              fill="none"
+              stroke="#2247eb"
+              strokeWidth="5"
+            />
+            <path
+              d={
+                chartPolyline([
+                  [boundaryX(53), 74],
+                  [boundaryX(14), 74],
+                  [boundaryX(183), 74],
+                ]) ?? ""
+              }
+              fill="none"
+              stroke="#f05b28"
+              strokeWidth="5"
+            />
+            <circle cx={boundaryX(0)} cy="24" r="7" fill="#2247eb" />
+            <circle cx={boundaryX(14)} cy="74" r="7" fill="#f05b28" />
+            <text x="230" y="15" fontSize="17" fill="#2247eb">
+              SCAN: 53 → 0 → 183 = 236
+            </text>
+            <text x="230" y="63" fontSize="17" fill="#a93411">
+              LOOK: 53 → 14 → 183 = 208
+            </text>
+            <text x="20" y="48" fontSize="13">
+              0
+            </text>
+            <text x="70" y="101" fontSize="13">
+              14
+            </text>
+          </svg>
+        )}
+        {conclusion && details.breakdown && (
+          <div className="grid shrink-0 grid-cols-3 gap-2 text-center text-xs font-semibold">
+            {details.breakdown.map((label, index) => (
+              <div
+                key={label}
+                className={`rounded-lg px-2 py-2 ${index === 1 && (algorithm === "C-SCAN" || algorithm === "C-LOOK") ? "bg-orange/10 text-orange" : "bg-blue/10 text-blue"}`}
+              >
+                {label}
+              </div>
+            ))}
+          </div>
+        )}
         <div
           className="flex min-h-7 flex-wrap justify-center gap-1.5"
           aria-label="Geliş sırasındaki istekler"
@@ -453,19 +514,7 @@ export function SchedulingLab({
           ))}
         </div>
         <StageCaption className="min-h-10 text-center text-xs font-semibold text-slate-600 md:text-sm">
-          {conclusion
-            ? algorithm === "FCFS"
-              ? "640: geliş sırası korundu, fakat kafa uzak silindirler arasında gidip geldi."
-              : algorithm === "SCAN"
-                ? "236 = 53 + 183. 14’te dönmek LOOK olurdu: 208. Burada fiziksel uç 0’a gidildi."
-                : "386 = 53 + 199 + 134. 0 → 199 dönüşü servis yapmaz, hareketi toplamdan silinmez."
-            : last
-              ? last.kind === "service"
-                ? `İstek ${(last.requestId ?? 0) + 1} tamamlandı · kafa ${last.position}`
-                : last.kind === "wrap"
-                  ? "0 → 199: fiziksel dönüş, servis yok · +199"
-                  : "Fiziksel uç 0’a ulaşıldı · bu adım bir isteği tamamlamaz"
-              : "Kafa 53’te. Bir sonraki hareketin yönünü ve mesafesini tahmin edin."}
+          {caption}
         </StageCaption>
       </div>
     </Stage>
@@ -478,111 +527,115 @@ export function ScheduleComparison({
   enabled,
   goTo,
 }: SceneContext) {
-  const algorithms: ScheduleAlgorithm[] = ["FCFS", "SCAN", "C-SCAN"];
-  const results = algorithms.map((algorithm) =>
+  const results = scheduleAlgorithms.map((algorithm) =>
     calculateSchedule(algorithm, defaultSchedule),
   );
+  const comparisonWidth = scaleLinear(
+    [0, Math.max(...results.map(({ total }) => total))],
+    [0, 100],
+  );
   const captions = [
-    "Geliş sırası: 640 silindir.",
-    "Aynı kuyruk, fiziksel uca giden SCAN: 236 silindir.",
-    "Aynı kuyruk, azalan C-SCAN: 386 silindir.",
-    "53 + 199 + 134 = 386. Dönüşte servis yapılmaz; hareket toplamda kalır.",
-    "Tablo servis sırasıdır; gerçek bekleme süresi veya adalet puanı değildir.",
+    "Aynı kuyrukta LOOK 208 silindirle en kısa yolu izler. SSTF ve SCAN farklı rotalarda 236 silindire ulaşır.",
+    "Turuncu bölümler servissiz dönüşü gösterir. C-SCAN fiziksel uçlar, C-LOOK bekleyen istekler arasında döner.",
+    "Tablo, her algoritmanın istekleri hangi sırayla tamamladığını gösterir. Bekleme süresi ayrıca ölçülür.",
     "Kaynağın tarihsel deadline örneği: her batch sonrasında eski bekleyen isteği gözet; bu güncel Linux varsayılanı iddiası değildir.",
   ];
   return (
     <Stage
-      title="Kısa yol tek ölçüt mü?"
+      title="HDD zamanlama karşılaştırması"
       controls={
         <div className="flex flex-wrap justify-center gap-2">
-          {["FCFS", "SCAN", "C-SCAN", "Dönüş", "Servis sırası", "Politika"].map(
-            (label, i) => (
-              <Choice
-                key={label}
-                active={stage === i}
-                onClick={() => setStage(i)}
-              >
-                {label}
-              </Choice>
-            ),
-          )}
+          {[
+            "Toplam hareket",
+            "Servissiz dönüş",
+            "Servis sırası",
+            "Politika",
+          ].map((label, i) => (
+            <Choice
+              key={label}
+              active={stage === i}
+              onClick={() => setStage(i)}
+            >
+              {label}
+            </Choice>
+          ))}
         </div>
       }
     >
-      <div className="flex h-full w-full max-w-[1000px] flex-col justify-center gap-3 md:gap-5">
-        {stage < 4 ? (
-          results.map((r, index) => (
-            <button
-              className="grid grid-cols-[75px_1fr_55px] items-center gap-3 text-left md:grid-cols-[120px_1fr_90px]"
-              key={r.algorithm}
-              onClick={() =>
-                goTo(["fcfs-path", "scan-path", "cscan-path"][index])
-              }
-              aria-label={`${r.algorithm}, ${stage >= index ? r.total : "henüz açılmadı"}, ilgili sahneye git`}
-            >
-              <span className="font-display text-base md:text-xl">
-                {r.algorithm}
-              </span>
-              <div className="h-12 rounded-lg bg-slate-100 md:h-16">
-                <motion.div
-                  initial={false}
-                  animate={{
-                    width:
-                      stage >= index ? `${comparisonWidth(r.total)}%` : "0%",
-                  }}
-                  transition={{ duration: enabled ? 0.25 : 0 }}
-                  className="flex h-full overflow-hidden rounded-lg"
-                  style={{ background: colors[r.algorithm] }}
-                >
-                  {r.algorithm === "C-SCAN" && stage >= 3 && (
-                    <>
-                      <span
-                        className="h-full bg-blue"
-                        style={{ width: `${circularSegmentWidth(53)}%` }}
-                      />
-                      <span
-                        className="flex h-full items-center justify-center border-x-2 border-white bg-orange text-xs font-bold text-white"
-                        style={{ width: `${circularSegmentWidth(199)}%` }}
-                      >
-                        199
-                      </span>
-                      <span
-                        className="h-full bg-blue"
-                        style={{ width: `${circularSegmentWidth(134)}%` }}
-                      />
-                    </>
-                  )}
-                </motion.div>
-              </div>
-              <strong className="font-display text-2xl md:text-5xl">
-                {stage >= index ? r.total : "?"}
-              </strong>
-            </button>
-          ))
-        ) : stage === 4 ? (
-          <div className="w-full overflow-hidden rounded-xl border-2 border-ink">
-            <div className="grid grid-cols-[100px_1fr] bg-slate-100 p-3 text-xs font-semibold">
-              <span>Politika</span>
-              <span>Servis edilen silindirler · olay sırası</span>
-            </div>
-            {results.map((r) => (
-              <div
-                key={r.algorithm}
-                className="grid grid-cols-[100px_1fr] items-center gap-2 border-t border-slate-200 p-3"
+      <div className="flex h-full w-full max-w-[1000px] flex-col justify-center gap-2 md:gap-3">
+        {stage < 2 ? (
+          results.map((result) => {
+            const { algorithm, total } = result;
+            const details = traceDetails[algorithm];
+            const wrap =
+              stage === 1
+                ? result.events.find((event) => event.kind === "wrap")
+                : undefined;
+            return (
+              <button
+                className="grid grid-cols-[60px_1fr_44px] items-center gap-2 text-left md:grid-cols-[100px_1fr_65px] md:gap-3"
+                key={algorithm}
+                onClick={() => goTo(details.sceneId)}
+                aria-label={`${algorithm}, ${total} silindir hareketi${wrap ? `, bunun ${wrap.distance} silindiri servissiz dönüş` : ""}. İlgili sahneye git.`}
               >
-                <strong className="text-xs">{r.algorithm}</strong>
-                <div className="flex flex-wrap gap-1">
-                  {r.serviceOrder.map((request) => (
-                    <span
-                      key={request.id}
-                      className="rounded bg-blue/10 px-2 py-1 font-display text-xs text-blue"
-                    >
-                      {request.cylinder}
-                    </span>
-                  ))}
+                <span className="font-display text-base md:text-xl">
+                  {algorithm}
+                </span>
+                <div className="h-[clamp(18px,4.7dvh,48px)] rounded-lg bg-slate-100">
+                  <motion.div
+                    initial={false}
+                    animate={{ width: `${comparisonWidth(total)}%` }}
+                    transition={{ duration: enabled ? 0.25 : 0 }}
+                    className="relative h-full overflow-hidden rounded-lg"
+                    style={{ background: details.color }}
+                  >
+                    {wrap && (
+                      <span
+                        className="absolute inset-y-0 flex items-center justify-center border-x-2 border-white bg-[#b63c15] text-[10px] font-bold text-white md:text-xs"
+                        style={{
+                          left: `${((wrap.total - wrap.distance) / total) * 100}%`,
+                          width: `${(wrap.distance / total) * 100}%`,
+                        }}
+                      >
+                        {wrap.distance}
+                      </span>
+                    )}
+                  </motion.div>
                 </div>
-              </div>
-            ))}
+                <strong className="font-display text-xl md:text-3xl">
+                  {total}
+                </strong>
+              </button>
+            );
+          })
+        ) : stage === 2 ? (
+          <div className="w-full overflow-hidden rounded-xl border-2 border-ink">
+            <table className="w-full table-fixed text-center text-xs md:text-sm">
+              <thead className="bg-slate-100">
+                <tr>
+                  <th scope="col" className="w-16 py-2 md:w-28">
+                    Algoritma
+                  </th>
+                  <th colSpan={defaultSchedule.queue.length}>
+                    Servis edilen silindirler
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {results.map(({ algorithm, serviceOrder }) => (
+                  <tr key={algorithm} className="border-t border-slate-200">
+                    <th scope="row" className="py-1.5 md:py-2">
+                      {algorithm}
+                    </th>
+                    {serviceOrder.map(({ id, cylinder }) => (
+                      <td key={id} className="font-display text-blue">
+                        {cylinder}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
@@ -619,22 +672,6 @@ export function ScheduleComparison({
           </div>
         )}
         {stage === 3 && (
-          <div className="grid grid-cols-3 gap-2 text-center text-xs font-semibold">
-            {[
-              "53 · 0’a kadar",
-              "199 · dönüş / servis yok",
-              "134 · kalan servis",
-            ].map((x, i) => (
-              <div
-                key={x}
-                className={`rounded-lg p-3 ${i === 1 ? "bg-orange/10 text-orange" : "bg-blue/10 text-blue"}`}
-              >
-                {x}
-              </div>
-            ))}
-          </div>
-        )}
-        {stage >= 4 && (
           <div className="flex justify-center gap-5 text-xs font-semibold text-blue">
             <span>Hareket</span>
             <span>Bekleme</span>

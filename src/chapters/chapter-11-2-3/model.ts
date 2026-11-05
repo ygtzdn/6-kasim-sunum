@@ -1,4 +1,12 @@
-export type ScheduleAlgorithm = "FCFS" | "SCAN" | "C-SCAN";
+export const scheduleAlgorithms = [
+  "FCFS",
+  "SSTF",
+  "SCAN",
+  "LOOK",
+  "C-SCAN",
+  "C-LOOK",
+] as const;
+export type ScheduleAlgorithm = (typeof scheduleAlgorithms)[number];
 export type ScheduleDirection = "up" | "down";
 export interface DiskRequest {
   id: number;
@@ -63,7 +71,7 @@ export function calculateSchedule(
     throw new Error("Geçersiz istek kuyruğu.");
   if (input.direction !== "up" && input.direction !== "down")
     throw new Error("Geçersiz yön.");
-  if (!["FCFS", "SCAN", "C-SCAN"].includes(algorithm))
+  if (!scheduleAlgorithms.includes(algorithm))
     throw new Error("Geçersiz algoritma.");
   const result: ScheduleResult = {
     algorithm,
@@ -98,6 +106,20 @@ export function calculateSchedule(
     for (const request of requests) visit(request.cylinder, "service", request);
     return result;
   }
+  if (algorithm === "SSTF") {
+    while (requests.length) {
+      requests.sort(
+        (a, b) =>
+          Math.abs(a.cylinder - position) - Math.abs(b.cylinder - position) ||
+          a.id - b.id,
+      );
+      const [nearest] = requests.splice(0, 1);
+      visit(nearest.cylinder, "service", nearest);
+    }
+    return result;
+  }
+  const circular = algorithm === "C-SCAN" || algorithm === "C-LOOK";
+  const usesPhysicalEdge = algorithm === "SCAN" || algorithm === "C-SCAN";
   const sign = input.direction === "up" ? 1 : -1;
   const sortForward = (a: DiskRequest, b: DiskRequest) =>
     sign * (a.cylinder - b.cylinder) || a.id - b.id;
@@ -108,16 +130,20 @@ export function calculateSchedule(
   const behind = requests
     .filter((r) => sign * (r.cylinder - input.head) < 0)
     .sort(
-      algorithm === "SCAN"
-        ? (a, b) => -sign * (a.cylinder - b.cylinder) || a.id - b.id
-        : sortForward,
+      circular
+        ? sortForward
+        : (a, b) => -sign * (a.cylinder - b.cylinder) || a.id - b.id,
     );
   for (const request of [...here, ...forward])
     visit(request.cylinder, "service", request);
   if (behind.length) {
     const edge = sign > 0 ? maximum : 0;
-    if (position !== edge) visit(edge, "turn");
-    if (algorithm === "C-SCAN") visit(sign > 0 ? 0 : maximum, "wrap");
+    if (usesPhysicalEdge && position !== edge) visit(edge, "turn");
+    if (circular) {
+      // Arriving after a wrap and servicing the request are separate events.
+      const wrapTarget = usesPhysicalEdge ? maximum - edge : behind[0].cylinder;
+      visit(wrapTarget, "wrap");
+    }
     for (const request of behind) visit(request.cylinder, "service", request);
   }
   return result;

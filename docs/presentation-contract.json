@@ -347,6 +347,40 @@
     "model": "Saf motor her aşamada kafa, tamamlanan kimlikler ve toplamı yeniden hesaplar. Dikey olay sırası zaman ekseni değildir."
   },
   {
+    "id": "sstf-path",
+    "title": "SSTF · En yakın istek",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "seconds": 60,
+    "legacyIds": [],
+    "stages": [
+      "Başlangıç: 53",
+      "En yakın istek: 65",
+      "En yakın istek: 67",
+      "En yakın istek: 37",
+      "En yakın istek: 14",
+      "En yakın istek: 98",
+      "En yakın istek: 122",
+      "En yakın istek: 124",
+      "En yakın istek: 183",
+      "Sonuç: 236 silindir"
+    ],
+    "sections": [
+      "11.2"
+    ],
+    "slides": [
+      19,
+      25
+    ],
+    "supplement": {
+      "label": "8. baskı · SSTF (slayt 19–20)",
+      "url": "https://www.os-book.com/OS8/os8c/slide-dir/PDF-dir/ch12.pdf#page=19"
+    },
+    "takeaway": "SSTF her adımda kafanın güncel konumuna en yakın bekleyen isteği seçer. Örnek toplamı 236 silindirdir.",
+    "model": "Seek süresi için silindir mesafesi kullanılır. Eşit mesafede önce gelen istek seçilir. 10. baskı slaytları ortak kuyruğu ve politika bağlamını, ek kaynak SSTF kuralını verir."
+  },
+  {
     "id": "scan-path",
     "title": "SCAN: fiziksel uca git, dön",
     "chapter": "11.2",
@@ -378,6 +412,41 @@
     ],
     "takeaway": "Fiziksel 0 ucuna giden azalan SCAN yolu 236’dır; 14’te dönen LOOK yolu 208 verir. İki algoritmanın dönüş noktası farklıdır.",
     "model": "Resmî 21. slayttaki 208 ifadesi açık fiziksel uç kuralıyla uyuşmaz. Tam kitap hatası iddia edilmeden iki yol ve hesap gösterilir."
+  },
+  {
+    "id": "look-path",
+    "title": "LOOK · Son istekte yön değişimi",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "seconds": 60,
+    "legacyIds": [],
+    "stages": [
+      "Başlangıç: 53",
+      "İstek: 37",
+      "Son azalan istek: 14",
+      "Yön değişimi ve ilk artan istek: 65",
+      "İstek: 67",
+      "İstek: 98",
+      "İstek: 122",
+      "İstek: 124",
+      "İstek: 183",
+      "Sonuç: 208 silindir"
+    ],
+    "sections": [
+      "11.2"
+    ],
+    "slides": [
+      19,
+      21,
+      22
+    ],
+    "supplement": {
+      "label": "8. baskı · LOOK ve C-LOOK (slayt 25–26)",
+      "url": "https://www.os-book.com/OS8/os8c/slide-dir/PDF-dir/ch12.pdf#page=25"
+    },
+    "takeaway": "LOOK başlangıç yönündeki son bekleyen istekte yön değiştirir. Kafa 14’te dönünce toplam hareket 208 silindir olur.",
+    "model": "Aynı örnekte SCAN fiziksel uç 0’da, LOOK son istek 14’te döner. LOOK kuralı ek kaynakta yer alır."
   },
   {
     "id": "cscan-path",
@@ -414,8 +483,44 @@
     "model": "Ortak azalan yön kullanılır; kaynaktaki artan yönün 382 sonucu alternatif olarak notlanır. Geri aşama toplamı ve servis durumunu birlikte geri kurar."
   },
   {
+    "id": "clook-path",
+    "title": "C-LOOK · İstekler arasında dönüş",
+    "chapter": "11.2",
+    "presenterId": 2,
+    "kind": "chapter",
+    "seconds": 60,
+    "legacyIds": [],
+    "stages": [
+      "Başlangıç: 53",
+      "İstek: 37",
+      "Son azalan istek: 14",
+      "14’ten 183’e servissiz dönüş",
+      "İstek: 183",
+      "İstek: 124",
+      "İstek: 122",
+      "İstek: 98",
+      "İstek: 67",
+      "İstek: 65",
+      "Sonuç: 326 silindir"
+    ],
+    "sections": [
+      "11.2"
+    ],
+    "slides": [
+      19,
+      23,
+      24
+    ],
+    "supplement": {
+      "label": "8. baskı · LOOK ve C-LOOK (slayt 25–26)",
+      "url": "https://www.os-book.com/OS8/os8c/slide-dir/PDF-dir/ch12.pdf#page=25"
+    },
+    "takeaway": "C-LOOK fiziksel uçlar yerine bekleyen istekler arasında döner. 14’ten 183’e servissiz hareketle birlikte toplam 326 silindirdir.",
+    "model": "C-LOOK kuralı ek kaynakta yer alır. Ortak azalan örnekte 183’e varış ile 183’te servis ayrı aşamalardır ve servis aşamasına 0 hareket eklenir."
+  },
+  {
     "id": "scheduling-tradeoffs",
-    "title": "Kısa yol tek ölçüt değil",
+    "title": "HDD zamanlama karşılaştırması",
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
@@ -424,12 +529,10 @@
       "s14"
     ],
     "stages": [
-      "FCFS: 640",
-      "SCAN: 236",
-      "C-SCAN: 386",
-      "Dönüşü ayır: 53 + 199 + 134",
-      "Hareket ve servis sırası farklı",
-      "Politika: eski bekleyen isteği gözet"
+      "Altı algoritmanın toplam kafa hareketi",
+      "C-SCAN ve C-LOOK’ta servissiz dönüş",
+      "Servis sıraları",
+      "Tarihsel deadline politikası"
     ],
     "sections": [
       "11.2"
@@ -445,7 +548,7 @@
       24,
       25
     ],
-    "takeaway": "Bu sabit kuyrukta kısa yol SCAN’indir; bekleme, adalet ve politika seçimi yalnız toplam mesafeden çıkarılmaz.",
+    "takeaway": "Bu sabit kuyrukta en kısa yol LOOK’un 208 silindirlik yoludur. Bekleme süresi ve adalet ayrı ölçütlerdir.",
     "model": "Çubuklar hesaplanan toplamdır, adalet puanı değildir. Deadline/NOOP/CFQ anlatımı kaynağın tarihsel bağlamında tutulur."
   },
   {
@@ -799,8 +902,31 @@
     "model": "Üç soru/cevap çifti özgün sentezdir. Yanıt görünürlüğü ortak aşamaya bağlıdır; bağımsız veya geriye gitmeyen bir cevap hafızası tutulmaz."
   },
   {
+    "id": "storage-attachment",
+    "title": "Storage Attachment",
+    "chapter": "11.7",
+    "presenterId": 4,
+    "kind": "chapter",
+    "seconds": 40,
+    "legacyIds": [],
+    "stages": [
+      "Üç temel bağlantı yaklaşımı",
+      "Host-attached",
+      "Network-attached",
+      "Cloud"
+    ],
+    "sections": [
+      "11.7"
+    ],
+    "slides": [
+      32
+    ],
+    "takeaway": "Kitap depolamaya erişimi host-attached, network-attached ve cloud yaklaşımlarıyla tanıtır.",
+    "model": "Üç özgün donanım/bağlantı çizimi kaynak slayt 32’nin girişini görselleştirir. SAN bu üçünün yerine geçen bir sınıflandırma olarak sunulmaz. Paket hareketi aygıt hızı değildir."
+  },
+  {
     "id": "host-attached",
-    "title": "Depolamaya hangi yoldan ulaşırız?",
+    "title": "Host-attached: yerel I/O bağlantısı",
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
@@ -809,25 +935,22 @@
       "s26"
     ],
     "stages": [
-      "Bağlantı sorusu",
-      "Host portu ve aygıt",
-      "Bus ile birden çok aygıt",
-      "FC fabric örneği",
-      "Bağlantı yolu ve hizmet arayüzü"
+      "Yerel I/O portu",
+      "Host’tan aygıta istek",
+      "Bus ile birden çok aygıt"
     ],
     "sections": [
       "11.7"
     ],
     "slides": [
-      15,
       32
     ],
-    "takeaway": "Bağlantı yolu ile istemciye sunulan dosya, blok veya API arayüzü ayrı eksenlerdir.",
-    "model": "Yerel port, bus ve fabric kavramsal çizimlerdir; aygıt/protokol hızı ölçülmez ve üç evrensel, birbirini dışlayan ürün sınıfı oluşturulmaz."
+    "takeaway": "Host-attached erişim yerel I/O portunu kullanır. Bir depolama bus’ı birden çok aygıtı bağlayabilir.",
+    "model": "Yerel port ve iki aygıtlı bus özgün kavramsal çizimlerdir. USB, FireWire, Thunderbolt ve FC kaynak örnekleridir. Aygıt veya protokol hızı ölçülmez."
   },
   {
     "id": "nas",
-    "title": "Ağda dosya mı, blok mu?",
+    "title": "Network-attached: ağdan depolamaya",
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
@@ -836,12 +959,10 @@
       "s27"
     ],
     "stages": [
-      "Dosya yolu isteği",
-      "NFS ve CIFS",
-      "IP üzerinde uzak çağrı",
-      "Sunucuda dosya sistemi",
-      "iSCSI ile blok karşı örneği",
-      "Dosya ve blok sorumluluğu"
+      "NAS ile uzak dosya sistemi",
+      "NFS / CIFS ve uzak çağrı",
+      "Dosyadan depolama bloklarına",
+      "iSCSI ile IP üzerinden blok erişimi"
     ],
     "sections": [
       "11.7"
@@ -854,7 +975,7 @@
   },
   {
     "id": "cloud-storage",
-    "title": "Uzak depolamaya API ile erişim",
+    "title": "Cloud: Internet üzerinden API erişimi",
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
@@ -863,10 +984,9 @@
       "s28"
     ],
     "stages": [
-      "Uygulama işlemi",
-      "WAN ve Internet yolu",
-      "Hizmet API arayüzü",
-      "Uzak hizmet ve yanıt",
+      "Program ve hizmet API’si",
+      "Internet / WAN üzerinden istek",
+      "Uzak veri merkezi ve yanıt",
       "Gecikme ve başarısızlık"
     ],
     "sections": [
@@ -880,7 +1000,7 @@
   },
   {
     "id": "storage-arrays",
-    "title": "Bir depolama dizisinin içi",
+    "title": "Depolama dizisi: denetleyici ve diskler",
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
@@ -889,11 +1009,10 @@
       "s29"
     ],
     "stages": [
-      "Tek aygıttan diziye",
-      "Host portları ve denetleyici",
-      "Bellek, yazılım ve diskler",
-      "Paylaşım ve hizmetler",
-      "Dizi özelliği ile RAID seviyesi"
+      "Tek disk ve depolama dizisi",
+      "Host portları",
+      "Denetleyici, bellek ve diskler",
+      "Birden çok host ve SAN bağlantısı"
     ],
     "sections": [
       "11.7"
@@ -901,24 +1020,23 @@
     "slides": [
       35
     ],
-    "takeaway": "Storage array host bağlantılarını, denetleyiciyi ve aygıtları birleştirir; RAID ve snapshot gibi hizmetler aynı kavram değildir.",
+    "takeaway": "Depolama dizisi host portlarını, denetleyiciyi, belleği, yönetim yazılımını ve diskleri birleştirir.",
     "model": "Diskler ve denetleyici temsildir. Kitabın doğrudan dizi/NAS ağ yükü karşılaştırması bütün diziler ağsızdır biçiminde genellenmez."
   },
   {
     "id": "san",
-    "title": "Birçok host, birçok dizi",
+    "title": "Storage Area Network (SAN)",
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
     "seconds": 45,
     "legacyIds": [],
     "stages": [
-      "Hostlar ve diziler",
-      "Switch ve fabric",
-      "Depolama yolu",
-      "LUN ve hacimler",
-      "LUN masking ile görünürlük",
-      "Ayrı ağlar ve arayüz ayrımı"
+      "Host’lar ve depolama dizileri",
+      "FC switch / InfiniBand ve istek yolu",
+      "LUN masking: Host A",
+      "LUN masking: Host B",
+      "Depolama ağı ve iletişim ağı"
     ],
     "sections": [
       "11.7"
@@ -928,8 +1046,32 @@
       36,
       37
     ],
-    "takeaway": "SAN çok host ve diziyi bağlar; belirli hacimlerin hostlara görünürlüğü dosya sistemi koordinasyonundan ayrı bir karardır.",
-    "model": "LUN görünürlüğü çizimde değişir; gerçek ağ, yetkilendirme veya küme dosya sistemi kurulmaz. Kaynaktaki FC/InfiniBand ve iSCSI/FCoE bağlamı korunur."
+    "takeaway": "SAN birden çok host ile depolama dizisini bağlar. LUN masking belirli birimleri belirli host’lara sunar.",
+    "model": "İki host, iki dizi ve iki LUN özgün örnektir. Fiziksel bağlantılar sabit kalır, görünür birim ve seçili erişim yolu vurgulanır. Gerçek ağ kurulmaz. Kaynaktaki FC/InfiniBand ve iSCSI/FCoE bağlamı korunur."
+  },
+  {
+    "id": "nas-san-comparison",
+    "title": "NAS ve SAN",
+    "chapter": "11.7",
+    "presenterId": 4,
+    "kind": "chapter",
+    "seconds": 45,
+    "legacyIds": [],
+    "stages": [
+      "Dosya ve blok erişimi",
+      "Bağlantı ve protokoller",
+      "Dosya sisteminin yeri"
+    ],
+    "sections": [
+      "11.7"
+    ],
+    "slides": [
+      33,
+      36,
+      37
+    ],
+    "takeaway": "NAS dosya sistemi hizmeti sunar. SAN host’lara depolama bloklarını ulaştırır. Dosya sistemi sorumluluğu farklı uçlardadır.",
+    "model": "Slayt 33 ve 36–37’nin özgün karşılaştırmasıdır. Dosya sistemi konumu, NAS dosya hizmeti ile SAN blok erişiminden çıkarılan tipik sorumluluk ayrımıdır. Hız, fiyat veya tüm ürünler için bir üstünlük iddiası eklenmez. iSCSI, IP üzerinden blok erişiminin kaynak örneğidir."
   },
   {
     "id": "raid-intro",

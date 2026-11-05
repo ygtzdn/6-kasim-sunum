@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 export interface SceneNotes {
   explanation: string;
+  topicPresenterLabel?: string;
 }
 export interface SceneContext {
   enabled: boolean;

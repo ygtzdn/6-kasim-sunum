@@ -4,7 +4,8 @@ export default function NotesPanel({ scene }: { scene: SceneDefinition }) {
   return (
     <article className="menu-notes">
       <span className="eyebrow">
-        {scene.chapter} · {scene.presenterId}. kişi
+        {scene.chapter} ·{" "}
+        {scene.notes.topicPresenterLabel ?? `${scene.presenterId}. kişi`}
       </span>
       <h2>{scene.title}</h2>
       <p>{scene.notes.explanation}</p>

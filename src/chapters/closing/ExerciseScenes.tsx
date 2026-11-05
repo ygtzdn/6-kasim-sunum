@@ -2,6 +2,7 @@ import { Cpu, HardDrive, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { Choice, Stage } from "../../components/presentation/ScenePrimitives";
 import { StageReveal } from "../../presentation/PresentationMotion";
+import { chapters } from "../../presentation/chapters";
 import type { SceneContext, SceneDefinition } from "../../presentation/types";
 import {
   calculateSchedule,
@@ -140,26 +141,44 @@ function ExerciseVisual({
   );
 }
 
-export const exerciseScenes: SceneDefinition[] = exercises.map((exercise) => ({
-  id: exercise.id,
-  title: `Alıştırma ${exercise.label} · ${exercise.title}`,
-  shortTitle: `${exercise.label} · ${exercise.title}`,
-  kind: "closing",
-  presenterId: 4,
-  chapter: exercise.chapter,
-  legacyIds: [],
-  stages: exercise.stages,
-  seconds: exercise.seconds,
-  notes: { explanation: exercise.answer },
-  render: (context) => <ExerciseScene {...context} exercise={exercise} />,
-}));
+export const exerciseScenes: SceneDefinition[] = exercises.map((exercise) => {
+  const presenters = new Set(
+    chapters
+      .filter(({ number }) => exercise.sections.includes(number))
+      .map(({ presenterId }) => `${presenterId}.`),
+  );
+  const topicPresenterLabel = `${[...presenters].join(" ve ")} kişinin konusu`;
+  return {
+    id: exercise.id,
+    title: `Alıştırma ${exercise.label} · ${exercise.title}`,
+    shortTitle: `${exercise.label} · ${exercise.title}`,
+    kind: "closing",
+    presenterId: 4,
+    chapter: exercise.chapter,
+    legacyIds: [],
+    stages: exercise.stages,
+    seconds: exercise.seconds,
+    notes: { explanation: exercise.answer, topicPresenterLabel },
+    render: (context) => (
+      <ExerciseScene
+        {...context}
+        exercise={exercise}
+        topicPresenterLabel={topicPresenterLabel}
+      />
+    ),
+  };
+});
 
 function ExerciseScene({
   exercise,
+  topicPresenterLabel,
   stage,
   setStage,
   enabled,
-}: SceneContext & { exercise: (typeof exercises)[number] }) {
+}: SceneContext & {
+  exercise: (typeof exercises)[number];
+  topicPresenterLabel: string;
+}) {
   const revealed = stage === 1;
   return (
     <Stage
@@ -177,6 +196,9 @@ function ExerciseScene({
     >
       <div className="exercise-scene">
         <div className="exercise-question">
+          <p className="text-sm font-semibold text-slate-700">
+            {topicPresenterLabel}
+          </p>
           <a
             href={`/references/ch11-exercises.pdf#page=${exercise.page}`}
             target="_blank"

@@ -4,6 +4,7 @@ import {
   calculateSchedule,
   cylinderMaximum,
   defaultSchedule,
+  scheduleAlgorithms,
   parseQueue,
   createFlashState,
   nextFlashStep,
@@ -11,22 +12,37 @@ import {
   flashStateAtStage,
 } from "../src/chapters/chapter-11-2-3/model.ts";
 
-test("default FCFS / SCAN / C-SCAN paths and totals match the teaching contract", () => {
+test("all six default paths and totals match the teaching example", () => {
   const expected = {
     FCFS: {
       path: [53, 98, 183, 37, 122, 14, 124, 65, 67],
       order: [98, 183, 37, 122, 14, 124, 65, 67],
       total: 640,
     },
+    SSTF: {
+      path: [53, 65, 67, 37, 14, 98, 122, 124, 183],
+      order: [65, 67, 37, 14, 98, 122, 124, 183],
+      total: 236,
+    },
     SCAN: {
       path: [53, 37, 14, 0, 65, 67, 98, 122, 124, 183],
       order: [37, 14, 65, 67, 98, 122, 124, 183],
       total: 236,
     },
+    LOOK: {
+      path: [53, 37, 14, 65, 67, 98, 122, 124, 183],
+      order: [37, 14, 65, 67, 98, 122, 124, 183],
+      total: 208,
+    },
     "C-SCAN": {
       path: [53, 37, 14, 0, 199, 183, 124, 122, 98, 67, 65],
       order: [37, 14, 183, 124, 122, 98, 67, 65],
       total: 386,
+    },
+    "C-LOOK": {
+      path: [53, 37, 14, 183, 183, 124, 122, 98, 67, 65],
+      order: [37, 14, 183, 124, 122, 98, 67, 65],
+      total: 326,
     },
   };
   for (const [algorithm, result] of Object.entries(expected)) {
@@ -42,6 +58,44 @@ test("default FCFS / SCAN / C-SCAN paths and totals match the teaching contract"
       result.total,
     );
   }
+});
+
+test("SSTF breaks distance ties by arrival order regardless of direction", () => {
+  for (const direction of ["up", "down"]) {
+    const result = calculateSchedule("SSTF", {
+      head: 50,
+      queue: [60, 40, 50, 60],
+      direction,
+    });
+    assert.deepEqual(
+      result.serviceOrder.map(({ id }) => id),
+      [2, 0, 3, 1],
+    );
+  }
+});
+
+test("LOOK reverses without an edge event and C-LOOK wraps to a pending request", () => {
+  const input = { head: 50, queue: [90, 65, 20, 30, 20], direction: "up" };
+  assert.deepEqual(
+    calculateSchedule("LOOK", input).path,
+    [50, 65, 90, 30, 20, 20],
+  );
+  const circular = calculateSchedule("C-LOOK", input);
+  assert.deepEqual(circular.path, [50, 65, 90, 20, 20, 20, 30]);
+  assert.deepEqual(circular.events[2], {
+    kind: "wrap",
+    position: 20,
+    distance: 70,
+    total: 110,
+    requestId: undefined,
+  });
+  assert.equal(circular.events[3].distance, 0);
+  assert.equal(circular.events[3].requestId, 2);
+  assert.equal(circular.total, 120);
+  assert.deepEqual(
+    calculateSchedule("C-LOOK", { ...input, queue: [65, 90] }).path,
+    [50, 65, 90],
+  );
 });
 
 test("upward SCAN visits the physical edge before reversing; C-SCAN charges the wrap", () => {
@@ -76,7 +130,7 @@ test("downward SCAN includes the physical edge; stopping at the last request wou
 });
 
 test("empty, repeated, current-head and endpoint requests preserve identities and terminate", () => {
-  for (const algorithm of ["FCFS", "SCAN", "C-SCAN"]) {
+  for (const algorithm of scheduleAlgorithms) {
     assert.equal(
       calculateSchedule(algorithm, { head: 35, queue: [], direction: "up" })
         .total,
@@ -153,7 +207,7 @@ test("every schedule services every request once, and cumulative totals match ac
   for (const head of [0, 53, 199])
     for (const direction of ["up", "down"])
       for (const queue of [[0, 199, 0, 53], [53, 53], [10, 120, 180], []])
-        for (const algorithm of ["FCFS", "SCAN", "C-SCAN"]) {
+        for (const algorithm of scheduleAlgorithms) {
           const result = calculateSchedule(algorithm, {
             head,
             queue,

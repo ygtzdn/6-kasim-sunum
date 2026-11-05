@@ -38,7 +38,7 @@ export const chapters = [
   {
     number: "11.7",
     title: "Depolamanın sisteme bağlanması",
-    firstScene: "host-attached",
+    firstScene: "storage-attachment",
     presenterId: 4,
   },
   {

@@ -6,11 +6,7 @@ export const attachmentStoryData = [
     chapter: "11.7",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 30,
-      full: 50,
-    },
+    seconds: 30,
     legacyIds: ["s26"],
     stages: [
       "Bağlantı sorusu",
@@ -30,11 +26,7 @@ export const attachmentStoryData = [
     chapter: "11.7",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 75,
-    },
+    seconds: 45,
     legacyIds: ["s27"],
     stages: [
       "Dosya yolu isteği",
@@ -55,11 +47,7 @@ export const attachmentStoryData = [
     chapter: "11.7",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 30,
-      full: 50,
-    },
+    seconds: 30,
     legacyIds: ["s28"],
     stages: [
       "Uygulama işlemi",
@@ -79,11 +67,7 @@ export const attachmentStoryData = [
     chapter: "11.7",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 65,
-    },
+    seconds: 45,
     legacyIds: ["s29"],
     stages: [
       "Tek aygıttan diziye",
@@ -103,11 +87,7 @@ export const attachmentStoryData = [
     chapter: "11.7",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 70,
-    },
+    seconds: 45,
     legacyIds: [],
     stages: [
       "Hostlar ve diziler",
@@ -128,11 +108,7 @@ export const attachmentStoryData = [
     chapter: "11.8",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 70,
-    },
+    seconds: 45,
     legacyIds: [],
     stages: [
       "Kapasite, paralellik ve güvenilirlik",
@@ -152,11 +128,7 @@ export const attachmentStoryData = [
     chapter: "11.8",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 60,
-      full: 95,
-    },
+    seconds: 60,
     legacyIds: ["s30"],
     stages: [
       "RAID 0 parçaları",
@@ -177,11 +149,7 @@ export const attachmentStoryData = [
     chapter: "11.8",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 60,
-      full: 95,
-    },
+    seconds: 60,
     legacyIds: ["s31"],
     stages: [
       "Veri ve P ilişkisi",
@@ -197,63 +165,12 @@ export const attachmentStoryData = [
       "Eş boyutlu disk/şerit gösterimi özgündür. RAID6 Q cebiri semboliktir; aynı XOR bilgisinin ikinci kopyası iki bağımsız denklem diye sunulmaz.",
   },
   {
-    id: "raid-xor",
-    title: "Kayıp bloğu sağlam bilgilerden üret",
-    chapter: "11.8",
-    presenterId: 4,
-    kind: "chapter",
-    depth: "extension",
-    seconds: {
-      core: 0,
-      full: 70,
-    },
-    legacyIds: [],
-    stages: [
-      "Üç veri bloğu",
-      "P paritesini hesapla",
-      "A1 kayıp: önce tahmin et",
-      "Sağlam hücrelerden A1 üret",
-      "İkinci bilinmeyenin sınırı",
-    ],
-    takeaway:
-      "Tek kayıp blok sağlam veri ve P üzerinden yeniden hesaplanabilir; aynı denklem iki bilinmeyeni çözmez.",
-    model:
-      "1100,1010,0110 ve 0000 bitleri özgün eğitim örneğidir, kitabın hazır sayısal örneği değildir. XOR sonucu gerçekten sağlam hücrelerden hesaplanır.",
-  },
-  {
-    id: "raid-levels",
-    title: "Koruma bilgisini iki boyutta yerleştirmek",
-    chapter: "11.8",
-    presenterId: 4,
-    kind: "chapter",
-    depth: "extension",
-    seconds: {
-      core: 0,
-      full: 35,
-    },
-    legacyIds: [],
-    stages: [
-      "Bilinen RAID seviye haritası",
-      "P ve Q yerleşimi",
-      "İki boyutlu aygıt düzeni",
-      "Satır ve sütun koruma rolleri",
-    ],
-    takeaway:
-      "Resmî slayt40 çok boyutlu RAID6 yerleşimini de gösterir; yalnız seviye adından evrensel hata garantisi çıkarılmaz.",
-    model:
-      "Kaynak figürünü açıklayan dar bir yerleşim şemasıdır; GF cebiri, keyfî boyutlarda kapasite veya arıza garantisi hesaplanmaz. Kaynakta doğrulanmayan RAID2/3 eklenmez.",
-  },
-  {
     id: "raid-nested",
     title: "Önce ayna mı, önce şerit mi?",
     chapter: "11.8",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 60,
-      full: 85,
-    },
+    seconds: 60,
     legacyIds: ["s32"],
     stages: [
       "Aynı diskler, iki gruplama",
@@ -275,11 +192,7 @@ export const attachmentStoryData = [
     chapter: "11.8",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 75,
-      full: 105,
-    },
+    seconds: 75,
     legacyIds: ["s33"],
     stages: [
       "Sağlıklı dizi ve boş hot spare",
@@ -301,11 +214,7 @@ export const attachmentStoryData = [
     chapter: "11.8",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 70,
-    },
+    seconds: 45,
     legacyIds: [],
     stages: [
       "Üç ayrı ihtiyaç",
@@ -326,11 +235,7 @@ export const attachmentStoryData = [
     chapter: "11.8",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 65,
-    },
+    seconds: 45,
     legacyIds: ["s34"],
     stages: [
       "Sağlam disk, değişmiş içerik",
@@ -350,11 +255,7 @@ export const attachmentStoryData = [
     chapter: "11.8",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 30,
-      full: 60,
-    },
+    seconds: 30,
     legacyIds: [],
     stages: [
       "Geleneksel bölüm ve volume sınırları",
@@ -374,11 +275,7 @@ export const attachmentStoryData = [
     chapter: "11.8",
     presenterId: 4,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 75,
-    },
+    seconds: 45,
     legacyIds: [],
     stages: [
       "Havuzda veri nesnesi",
@@ -402,11 +299,7 @@ export const closingStoryData = [
     chapter: "Ortak kapanış",
     presenterId: 4,
     kind: "closing",
-    depth: "core",
-    seconds: {
-      core: 60,
-      full: 75,
-    },
+    seconds: 60,
     legacyIds: ["s35"],
     stages: [
       "Bütün sistem görünümü",
@@ -428,11 +321,7 @@ export const closingStoryData = [
     chapter: "Ortak kapanış",
     presenterId: 4,
     kind: "closing",
-    depth: "core",
-    seconds: {
-      core: 60,
-      full: 75,
-    },
+    seconds: 60,
     legacyIds: ["s36"],
     stages: [
       "Tasarım sorusu",

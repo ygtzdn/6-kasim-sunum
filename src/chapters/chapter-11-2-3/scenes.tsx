@@ -19,7 +19,6 @@ const renderers: Record<string, (context: SceneContext) => ReactNode> = {
 export const schedulingScenes: SceneDefinition[] = curriculum.map((scene) => ({
   ...scene,
   kind: "chapter",
-  depth: scene.depth === "core" ? "core" : "extension",
   presenterId: 2,
   shortTitle: scene.title,
   notes: schedulingNotes[scene.id],

@@ -2,7 +2,6 @@ import type { SceneDefinition } from "../../presentation/types";
 import { DeviceLab, BootLab, RemapLab } from "./DeviceLab";
 import { ParityLab, EccLab } from "./ParityLab";
 import { ErrorNeed } from "./ErrorNeed";
-import { StorageAccess } from "./StorageAccess";
 import { ManagementRecap } from "./Recap";
 import { SwapConcept, SwapJourney } from "./SwapLab";
 import { managementNotes } from "./notes";
@@ -15,8 +14,7 @@ export const managementScenes: SceneDefinition[] = [
     chapter: "11.4",
     presenterId: 3,
     kind: "chapter",
-    depth: "core",
-    seconds: { core: 45, full: 60 },
+    seconds: 45,
     shortTitle: "Neden hata tespiti?",
     notes: managementNotes["why-error-detection"],
     stages: managementStages["why-error-detection"],
@@ -28,11 +26,7 @@ export const managementScenes: SceneDefinition[] = [
     chapter: "11.4",
     presenterId: 3,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 75,
-      full: 120,
-    },
+    seconds: 75,
     legacyIds: ["s18"],
     shortTitle: "Parite ile hata tespiti",
     notes: managementNotes["error-detection"],
@@ -45,11 +39,7 @@ export const managementScenes: SceneDefinition[] = [
     chapter: "11.4",
     presenterId: 3,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 75,
-    },
+    seconds: 45,
     legacyIds: ["s19"],
     shortTitle: "ECC ile hata düzeltme",
     notes: managementNotes["error-correction"],
@@ -62,11 +52,7 @@ export const managementScenes: SceneDefinition[] = [
     chapter: "11.5",
     presenterId: 3,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 105,
-      full: 150,
-    },
+    seconds: 105,
     legacyIds: ["s20"],
     shortTitle: "Ham ortamdan dosyaya",
     notes: managementNotes["device-preparation"],
@@ -74,33 +60,12 @@ export const managementScenes: SceneDefinition[] = [
     render: (context) => <DeviceLab {...context} />,
   },
   {
-    id: "storage-access-modes",
-    title: "Blokları kim yönetiyor?",
-    chapter: "11.5",
-    presenterId: 3,
-    kind: "chapter",
-    depth: "extension",
-    seconds: {
-      core: 0,
-      full: 90,
-    },
-    legacyIds: [],
-    shortTitle: "Blokları kim yönetiyor?",
-    notes: managementNotes["storage-access-modes"],
-    stages: managementStages["storage-access-modes"],
-    render: (context) => <StorageAccess {...context} />,
-  },
-  {
     id: "boot-sequence",
     title: "Kernel'den önce hangi kod çalışır?",
     chapter: "11.5",
     presenterId: 3,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 60,
-      full: 105,
-    },
+    seconds: 60,
     legacyIds: ["s21"],
     shortTitle: "Kernel'den önce hangi kod çalışır?",
     notes: managementNotes["boot-sequence"],
@@ -113,11 +78,7 @@ export const managementScenes: SceneDefinition[] = [
     chapter: "11.5",
     presenterId: 3,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 75,
-    },
+    seconds: 45,
     legacyIds: ["s22"],
     shortTitle: "Adres aynı kalırken yer değişebilir",
     notes: managementNotes["bad-block-remapping"],
@@ -130,11 +91,7 @@ export const managementScenes: SceneDefinition[] = [
     chapter: "11.6",
     presenterId: 3,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 60,
-      full: 90,
-    },
+    seconds: 60,
     legacyIds: ["s23"],
     shortTitle: "RAM yetmezse neyi, nereye taşırız?",
     notes: managementNotes["swap-space"],
@@ -147,11 +104,7 @@ export const managementScenes: SceneDefinition[] = [
     chapter: "11.6",
     presenterId: 3,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 105,
-      full: 165,
-    },
+    seconds: 105,
     legacyIds: ["s24"],
     shortTitle: "Bir sayfanın dışarı ve geri yolculuğu",
     notes: managementNotes["swap-journey"],
@@ -164,11 +117,7 @@ export const managementScenes: SceneDefinition[] = [
     chapter: "11.4–11.6",
     presenterId: 3,
     kind: "chapter",
-    depth: "core",
-    seconds: {
-      core: 45,
-      full: 90,
-    },
+    seconds: 45,
     legacyIds: ["s25"],
     shortTitle: "Üç sorumluluğu ayır",
     notes: managementNotes["management-decisions"],

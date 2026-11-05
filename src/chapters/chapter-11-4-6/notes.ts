@@ -17,10 +17,6 @@ export const managementNotes: Record<string, SceneNotes> = {
     explanation:
       "Depolama aygıtının fiziksel düzeni, bölümleme ve dosya sistemi oluşturma farklı katmanlardır. Örnekte alan iki bölüme ayrılır ve yalnız ilk bölümde dosya sistemi oluşturulur. Bağlama sırasında dosya sistemi denetlenir ve işletim sisteminin ad alanına katılır. Dosyaya erişim bu hazırlıkların ardından mümkün olur.",
   },
-  "storage-access-modes": {
-    explanation:
-      "Aygıt mantıksal bloklar sunar, dosya sistemi bu bloklar üzerinde dosya ve dizin düzeni kurar. Bloklar dosya sistemi tarafından daha büyük gruplarda yönetilebilir. Raw erişimde uygun uygulama kendi blok düzenini yönetir. İşletim sisteminin I/O katmanı ve sürücüler bu erişimde de bulunur.",
-  },
   "boot-sequence": {
     explanation:
       "Bilgisayar açıldığında ilk kod firmware’den çalışır. Firmware ve depolamadaki yükleyici kodu, kernel görüntüsünün RAM’e getirilmesini sağlar. Denetim kernel’e geçtiğinde işletim sistemi çalışmaya başlar. Depolamadaki kalıcı görüntü ile RAM’de çalışan içerik farklı konumlardır.",

@@ -5,11 +5,7 @@
     "chapter": "Bölüm 11 · Açılış",
     "presenterId": 1,
     "kind": "intro",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 60
-    },
+    "seconds": 45,
     "legacyIds": [
       "s01",
       "s02",
@@ -42,11 +38,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 60
-    },
+    "seconds": 45,
     "legacyIds": [
       "hdd-history",
       "magnetic-tape"
@@ -71,11 +63,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 75,
-      "full": 120
-    },
+    "seconds": 75,
     "legacyIds": [
       "s03"
     ],
@@ -102,11 +90,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
+    "seconds": 45,
     "legacyIds": [],
     "stages": [
       "Tek yüzey",
@@ -131,11 +115,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 150
-    },
+    "seconds": 90,
     "legacyIds": [
       "s05"
     ],
@@ -164,11 +144,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 90
-    },
+    "seconds": 45,
     "legacyIds": [
       "s09"
     ],
@@ -193,11 +169,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
+    "seconds": 45,
     "legacyIds": [
       "s06"
     ],
@@ -221,11 +193,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 135
-    },
+    "seconds": 90,
     "legacyIds": [
       "s07"
     ],
@@ -250,11 +218,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 90
-    },
+    "seconds": 60,
     "legacyIds": [],
     "stages": [
       "Sınırlı program/silme dayanıklılığı",
@@ -278,11 +242,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 60
-    },
+    "seconds": 45,
     "legacyIds": [
       "ram-disk",
       "s04"
@@ -307,11 +267,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 60
-    },
+    "seconds": 45,
     "legacyIds": [],
     "stages": [
       "RAM, HDD ve flash SSD karşılaştırması"
@@ -328,106 +284,12 @@
     "model": "Gerçek aygıt fotoğrafları ve kavramsal öğretim modeli kullanılır. Boyutlar veya gösterim süresi ürün ölçümü değildir."
   },
   {
-    "id": "hdd-performance-metrics",
-    "title": "Hız, gecikme ve bandwidth",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "extension",
-    "seconds": {
-      "core": 0,
-      "full": 75
-    },
-    "legacyIds": [],
-    "stages": [
-      "Tarihsel arayüz tavanı: 6 Gb/s",
-      "Tarihsel etkin örnek: 1 Gb/s",
-      "Tek I/O servis süresi: ms",
-      "Toplam byte / toplam geçen süre"
-    ],
-    "sections": [
-      "11.1",
-      "11.2"
-    ],
-    "slides": [
-      6,
-      7,
-      17
-    ],
-    "takeaway": "Arayüz tavanı, etkin transfer, tek I/O gecikmesi ve toplam disk bandwidth’i aynı ölçü değildir.",
-    "model": "Kaynak sayıları tarihsel örnek olarak etiketlenir; farklı birimler aynı çubuk uzunluğuyla yanlış karşılaştırılmaz."
-  },
-  {
-    "id": "logical-blocks",
-    "title": "OS’nin mantıksal blok görünümü",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "extension",
-    "seconds": {
-      "core": 0,
-      "full": 75
-    },
-    "legacyIds": [
-      "s08"
-    ],
-    "stages": [
-      "Numaralı LBA dizisi",
-      "LBA3 okuma isteği",
-      "Temel sıralı sektör eşlemesi",
-      "Fiziksel ayrıntıyı gizle, LBA’yı koru"
-    ],
-    "sections": [
-      "11.1"
-    ],
-    "slides": [
-      14,
-      16
-    ],
-    "takeaway": "Disk OS’ye tek boyutlu mantıksal blok dizisi olarak görünür; LBA her aygıtta aynı fiziksel koordinatı garanti etmez.",
-    "model": "Küçük sıralı eşleme eğitim modelidir. Bozuk sektör ve değişken geometri notlarda anılır; yeniden eşleme demosu kişi3’e bırakılır."
-  },
-  {
-    "id": "storage-data-path",
-    "title": "Komut yolu ve DMA veri yolu",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "extension",
-    "seconds": {
-      "core": 0,
-      "full": 105
-    },
-    "legacyIds": [],
-    "stages": [
-      "OS isteği ve hedef RAM",
-      "Host denetleyicisine komut",
-      "Aygıt denetleyicisine mesaj",
-      "Aygıtta veri erişimi",
-      "DMA ile DRAM’e veri aktarımı"
-    ],
-    "sections": [
-      "11.1",
-      "11.2"
-    ],
-    "slides": [
-      15,
-      18
-    ],
-    "takeaway": "Komutun controller’lar üzerinden iletilmesi ile verinin DMA ile DRAM’e aktarılması ayrı akışlardır.",
-    "model": "Özgün iki hatlı diyagram ve aşamadan türetilen payload konumu kullanılır; gerçek DMA protokolü veya ürün arayüz performansı ölçülmez."
-  },
-  {
     "id": "hdd-request-queue",
     "title": "HDD’de neden zamanlama gerekir?",
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 90
-    },
+    "seconds": 60,
     "legacyIds": [
       "s10"
     ],
@@ -458,11 +320,7 @@
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 80,
-      "full": 120
-    },
+    "seconds": 80,
     "legacyIds": [
       "s11"
     ],
@@ -494,11 +352,7 @@
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 135
-    },
+    "seconds": 90,
     "legacyIds": [
       "s12"
     ],
@@ -531,11 +385,7 @@
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 135
-    },
+    "seconds": 90,
     "legacyIds": [
       "s13"
     ],
@@ -569,11 +419,7 @@
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 75,
-      "full": 120
-    },
+    "seconds": 75,
     "legacyIds": [
       "s14"
     ],
@@ -608,11 +454,7 @@
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 75,
-      "full": 120
-    },
+    "seconds": 75,
     "legacyIds": [
       "s15"
     ],
@@ -643,11 +485,7 @@
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 90
-    },
+    "seconds": 60,
     "legacyIds": [],
     "stages": [
       "Başlangıç eşlemesi",
@@ -670,11 +508,7 @@
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 120,
-      "full": 180
-    },
+    "seconds": 120,
     "legacyIds": [
       "s16"
     ],
@@ -704,11 +538,7 @@
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 105
-    },
+    "seconds": 60,
     "legacyIds": [
       "s17"
     ],
@@ -735,11 +565,7 @@
     "chapter": "11.4",
     "presenterId": 3,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 60
-    },
+    "seconds": 45,
     "legacyIds": [],
     "stages": [
       "Veriyi saklama ve okuma",
@@ -761,11 +587,7 @@
     "chapter": "11.4",
     "presenterId": 3,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 75,
-      "full": 120
-    },
+    "seconds": 75,
     "legacyIds": [
       "s18"
     ],
@@ -791,11 +613,7 @@
     "chapter": "11.4",
     "presenterId": 3,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
+    "seconds": 45,
     "legacyIds": [
       "s19"
     ],
@@ -820,11 +638,7 @@
     "chapter": "11.5",
     "presenterId": 3,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 105,
-      "full": 150
-    },
+    "seconds": 105,
     "legacyIds": [
       "s20"
     ],
@@ -847,45 +661,12 @@
     "model": "60/40 bölümler ve örnek dosya özgün eğitim durumudur. Gerçek format işlemi yapılmaz; geri aşama seçimi gerçek aygıtta geri alma garantisi değildir."
   },
   {
-    "id": "storage-access-modes",
-    "title": "Blokları kim yönetiyor?",
-    "chapter": "11.5",
-    "presenterId": 3,
-    "kind": "chapter",
-    "depth": "extension",
-    "seconds": {
-      "core": 0,
-      "full": 90
-    },
-    "legacyIds": [],
-    "stages": [
-      "Aygıt blokları",
-      "Dosya sistemi gruplaması",
-      "Normal dosya yolu",
-      "Raw erişim"
-    ],
-    "sections": [
-      "11.5"
-    ],
-    "slides": [
-      28,
-      29,
-      30
-    ],
-    "takeaway": "Dosya sistemi blokların üstünde düzen kurar; uygun uygulamalar kendi blok yönetimleri için raw erişim de isteyebilir.",
-    "model": "Cluster grupları ve veritabanı yolu kavramsal örnektir; grup boyutu standart değildir. Raw erişim bütün OS sürücülerinin ortadan kalktığı anlamına gelmez."
-  },
-  {
     "id": "boot-sequence",
     "title": "Kernel'den önce hangi kod çalışır?",
     "chapter": "11.5",
     "presenterId": 3,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 105
-    },
+    "seconds": 60,
     "legacyIds": [
       "s21"
     ],
@@ -912,11 +693,7 @@
     "chapter": "11.5",
     "presenterId": 3,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
+    "seconds": 45,
     "legacyIds": [
       "s22"
     ],
@@ -940,11 +717,7 @@
     "chapter": "11.6",
     "presenterId": 3,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 90
-    },
+    "seconds": 60,
     "legacyIds": [
       "s23"
     ],
@@ -970,11 +743,7 @@
     "chapter": "11.6",
     "presenterId": 3,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 105,
-      "full": 165
-    },
+    "seconds": 105,
     "legacyIds": [
       "s24"
     ],
@@ -1002,11 +771,7 @@
     "chapter": "11.4–11.6",
     "presenterId": 3,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 90
-    },
+    "seconds": 45,
     "legacyIds": [
       "s25"
     ],
@@ -1039,11 +804,7 @@
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 30,
-      "full": 50
-    },
+    "seconds": 30,
     "legacyIds": [
       "s26"
     ],
@@ -1070,11 +831,7 @@
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
+    "seconds": 45,
     "legacyIds": [
       "s27"
     ],
@@ -1101,11 +858,7 @@
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 30,
-      "full": 50
-    },
+    "seconds": 30,
     "legacyIds": [
       "s28"
     ],
@@ -1131,11 +884,7 @@
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 65
-    },
+    "seconds": 45,
     "legacyIds": [
       "s29"
     ],
@@ -1161,11 +910,7 @@
     "chapter": "11.7",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 70
-    },
+    "seconds": 45,
     "legacyIds": [],
     "stages": [
       "Hostlar ve diziler",
@@ -1192,11 +937,7 @@
     "chapter": "11.8",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 70
-    },
+    "seconds": 45,
     "legacyIds": [],
     "stages": [
       "Kapasite, paralellik ve güvenilirlik",
@@ -1221,11 +962,7 @@
     "chapter": "11.8",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 95
-    },
+    "seconds": 60,
     "legacyIds": [
       "s30"
     ],
@@ -1253,11 +990,7 @@
     "chapter": "11.8",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 95
-    },
+    "seconds": 60,
     "legacyIds": [
       "s31"
     ],
@@ -1280,72 +1013,12 @@
     "model": "Eş boyutlu disk/şerit gösterimi özgündür. RAID6 Q cebiri semboliktir; aynı XOR bilgisinin ikinci kopyası iki bağımsız denklem diye sunulmaz."
   },
   {
-    "id": "raid-xor",
-    "title": "Kayıp bloğu sağlam bilgilerden üret",
-    "chapter": "11.8",
-    "presenterId": 4,
-    "kind": "chapter",
-    "depth": "extension",
-    "seconds": {
-      "core": 0,
-      "full": 70
-    },
-    "legacyIds": [],
-    "stages": [
-      "Üç veri bloğu",
-      "P paritesini hesapla",
-      "A1 kayıp: önce tahmin et",
-      "Sağlam hücrelerden A1 üret",
-      "İkinci bilinmeyenin sınırı"
-    ],
-    "sections": [
-      "11.8"
-    ],
-    "slides": [
-      39,
-      40
-    ],
-    "takeaway": "Tek kayıp blok sağlam veri ve P üzerinden yeniden hesaplanabilir; aynı denklem iki bilinmeyeni çözmez.",
-    "model": "1100,1010,0110 ve 0000 bitleri özgün eğitim örneğidir, kitabın hazır sayısal örneği değildir. XOR sonucu gerçekten sağlam hücrelerden hesaplanır."
-  },
-  {
-    "id": "raid-levels",
-    "title": "Koruma bilgisini iki boyutta yerleştirmek",
-    "chapter": "11.8",
-    "presenterId": 4,
-    "kind": "chapter",
-    "depth": "extension",
-    "seconds": {
-      "core": 0,
-      "full": 35
-    },
-    "legacyIds": [],
-    "stages": [
-      "Bilinen RAID seviye haritası",
-      "P ve Q yerleşimi",
-      "İki boyutlu aygıt düzeni",
-      "Satır ve sütun koruma rolleri"
-    ],
-    "sections": [
-      "11.8"
-    ],
-    "slides": [
-      40
-    ],
-    "takeaway": "Resmî slayt40 çok boyutlu RAID6 yerleşimini de gösterir; yalnız seviye adından evrensel hata garantisi çıkarılmaz.",
-    "model": "Kaynak figürünü açıklayan dar bir yerleşim şemasıdır; GF cebiri, keyfî boyutlarda kapasite veya arıza garantisi hesaplanmaz. Kaynakta doğrulanmayan RAID2/3 eklenmez."
-  },
-  {
     "id": "raid-nested",
     "title": "Önce ayna mı, önce şerit mi?",
     "chapter": "11.8",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 85
-    },
+    "seconds": 60,
     "legacyIds": [
       "s32"
     ],
@@ -1374,11 +1047,7 @@
     "chapter": "11.8",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 75,
-      "full": 105
-    },
+    "seconds": 75,
     "legacyIds": [
       "s33"
     ],
@@ -1408,11 +1077,7 @@
     "chapter": "11.8",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 70
-    },
+    "seconds": 45,
     "legacyIds": [],
     "stages": [
       "Üç ayrı ihtiyaç",
@@ -1439,11 +1104,7 @@
     "chapter": "11.8",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 65
-    },
+    "seconds": 45,
     "legacyIds": [
       "s34"
     ],
@@ -1469,11 +1130,7 @@
     "chapter": "11.8",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 30,
-      "full": 60
-    },
+    "seconds": 30,
     "legacyIds": [],
     "stages": [
       "Geleneksel bölüm ve volume sınırları",
@@ -1498,11 +1155,7 @@
     "chapter": "11.8",
     "presenterId": 4,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
+    "seconds": 45,
     "legacyIds": [],
     "stages": [
       "Havuzda veri nesnesi",
@@ -1528,11 +1181,7 @@
     "chapter": "Ortak kapanış",
     "presenterId": 4,
     "kind": "closing",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 75
-    },
+    "seconds": 60,
     "legacyIds": [
       "s35"
     ],
@@ -1580,11 +1229,7 @@
     "chapter": "Kapanış · Exercises",
     "presenterId": 4,
     "kind": "closing",
-    "depth": "core",
-    "seconds": {
-      "core": 30,
-      "full": 60
-    },
+    "seconds": 30,
     "legacyIds": [],
     "stages": [
       "Soruyu tartış",
@@ -1609,11 +1254,7 @@
     "chapter": "Kapanış · Exercises",
     "presenterId": 4,
     "kind": "closing",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 150
-    },
+    "seconds": 90,
     "legacyIds": [],
     "stages": [
       "Soruyu tartış",
@@ -1643,11 +1284,7 @@
     "chapter": "Kapanış · Exercises",
     "presenterId": 4,
     "kind": "closing",
-    "depth": "core",
-    "seconds": {
-      "core": 30,
-      "full": 60
-    },
+    "seconds": 30,
     "legacyIds": [],
     "stages": [
       "Soruyu tartış",
@@ -1673,11 +1310,7 @@
     "chapter": "Kapanış · Exercises",
     "presenterId": 4,
     "kind": "closing",
-    "depth": "core",
-    "seconds": {
-      "core": 30,
-      "full": 60
-    },
+    "seconds": 30,
     "legacyIds": [],
     "stages": [
       "Soruyu tartış",
@@ -1709,11 +1342,7 @@
     "chapter": "Kapanış · Exercises",
     "presenterId": 4,
     "kind": "closing",
-    "depth": "core",
-    "seconds": {
-      "core": 30,
-      "full": 60
-    },
+    "seconds": 30,
     "legacyIds": [],
     "stages": [
       "Soruyu tartış",
@@ -1739,11 +1368,7 @@
     "chapter": "Kapanış · Exercises",
     "presenterId": 4,
     "kind": "closing",
-    "depth": "core",
-    "seconds": {
-      "core": 30,
-      "full": 60
-    },
+    "seconds": 30,
     "legacyIds": [],
     "stages": [
       "Soruyu tartış",
@@ -1769,11 +1394,7 @@
     "chapter": "Ortak kapanış",
     "presenterId": 4,
     "kind": "closing",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 75
-    },
+    "seconds": 60,
     "legacyIds": [
       "s36"
     ],

@@ -61,21 +61,3 @@ RAM, işlemcinin çalışan programlara ve kullanılan verilere eriştiği çal�
 11.1
 
 RAM çalışma verisini, HDD ve SSD kaydedilmiş veriyi tutar. Güç kesildiğinde RAM içeriği korunmaz, HDD ve SSD’de önceden kaydedilmiş veriler korunur. HDD veriye mekanik hareketle erişir. Flash SSD ve RAM’de veri erişimi için hareketli parça bulunmaz.
-
-## Hız, gecikme ve bandwidth
-
-11.1 · Ek içerik
-
-Arayüzün teorik hızı, etkin aktarım hızı ve tek isteğin gecikmesi farklı ölçülerdir. Gb/s aktarım hızını, ms süreyi ifade eder. Disk bandwidth’i toplam aktarılan verinin toplam geçen süreye oranıdır. Ekrandaki 6 Gb/s ve 1 Gb/s değerleri kaynağın tarihsel örnekleridir.
-
-## OS’nin mantıksal blok görünümü
-
-11.1 · Ek içerik
-
-İşletim sistemi diski tek boyutlu numaralı mantıksal blok dizisi olarak adresler. LBA 3, fiziksel yüzey koordinatını belirtmez. Aygıt mantıksal adresi fiziksel konuma eşler. Bu eşleme fiziksel ayrıntıları üst katmandan gizler.
-
-## Komut yolu ve DMA veri yolu
-
-11.1 · Ek içerik
-
-İşletim sistemi okuma komutunu ve verinin yerleştirileceği RAM alanını belirler. Komut bilgisayar tarafındaki host denetleyicisinden aygıt denetleyicisine iletilir. Aygıtta hazır olan veri DMA ile DRAM’e aktarılır. Komut iletimi ve veri aktarımı farklı işlerdir.

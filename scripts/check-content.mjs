@@ -3,10 +3,7 @@ import { existsSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createServer } from "vite";
-import {
-  resolveSceneId,
-  scenesForMode,
-} from "../src/presentation/navigation.mjs";
+import { resolveSceneId } from "../src/presentation/navigation.mjs";
 
 // Basic page loading, links and local assets only.
 // No note-format requirements, curriculum contract or per-stage checks.
@@ -66,7 +63,7 @@ try {
     }
   }
   console.log(
-    `${scenes.length} sayfanın açılışı, bölüm bağlantıları ve yerel görseller kontrol edildi. Ana akış: ${scenesForMode(scenes, "core").length} sayfa.`,
+    `Ana akıştaki ${scenes.length} sayfanın açılışı, bölüm bağlantıları ve yerel görseller kontrol edildi.`,
   );
 } finally {
   await server.close();

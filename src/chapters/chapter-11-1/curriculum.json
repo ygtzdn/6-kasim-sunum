@@ -5,11 +5,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 60
-    },
+    "seconds": 45,
     "legacyIds": ["hdd-history", "magnetic-tape"],
     "stages": ["Çalışma alanı ve kalıcı depolama"],
     "sections": ["11.1"],
@@ -23,11 +19,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 75,
-      "full": 120
-    },
+    "seconds": 75,
     "legacyIds": ["s03"],
     "stages": [
       "Gerçek HDD",
@@ -47,11 +39,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
+    "seconds": 45,
     "legacyIds": [],
     "stages": [
       "Tek yüzey",
@@ -70,11 +58,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 150
-    },
+    "seconds": 90,
     "legacyIds": ["s05"],
     "stages": [
       "İstek ve açık birimler",
@@ -95,11 +79,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 90
-    },
+    "seconds": 45,
     "legacyIds": ["s09"],
     "stages": [
       "4 KiB / 125 MB/s",
@@ -118,11 +98,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 75
-    },
+    "seconds": 45,
     "legacyIds": ["s06"],
     "stages": ["Gerçek SSD", "NAND flash", "Denetleyici ve SATA bağlantısı"],
     "sections": ["11.1"],
@@ -136,11 +112,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 135
-    },
+    "seconds": 90,
     "legacyIds": ["s07"],
     "stages": ["Sayfa ve blok", "Sayfa oku/yaz", "Bloğu sil"],
     "sections": ["11.1"],
@@ -154,11 +126,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 90
-    },
+    "seconds": 60,
     "legacyIds": [],
     "stages": [
       "Sınırlı program/silme dayanıklılığı",
@@ -177,11 +145,7 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 60
-    },
+    "seconds": 45,
     "legacyIds": ["ram-disk", "s04"],
     "stages": ["Çalışma alanı", "Güç kesilir", "Güç geri gelir"],
     "sections": ["11.1"],
@@ -195,86 +159,12 @@
     "chapter": "11.1",
     "presenterId": 1,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 45,
-      "full": 60
-    },
+    "seconds": 45,
     "legacyIds": [],
     "stages": ["RAM, HDD ve flash SSD karşılaştırması"],
     "sections": ["11.1"],
     "slides": [4, 9, 12],
     "takeaway": "RAM uçucu çalışma alanıdır. HDD ve flash SSD kalıcı depolamadır. Hareketli parça ve kalıcılık farklı özelliklerdir.",
     "model": "Gerçek aygıt fotoğrafları ve kavramsal öğretim modeli kullanılır. Boyutlar veya gösterim süresi ürün ölçümü değildir."
-  },
-  {
-    "id": "hdd-performance-metrics",
-    "title": "Hız, gecikme ve bandwidth",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "extension",
-    "seconds": {
-      "core": 0,
-      "full": 75
-    },
-    "legacyIds": [],
-    "stages": [
-      "Tarihsel arayüz tavanı: 6 Gb/s",
-      "Tarihsel etkin örnek: 1 Gb/s",
-      "Tek I/O servis süresi: ms",
-      "Toplam byte / toplam geçen süre"
-    ],
-    "sections": ["11.1", "11.2"],
-    "slides": [6, 7, 17],
-    "takeaway": "Arayüz tavanı, etkin transfer, tek I/O gecikmesi ve toplam disk bandwidth’i aynı ölçü değildir.",
-    "model": "Kaynak sayıları tarihsel örnek olarak etiketlenir; farklı birimler aynı çubuk uzunluğuyla yanlış karşılaştırılmaz."
-  },
-  {
-    "id": "logical-blocks",
-    "title": "OS’nin mantıksal blok görünümü",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "extension",
-    "seconds": {
-      "core": 0,
-      "full": 75
-    },
-    "legacyIds": ["s08"],
-    "stages": [
-      "Numaralı LBA dizisi",
-      "LBA3 okuma isteği",
-      "Temel sıralı sektör eşlemesi",
-      "Fiziksel ayrıntıyı gizle, LBA’yı koru"
-    ],
-    "sections": ["11.1"],
-    "slides": [14, 16],
-    "takeaway": "Disk OS’ye tek boyutlu mantıksal blok dizisi olarak görünür; LBA her aygıtta aynı fiziksel koordinatı garanti etmez.",
-    "model": "Küçük sıralı eşleme eğitim modelidir. Bozuk sektör ve değişken geometri notlarda anılır; yeniden eşleme demosu kişi3’e bırakılır."
-  },
-  {
-    "id": "storage-data-path",
-    "title": "Komut yolu ve DMA veri yolu",
-    "chapter": "11.1",
-    "presenterId": 1,
-    "kind": "chapter",
-    "depth": "extension",
-    "seconds": {
-      "core": 0,
-      "full": 105
-    },
-    "legacyIds": [],
-    "stages": [
-      "OS isteği ve hedef RAM",
-      "Host denetleyicisine komut",
-      "Aygıt denetleyicisine mesaj",
-      "Aygıtta veri erişimi",
-      "DMA ile DRAM’e veri aktarımı"
-    ],
-    "sections": ["11.1", "11.2"],
-    "slides": [15, 18],
-    "takeaway": "Komutun controller’lar üzerinden iletilmesi ile verinin DMA ile DRAM’e aktarılması ayrı akışlardır.",
-    "model": "Özgün iki hatlı diyagram ve aşamadan türetilen payload konumu kullanılır; gerçek DMA protokolü veya ürün arayüz performansı ölçülmez."
   }
 ]

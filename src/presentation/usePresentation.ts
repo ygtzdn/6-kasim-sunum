@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { scenes } from "./registry";
 import {
   adjacentSceneId,
   resolveSceneId,
   sceneIdFromHash,
-  scenesForMode,
 } from "./navigation.mjs";
 import {
   blocksRepeatedActivation,
@@ -14,6 +13,10 @@ import {
 } from "./controls.mjs";
 import { presentationPosition } from "./position.mjs";
 export type MenuTab = "scenes" | "notes" | "sources";
+const estimatedSeconds = scenes.reduce(
+  (total, scene) => total + scene.seconds,
+  0,
+);
 function focusCanvasAfterStageButton(sceneId: string) {
   const active = document.activeElement;
   if (
@@ -42,7 +45,6 @@ export function usePresentation() {
     () => ({ index: readIndex(), stage: 0, direction: 1 }),
   );
   const index = position.index;
-  const [mode, setMode] = useState<"core" | "full">("core");
   const [menu, setMenu] = useState(false);
   const [tab, setTab] = useState<MenuTab>("scenes");
   const [motionOn, setMotionOn] = useState(true);
@@ -50,11 +52,6 @@ export function usePresentation() {
   const [shortcuts, setShortcuts] = useState(true);
   const [notice, setNotice] = useState("");
   const current = scenes[index];
-  const route = useMemo(() => scenesForMode(scenes, mode), [mode]);
-  const estimatedSeconds = route.reduce(
-    (total, scene) => total + (scene.seconds?.[mode] ?? 0),
-    0,
-  );
   const stage = clampStage(position.stage, current.stages.length);
   const setStage = useCallback(
     (value: number) => {
@@ -99,14 +96,14 @@ export function usePresentation() {
   }, []);
   const move = useCallback(
     (delta: number) => {
-      const next = adjacentSceneId(scenes, current.id, delta, mode);
+      const next = adjacentSceneId(scenes, current.id, delta);
       if (!next && delta > 0) {
         openMenu();
         return;
       }
       if (next) goTo(next);
     },
-    [current.id, mode, goTo, openMenu],
+    [current.id, goTo, openMenu],
   );
   const fullscreen = useCallback(async () => {
     try {
@@ -163,8 +160,8 @@ export function usePresentation() {
       else if (action === "toggle-motion") setMotionOn((v) => !v);
       else if (action === "next-scene") move(1);
       else if (action === "previous-scene") move(-1);
-      else if (action === "first-scene") goTo(route[0].id);
-      else if (action === "last-scene") goTo(route.at(-1)!.id);
+      else if (action === "first-scene") goTo(scenes[0].id);
+      else if (action === "last-scene") goTo(scenes.at(-1)!.id);
       else if (action === "menu") openMenu();
       else if (action === "notes") {
         setTab("notes");
@@ -174,17 +171,7 @@ export function usePresentation() {
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [
-    menu,
-    shortcuts,
-    move,
-    goTo,
-    openMenu,
-    fullscreen,
-    advance,
-    retreat,
-    route,
-  ]);
+  }, [menu, shortcuts, move, goTo, openMenu, fullscreen, advance, retreat]);
   useEffect(() => {
     if (!notice) return;
     const timer = setTimeout(() => setNotice(""), 4000);
@@ -193,9 +180,6 @@ export function usePresentation() {
   return {
     index,
     direction: position.direction,
-    mode,
-    setMode,
-    route,
     estimatedSeconds,
     current,
     stage,

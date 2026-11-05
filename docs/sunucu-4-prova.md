@@ -50,18 +50,6 @@ RAID, birden çok diski belirli bir veri dağıtımı ve koruma düzeninde kulla
 
 RAID 4 pariteyi ayrı diskte, RAID 5 diskler arasında dağıtarak saklar. Tek parite bilgisi bir kayıp bloğun yeniden üretilmesini sağlayabilir. RAID 6 ikinci bağımsız koruma bilgisi ekleyerek iki tam disk kaybına dayanabilir. Koruma düzeni, hangi arızaların karşılanabileceğini belirler.
 
-## Kayıp bloğu sağlam bilgilerden üret
-
-11.8 · Ek içerik
-
-XOR paritesi, veri bloklarından hesaplanan ek koruma bilgisidir. Bir veri bloğu kaybolduğunda kalan veri ve pariteyle yeniden hesaplanabilir. Aynı denklem iki bağımsız kayıp veriyi belirleyemez.
-
-## Koruma bilgisini iki boyutta yerleştirmek
-
-11.8 · Ek içerik
-
-Koruma bilgisi farklı boyut ve gruplarda yerleştirilebilir. Ekrandaki çok boyutlu parite örneğinde kayıpların hangi satır ve gruplara düştüğü kurtarılabilirliği etkiler. Bir RAID seviye adı tek başına her yerleşim ve hata örüntüsü için aynı sonucu vermez.
-
 ## Önce ayna mı, önce şerit mi?
 
 11.8

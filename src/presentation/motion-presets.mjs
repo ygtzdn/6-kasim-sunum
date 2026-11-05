@@ -10,11 +10,9 @@ export const motionGroups = {
     "ram-memory",
     "storage-devices",
     "flash-addressing",
-    "logical-blocks",
     "error-detection",
     "error-correction",
     "bad-block-remapping",
-    "raid-xor",
   ],
   compare: [
     "hdd-request-size",
@@ -22,10 +20,8 @@ export const motionGroups = {
     "flash-endurance",
     "scheduling-tradeoffs",
     "nvm-management-summary",
-    "storage-access-modes",
     "swap-space",
     "raid-intro",
-    "raid-levels",
     "raid-nested",
     "raid-features",
     "storage-pools",
@@ -33,7 +29,6 @@ export const motionGroups = {
   trace: ["fcfs-path", "scan-path", "cscan-path"],
   flow: [
     "why-error-detection",
-    "storage-data-path",
     "hdd-request-queue",
     "nvm-scheduling",
     "device-preparation",
@@ -54,7 +49,6 @@ export const motionGroups = {
   resolve: [
     ...exercises.map((exercise) => exercise.id),
     "hdd-access-cost",
-    "hdd-performance-metrics",
     "flash-write-amplification",
     "management-decisions",
     "storage-wrap-up",

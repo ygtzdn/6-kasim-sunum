@@ -27,8 +27,8 @@ export default function SideMenu(p: Props) {
   const [expanded, setExpanded] = useState<string[]>(["intro", "11.1"]);
   const stages = p.current.stages;
   const finalStage = p.stage === stages.length - 1;
-  const previousId = adjacentSceneId(scenes, p.current.id, -1, p.mode);
-  const nextId = adjacentSceneId(scenes, p.current.id, 1, p.mode);
+  const previousId = adjacentSceneId(scenes, p.current.id, -1);
+  const nextId = adjacentSceneId(scenes, p.current.id, 1);
   const previousScene = scenes.find((scene) => scene.id === previousId);
   const nextScene = scenes.find((scene) => scene.id === nextId);
   const previousLabel = previousScene
@@ -169,44 +169,10 @@ export default function SideMenu(p: Props) {
             Sunucu ve bölüm gruplarıyla {scenes.length} sahnede serbest gezinme,
             sayfa açıklamaları ve kaynaklar.
           </Dialog.Description>
-          <fieldset className="shrink-0">
-            <legend className="mb-2 text-xs font-semibold text-slate-600">
-              Anlatım rotası
-            </legend>
-            <div className="grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1">
-              {(["core", "full"] as const).map((mode) => (
-                <button
-                  key={mode}
-                  aria-pressed={p.mode === mode}
-                  onClick={() => p.setMode(mode)}
-                  className={`rounded-lg px-2 py-2 text-xs font-semibold ${p.mode === mode ? "bg-white text-blue shadow-sm" : "text-slate-600"}`}
-                >
-                  {mode === "full" ? "Tüm içerik" : "Ana akış"}
-                  <small className="mt-1 block font-normal">
-                    {
-                      scenes.filter(
-                        (scene) =>
-                          mode === "full" || scene.depth !== "extension",
-                      ).length
-                    }{" "}
-                    sahne · ≈
-                    {Math.ceil(
-                      scenes.reduce(
-                        (sum, scene) => sum + (scene.seconds?.[mode] ?? 0),
-                        0,
-                      ) / 60,
-                    )}{" "}
-                    dk
-                  </small>
-                </button>
-              ))}
-            </div>
-            <p className="mt-2 text-[10px] leading-relaxed text-slate-600">
-              {p.route.length} sahne · {Math.floor(p.estimatedSeconds / 60)} dk{" "}
-              {p.estimatedSeconds % 60} sn hedef. Ek açıklamalar menüden her
-              zaman açılabilir.
-            </p>
-          </fieldset>
+          <p className="shrink-0 text-xs leading-relaxed text-slate-600">
+            {scenes.length} sahne · {Math.floor(p.estimatedSeconds / 60)} dk{" "}
+            {p.estimatedSeconds % 60} sn hedef.
+          </p>
           <div className="menu-tabs" role="group" aria-label="Menü içeriği">
             {(["scenes", "notes", "sources"] as const).map((tab, i) => (
               <button
@@ -261,11 +227,6 @@ export default function SideMenu(p: Props) {
                               )}
                             </span>
                             {scene.shortTitle}
-                            {scene.depth === "extension" && (
-                              <small className="ml-auto shrink-0 text-[9px] font-medium text-slate-500">
-                                Ek
-                              </small>
-                            )}
                             {p.current.id === scene.id && <Check size={15} />}
                           </button>
                         ))}

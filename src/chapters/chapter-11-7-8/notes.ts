@@ -33,14 +33,6 @@ export const attachmentRaidNotes: Record<string, SceneNotes> = {
     explanation:
       "RAID 4 pariteyi ayrı diskte, RAID 5 diskler arasında dağıtarak saklar. Tek parite bilgisi bir kayıp bloğun yeniden üretilmesini sağlayabilir. RAID 6 ikinci bağımsız koruma bilgisi ekleyerek iki tam disk kaybına dayanabilir. Koruma düzeni, hangi arızaların karşılanabileceğini belirler.",
   },
-  "raid-xor": {
-    explanation:
-      "XOR paritesi, veri bloklarından hesaplanan ek koruma bilgisidir. Bir veri bloğu kaybolduğunda kalan veri ve pariteyle yeniden hesaplanabilir. Aynı denklem iki bağımsız kayıp veriyi belirleyemez.",
-  },
-  "raid-levels": {
-    explanation:
-      "Koruma bilgisi farklı boyut ve gruplarda yerleştirilebilir. Ekrandaki çok boyutlu parite örneğinde kayıpların hangi satır ve gruplara düştüğü kurtarılabilirliği etkiler. Bir RAID seviye adı tek başına her yerleşim ve hata örüntüsü için aynı sonucu vermez.",
-  },
   "raid-nested": {
     explanation:
       "RAID 0+1 ve RAID 1+0, şeritleme ile aynalamayı farklı sırayla birleştirir. Bu sıra, bir disk kaybının hangi koruma grubunu etkilediğini değiştirir. İkinci arızanın sonucu, yalnız arıza sayısına değil kaybedilen disklerin gruplarına da bağlıdır.",

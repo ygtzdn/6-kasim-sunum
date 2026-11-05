@@ -90,14 +90,6 @@ export const sceneReferences: Record<string, SceneReference> = {
     model:
       "60/40 bölümler ve örnek dosya özgün eğitim durumudur. Gerçek format işlemi yapılmaz; geri aşama seçimi gerçek aygıtta geri alma garantisi değildir.",
   },
-  "storage-access-modes": {
-    sections: ["11.5"],
-    slides: [28, 29, 30],
-    takeaway:
-      "Dosya sistemi blokların üstünde düzen kurar; uygun uygulamalar kendi blok yönetimleri için raw erişim de isteyebilir.",
-    model:
-      "Cluster grupları ve veritabanı yolu kavramsal örnektir; grup boyutu standart değildir. Raw erişim bütün OS sürücülerinin ortadan kalktığı anlamına gelmez.",
-  },
   "boot-sequence": {
     sections: ["11.5"],
     slides: [29, 30],
@@ -201,22 +193,6 @@ export const sceneReferences: Record<string, SceneReference> = {
       "RAID4/5 tek P korumasını farklı yerleştirir; RAID6 ikinci bağımsız korumayla iki tam disk kaybını karşılayabilir.",
     model:
       "Eş boyutlu disk/şerit gösterimi özgündür. RAID6 Q cebiri semboliktir; aynı XOR bilgisinin ikinci kopyası iki bağımsız denklem diye sunulmaz.",
-  },
-  "raid-xor": {
-    sections: ["11.8"],
-    slides: [39, 40],
-    takeaway:
-      "Tek kayıp blok sağlam veri ve P üzerinden yeniden hesaplanabilir; aynı denklem iki bilinmeyeni çözmez.",
-    model:
-      "1100,1010,0110 ve 0000 bitleri özgün eğitim örneğidir, kitabın hazır sayısal örneği değildir. XOR sonucu gerçekten sağlam hücrelerden hesaplanır.",
-  },
-  "raid-levels": {
-    sections: ["11.8"],
-    slides: [40],
-    takeaway:
-      "Resmî slayt40 çok boyutlu RAID6 yerleşimini de gösterir; yalnız seviye adından evrensel hata garantisi çıkarılmaz.",
-    model:
-      "Kaynak figürünü açıklayan dar bir yerleşim şemasıdır; GF cebiri, keyfî boyutlarda kapasite veya arıza garantisi hesaplanmaz. Kaynakta doğrulanmayan RAID2/3 eklenmez.",
   },
   "raid-nested": {
     sections: ["11.8"],

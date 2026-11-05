@@ -145,7 +145,6 @@ export const exerciseScenes: SceneDefinition[] = exercises.map((exercise) => ({
   title: `Alıştırma ${exercise.label} · ${exercise.title}`,
   shortTitle: `${exercise.label} · ${exercise.title}`,
   kind: "closing",
-  depth: "core",
   presenterId: 4,
   chapter: exercise.chapter,
   legacyIds: [],

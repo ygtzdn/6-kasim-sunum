@@ -19,7 +19,7 @@ export const exercises = [
     question: "NVM aygıtları neden sıklıkla FCFS sıralaması kullanır?",
     answer:
       "Mekanik seek ve dönme olmadığından silindir sırasıyla kafa hareketini azaltma kazancı yoktur. FCFS basit ve düşük ek yüklüdür. Kuyruk, paralellik ve flash yönetimi işleri yine sürer.",
-    seconds: { core: 30, full: 60 },
+    seconds: 30,
   },
   {
     id: "exercise-scheduling",
@@ -33,7 +33,7 @@ export const exercises = [
       "Kafa 2150'de, önceki konum 1805. Verilen kuyruk için FCFS, SCAN ve C-SCAN toplam kaç silindir hareket eder?",
     answer:
       "Sonuçlar: FCFS 13011, SCAN 7492, C-SCAN 9917 silindir. Yön artandır: 1805'ten 2150'ye gelindi. SCAN fiziksel 4999 ucuna gider. C-SCAN'ın 4999'dan 0'a dönüşü de hareket toplamına eklenir. Son bekleyen istek servis edildiğinde ölçüm biter.",
-    seconds: { core: 90, full: 150 },
+    seconds: 90,
   },
   {
     id: "exercise-rotation",
@@ -47,7 +47,7 @@ export const exercises = [
       "7200 RPM ile dönen bir diskin ortalama dönme beklemesi kaç milisaniyedir?",
     answer:
       "Bir tur 60000 / 7200 = 8,3333 ms sürer. Sektörün açısal konumu için eşit olasılık varsayımıyla ortalama bekleme yarım turdur: 4,1667 ms. Seek ve aktarım bu hesaba dahil değildir.",
-    seconds: { core: 30, full: 60 },
+    seconds: 30,
   },
   {
     id: "exercise-hdd-nvm",
@@ -61,7 +61,7 @@ export const exercises = [
       "HDD ve NVM aygıtlarını karşılaştır. Hangi iş yüklerinde hangi özellikleri önem kazanır?",
     answer:
       "HDD'de seek ve dönme maliyeti vardır; büyük sıralı aktarımlar bu maliyetin payını azaltabilir. NVM mekanik beklemeyi kaldırır; küçük rastgele I/O ve düşük gecikme gereksinimi için bu önemlidir. Sonuç iş yüküne ve aygıta bağlıdır.",
-    seconds: { core: 30, full: 60 },
+    seconds: 30,
   },
   {
     id: "exercise-raid-write",
@@ -75,7 +75,7 @@ export const exercises = [
       "Beş diskli RAID 5'te tek veri bloğu güncellenirken kaç blok erişimi gerekir? Önbelleksiz read-modify-write yolunu kullan.",
     answer:
       "Eski veri ve eski parite okunur; yeni veri ve yeni parite yazılır. Toplam 2 okuma + 2 yazma = 4 blok I/O yapılır. İki farklı blok konumuna erişilir; erişim sayısı ile benzersiz blok sayısı aynı değildir.",
-    seconds: { core: 30, full: 60 },
+    seconds: 30,
   },
   {
     id: "exercise-mtbf",
@@ -89,12 +89,11 @@ export const exercises = [
       "1000 diskin her biri 750000 disk-saat/arızalık MTBF değerine sahipse çiftlikte ortalama arıza aralığı nedir? MTBF, garanti süresini belirler mi?",
     answer:
       "Bağımsız ve sabit arıza hızı varsayımıyla toplam arıza hızı 1000 / 750000'dir. Ortalama aralık 750 saat, yaklaşık 31,25 gündür. MTBF'den tek diskin ömrü veya garanti süresi çıkarılamaz.",
-    seconds: { core: 30, full: 60 },
+    seconds: 30,
   },
 ].map((exercise) => ({
   ...exercise,
   kind: "closing",
-  depth: "core",
   presenterId: 4,
   chapter: "Kapanış · Exercises",
   legacyIds: [],

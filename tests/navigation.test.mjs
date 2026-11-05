@@ -4,14 +4,12 @@ import {
   adjacentSceneId,
   resolveSceneId,
   sceneIdFromHash,
-  scenesForMode,
 } from "../src/presentation/navigation.mjs";
 
 const scenes = [
-  { id: "opening", legacyIds: ["s01"], depth: "core" },
-  { id: "hdd-anatomy", legacyIds: ["s03"], depth: "core" },
-  { id: "hdd-history", depth: "extension" },
-  { id: "storage-summary", legacyIds: ["s36"], depth: "core" },
+  { id: "opening", legacyIds: ["s01"] },
+  { id: "hdd-anatomy", legacyIds: ["s03"] },
+  { id: "storage-summary", legacyIds: ["s36"] },
 ];
 test("stable URLs and legacy links resolve to the same canonical scene", () => {
   assert.equal(resolveSceneId(scenes, "s03"), "hdd-anatomy");
@@ -25,34 +23,14 @@ test("stable URLs and legacy links resolve to the same canonical scene", () => {
   ])
     assert.equal(sceneIdFromHash(hash, scenes), "opening");
 });
-test("core route skips extensions, while full route includes every scene in book order", () => {
-  assert.deepEqual(
-    scenesForMode(scenes, "core").map((s) => s.id),
-    ["opening", "hdd-anatomy", "storage-summary"],
-  );
-  assert.equal(
-    adjacentSceneId(scenes, "hdd-anatomy", 1, "core"),
-    "storage-summary",
-  );
-  assert.equal(
-    adjacentSceneId(scenes, "hdd-anatomy", 1, "full"),
-    "hdd-history",
-  );
-  assert.equal(
-    adjacentSceneId(scenes, "storage-summary", -1, "core"),
-    "hdd-anatomy",
-  );
+test("forward and backward navigation follow the same single scene sequence", () => {
+  assert.equal(adjacentSceneId(scenes, "hdd-anatomy", 1), "storage-summary");
+  assert.equal(adjacentSceneId(scenes, "hdd-anatomy", -1), "opening");
+  assert.equal(adjacentSceneId(scenes, "storage-summary", -1), "hdd-anatomy");
 });
-test("directly opened extensions can rejoin either route, and boundaries never reset a scene", () => {
-  assert.equal(
-    adjacentSceneId(scenes, "hdd-history", -1, "core"),
-    "hdd-anatomy",
-  );
-  assert.equal(
-    adjacentSceneId(scenes, "hdd-history", 1, "core"),
-    "storage-summary",
-  );
-  assert.equal(adjacentSceneId(scenes, "opening", -1, "full"), null);
-  assert.equal(adjacentSceneId(scenes, "storage-summary", 1, "core"), null);
-  assert.equal(adjacentSceneId(scenes, "missing", 1, "core"), null);
+test("navigation boundaries and unknown scenes never reset a scene", () => {
+  assert.equal(adjacentSceneId(scenes, "opening", -1), null);
+  assert.equal(adjacentSceneId(scenes, "storage-summary", 1), null);
+  assert.equal(adjacentSceneId(scenes, "missing", 1), null);
+  assert.equal(adjacentSceneId(scenes, "hdd-anatomy", 0), null);
 });

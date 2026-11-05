@@ -14,8 +14,7 @@ export interface SceneDefinition {
   id: string;
   legacyIds?: readonly string[];
   kind: "intro" | "chapter" | "closing";
-  depth: "core" | "extension";
-  seconds: { core: number; full: number };
+  seconds: number;
   title: string;
   shortTitle: string;
   chapter: string;

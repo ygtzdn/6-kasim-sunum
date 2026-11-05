@@ -5,11 +5,7 @@
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 90
-    },
+    "seconds": 60,
     "legacyIds": ["s10"],
     "stages": [
       "HDD’de mekanik erişim maliyeti",
@@ -30,11 +26,7 @@
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 80,
-      "full": 120
-    },
+    "seconds": 80,
     "legacyIds": ["s11"],
     "stages": [
       "Başlangıç: 53",
@@ -59,11 +51,7 @@
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 135
-    },
+    "seconds": 90,
     "legacyIds": ["s12"],
     "stages": [
       "Başlangıç: 53",
@@ -89,11 +77,7 @@
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 90,
-      "full": 135
-    },
+    "seconds": 90,
     "legacyIds": ["s13"],
     "stages": [
       "Başlangıç: 53",
@@ -120,11 +104,7 @@
     "chapter": "11.2",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 75,
-      "full": 120
-    },
+    "seconds": 75,
     "legacyIds": ["s14"],
     "stages": [
       "FCFS: 640",
@@ -145,11 +125,7 @@
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 75,
-      "full": 120
-    },
+    "seconds": 75,
     "legacyIds": ["s15"],
     "stages": [
       "SSD’de seek ve dönme yok",
@@ -170,11 +146,7 @@
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 90
-    },
+    "seconds": 60,
     "legacyIds": [],
     "stages": ["Başlangıç eşlemesi", "Adres aynı, fiziksel yer farklı"],
     "sections": ["11.1", "11.3"],
@@ -188,11 +160,7 @@
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 120,
-      "full": 180
-    },
+    "seconds": 120,
     "legacyIds": ["s16"],
     "stages": [
       "Başlangıç eşlemesi",
@@ -213,11 +181,7 @@
     "chapter": "11.3",
     "presenterId": 2,
     "kind": "chapter",
-    "depth": "core",
-    "seconds": {
-      "core": 60,
-      "full": 105
-    },
+    "seconds": 60,
     "legacyIds": ["s17"],
     "stages": [
       "Birikmiş silmeler",

@@ -1,6 +1,6 @@
 # Kütlesel depolama — Etkileşimli sunum
 
-**Operating System Concepts, Tenth Edition · Bölüm 11.1–11.8.** Dört kişinin Türkçe sunumu. İlk ekranda sekiz bölüm başlığı birlikte görünür. Sunum varsayılan olarak 51 sayfalık **Ana akış** rotasında açılır. **Tüm içerik** 57 sayfayı kapsar.
+**Operating System Concepts, Tenth Edition · Bölüm 11.1–11.8.** Dört kişinin Türkçe sunumu. İlk ekranda sekiz bölüm başlığı birlikte görünür. Sunum yalnızca 51 sayfalık **Ana akış** ile çalışır.
 
 Yerel sunum: [http://localhost:5173/](http://localhost:5173/).
 
@@ -41,7 +41,7 @@ Açılıştaki her başlık kendi bölümünün ilk sayfasına bağlanır. Menü
 
 Teyp ve HDD tarihçesi sunumdan çıkarıldı. RAM disk anlatımı RAM'in çalışma alanı ve güç bağımlılığıyla değiştirildi. GC ve wear leveling 2. kişinin bölümünde kalır. Adresleme ve GC aynı üç bloklu flash modelini kullanır.
 
-Ana akışın dışındaki altı ek sayfa menüden veya Tüm içerik rotasından açılabilir: performans ölçüleri, HDD mantıksal blok görünümü, komut/DMA veri yolu, raw erişim, XOR ve çok boyutlu parite. DWPD ana akıştadır.
+Sunum, menü ve çevrimdışı notlar aynı 51 sayfayı içerir. Önceki altı ek sayfa kaldırıldı. DWPD ana akıştadır.
 
 3. kişinin 11.4 bölümü önce hata tespitinin neden gerektiğini gösterir. Ardından bit değişimi ve parite kontrolü ayrı adımlarda açılır, iki bitlik hatanın pariteden kaçması açıklanır. Paritenin basit bir checksum türü olduğu ve CRC'nin başka bir tespit yöntemi olduğu gösterilir. ECC, veri/denetim/sonuç diyagramıyla anlatılır; son adım kitabın soft error / hard error ayrımıdır. Bölümün başlangıç adresi `/#/sunum/why-error-detection` olur. Ayrıntılar [3. kişi düzenleme kaydındadır](docs/24-ucuncu-kisi-hata-tespiti-ve-duzeltme.md).
 
@@ -67,8 +67,8 @@ Not biçimi, metin uzunluğu, soru sayısı ve aşama başına ayrı açıklama 
 ## Klavye ve gezinme
 
 - **Enter / Backspace:** aynı sayfada sonraki / önceki aşama.
-- **Sol / sağ ok:** seçili rotada önceki / sonraki sayfa.
-- **Home / End:** rotanın başlangıcı / sonu.
+- **Sol / sağ ok:** önceki / sonraki sayfa.
+- **Home / End:** sunumun başlangıcı / sonu.
 - **M / N:** menü / notlar.
 - **Space:** açıklayıcı hareketi duraklat / oynat.
 - **F:** tam ekran.

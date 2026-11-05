@@ -11,10 +11,8 @@ import {
   ParityRaidScene,
   RaidFeaturesScene,
   RaidIntroScene,
-  RaidLevelsScene,
   RebuildRaidScene,
   StripingMirrorScene,
-  XorRaidScene,
 } from "./RaidScenes";
 import {
   IntegrityScene,
@@ -36,8 +34,6 @@ const renderers: Record<
   "raid-intro": (context) => <RaidIntroScene {...context} />,
   "raid-striping": (context) => <StripingMirrorScene {...context} />,
   "raid-parity": (context) => <ParityRaidScene {...context} />,
-  "raid-xor": (context) => <XorRaidScene {...context} />,
-  "raid-levels": (context) => <RaidLevelsScene {...context} />,
   "raid-nested": (context) => <NestedRaidScene {...context} />,
   "raid-rebuild": (context) => <RebuildRaidScene {...context} />,
   "raid-features": (context) => <RaidFeaturesScene {...context} />,

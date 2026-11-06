@@ -531,8 +531,7 @@
     "stages": [
       "Altı algoritmanın toplam kafa hareketi",
       "C-SCAN ve C-LOOK’ta servissiz dönüş",
-      "Servis sıraları",
-      "Tarihsel deadline politikası"
+      "Servis sıraları"
     ],
     "sections": [
       "11.2"
@@ -545,11 +544,10 @@
       21,
       22,
       23,
-      24,
-      25
+      24
     ],
     "takeaway": "Bu sabit kuyrukta en kısa yol LOOK’un 208 silindirlik yoludur. Bekleme süresi ve adalet ayrı ölçütlerdir.",
-    "model": "Çubuklar hesaplanan toplamdır, adalet puanı değildir. Deadline/NOOP/CFQ anlatımı kaynağın tarihsel bağlamında tutulur."
+    "model": "Çubuklar toplam kafa hareketini, tablo ise isteklerin tamamlanma sırasını gösterir."
   },
   {
     "id": "nvm-scheduling",

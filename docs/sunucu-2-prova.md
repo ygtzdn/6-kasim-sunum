@@ -48,7 +48,7 @@ C-LOOK istekleri tek yönde karşılar. 53’ten başlayan kafa 37 ve 14’ü se
 
 11.2
 
-Aynı kuyrukta FCFS 640, SSTF 236, SCAN 236, LOOK 208, C-SCAN 386 ve C-LOOK 326 silindir hareketi üretir. LOOK bu örnekte en kısa yolu izler. SSTF ve SCAN farklı servis sıralarına rağmen aynı toplamı verir. Servissiz dönüş C-SCAN’de 199, C-LOOK’ta 169 silindirdir ve iki toplamda da yer alır. Gerçek bekleme süresi ve adalet ayrı ölçütlerdir. Tarihsel deadline örneği, uzun süredir bekleyen istekleri gözeten bir politikayı gösterir.
+Aynı kuyrukta FCFS 640, SSTF 236, SCAN 236, LOOK 208, C-SCAN 386 ve C-LOOK 326 silindir hareketi üretir. LOOK bu örnekte en kısa yolu izler. SSTF ve SCAN farklı servis sıralarına rağmen aynı toplamı verir. Servissiz dönüş C-SCAN’de 199, C-LOOK’ta 169 silindirdir ve iki toplamda da yer alır. Gerçek bekleme süresi ve adalet ayrı ölçütlerdir.
 
 ## SSD’de neden hâlâ optimizasyon var?
 

@@ -538,27 +538,23 @@ export function ScheduleComparison({
     "Aynı kuyrukta LOOK 208 silindirle en kısa yolu izler. SSTF ve SCAN farklı rotalarda 236 silindire ulaşır.",
     "Turuncu bölümler servissiz dönüşü gösterir. C-SCAN fiziksel uçlar, C-LOOK bekleyen istekler arasında döner.",
     "Tablo, her algoritmanın istekleri hangi sırayla tamamladığını gösterir. Bekleme süresi ayrıca ölçülür.",
-    "Kaynağın tarihsel deadline örneği: her batch sonrasında eski bekleyen isteği gözet; bu güncel Linux varsayılanı iddiası değildir.",
   ];
   return (
     <Stage
       title="HDD zamanlama karşılaştırması"
       controls={
         <div className="flex flex-wrap justify-center gap-2">
-          {[
-            "Toplam hareket",
-            "Servissiz dönüş",
-            "Servis sırası",
-            "Politika",
-          ].map((label, i) => (
-            <Choice
-              key={label}
-              active={stage === i}
-              onClick={() => setStage(i)}
-            >
-              {label}
-            </Choice>
-          ))}
+          {["Toplam hareket", "Servissiz dönüş", "Servis sırası"].map(
+            (label, i) => (
+              <Choice
+                key={label}
+                active={stage === i}
+                onClick={() => setStage(i)}
+              >
+                {label}
+              </Choice>
+            ),
+          )}
         </div>
       }
     >
@@ -608,7 +604,7 @@ export function ScheduleComparison({
               </button>
             );
           })
-        ) : stage === 2 ? (
+        ) : (
           <div className="w-full overflow-hidden rounded-xl border-2 border-ink">
             <table className="w-full table-fixed text-center text-xs md:text-sm">
               <thead className="bg-slate-100">
@@ -636,46 +632,6 @@ export function ScheduleComparison({
                 ))}
               </tbody>
             </table>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              {
-                name: "Oku · LBA sırası",
-                value: "12 → 44 → 90",
-                selected: true,
-              },
-              { name: "Yaz · LBA sırası", value: "20 → 70", selected: false },
-              {
-                name: "Oku · FCFS yaşı",
-                value: "R0 (LBA 90): 600 ms > 500 ms",
-                selected: false,
-              },
-              { name: "Yaz · FCFS yaşı", value: "W0: 80 ms", selected: false },
-            ].map((q) => (
-              <div
-                key={q.name}
-                className={`rounded-xl border-2 p-4 md:p-6 ${q.selected ? "border-blue bg-blue/10" : "border-slate-300 bg-white"}`}
-              >
-                <h2 className="mb-3 text-xs font-semibold md:text-base">
-                  {q.name}
-                </h2>
-                <p className="font-display text-sm md:text-xl">{q.value}</p>
-                {q.selected && (
-                  <span className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-blue">
-                    <ArrowRight size={15} />
-                    Sonraki batch için seçildi
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-        {stage === 3 && (
-          <div className="flex justify-center gap-5 text-xs font-semibold text-blue">
-            <span>Hareket</span>
-            <span>Bekleme</span>
-            <span>Adalet</span>
           </div>
         )}
         <StageCaption className="text-center text-xs font-semibold leading-relaxed text-slate-600 md:text-sm">
